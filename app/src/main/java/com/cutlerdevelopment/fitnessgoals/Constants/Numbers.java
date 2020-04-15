@@ -11,9 +11,12 @@ public class Numbers {
     public static final long FIRST_MENU_SPEECH_BUBBLE_ANIM_DURATION = 1000;
     public static final long FIRST_MENU_SPEECH_BUBBLE_BOUNCE_ANIM_DURATION = 500;
 
+
     public static final float FIRST_MENU_FITNESS_APP_DIVIDER = 2;
     public static final long FIRST_MENU_FITNESS_ANIM_DURATION = 1000;
+    public static final long FIRST_MENU_FITNESS_MARGIN_PADDING = 32;
 
 
     public static final float SPEECH_BUBBLE_PADDING_OFFSET = 100;
+
 }
