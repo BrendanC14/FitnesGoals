@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/firstMenuBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/mainmenubackground"
+    tools:context=".Activities.FirstMenu">
+
+    <ImageView
+        android:id="@+id/firstMenuJamesImage"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:contentDescription="@string/content_description_james"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:srcCompat="@drawable/james" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/firstMenuSpeechBubble"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:animateLayoutChanges="true"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/firstMenuSpeechText"
+            style="@style/TextAppearance.FitnessGoals.SpeechText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:background="@drawable/speech_bubble"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

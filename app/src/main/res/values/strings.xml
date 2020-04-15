@@ -1,3 +1,27 @@
+
+<!DOCTYPE resources [
+    <!ENTITY appname "Fitness Goals">
+    ]>
 <resources>
-    <string name="app_name">Fitness Goals</string>
+    <string name="app_name">&appname;</string>
+
+    <string name="next_button_text">Next</string>
+
+    <string name="first_menu_intro_text_1">
+        Welcome to &appname;, the app where your real-life activity will determine your on-field performances.
+        \nMy name\'s James, and I\'ll be your agent. I\'m here to guide you through the app, and your football career.
+    </string>
+    <string name="first_menu_intro_text_2">
+        Before you get on the pitch, we need to do a medical. I\'m gonna need to get in touch with your fitness app and get some details. Don\'t worry though, this info is only used to decide your match performance!"
+    </string>
+    <string name="first_menu_intro_text_3">
+        Which app should I call?
+    </string>
+
+
+
+
+
+    <string name="content_description_james">Business man in a white shirt</string>
+
 </resources>
