@@ -3,6 +3,7 @@ package com.cutlerdevelopment.fitnessgoals.Integrations;
 import android.app.Activity;
 import android.content.Context;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.FitnessApps;
 import com.cutlerdevelopment.fitnessgoals.Settings.UserActivity;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -58,7 +59,7 @@ public class GoogleFitAPI {
         if (!GoogleSignIn.hasPermissions(account, fitnessOptions)) {
             GoogleSignIn.requestPermissions(
                     activity,
-                    1234,
+                    FitnessApps.GOOGLE_FIT_INIT_REQUEST_CODE,
                     account,
                     fitnessOptions);
             return false;

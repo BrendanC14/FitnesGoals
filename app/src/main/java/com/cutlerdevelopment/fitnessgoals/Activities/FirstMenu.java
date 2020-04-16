@@ -19,8 +19,11 @@ import android.widget.TextView;
 
 import com.cutlerdevelopment.fitnessgoals.Constants.FitnessApps;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
+import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitAPI;
+import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitResponse;
 import com.cutlerdevelopment.fitnessgoals.Integrations.GoogleFitAPI;
 import com.cutlerdevelopment.fitnessgoals.R;
+import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitSavedData;
 import com.cutlerdevelopment.fitnessgoals.Settings.AppSettings;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.FitnessAppSmallCardAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.FitnessAppSmallCard;
@@ -30,7 +33,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
 
 import java.util.ArrayList;
 
-public class FirstMenu extends AppCompatActivity {
+public class FirstMenu extends AppCompatActivity  {
 
     Boolean readyToProgress = false;
     ConstraintLayout backgroundLayout;
@@ -60,7 +63,33 @@ public class FirstMenu extends AppCompatActivity {
                 nextStep();
             }
         });
+
         animateJamesIntroduction();
+
+
+    }
+
+
+    void nextStep() {
+
+        if (readyToProgress) {
+            switch (tutorialStep) {
+                case 1:
+                    speechBubbleText.setText(getString(R.string.first_menu_intro_text_2_1));
+                    break;
+                case 2:
+                    speechBubbleText.setText(getString(R.string.first_menu_intro_text_2_2));
+                    readyToProgress = false;
+                    populateFitnessAppList();
+                    showMenu(fitnessAppsLayout);
+                    break;
+                case 3:
+                    speechBubbleText.setText(getString(R.string.first_menu_intro_text_3));
+
+            }
+
+            tutorialStep++;
+        }
     }
 
     /**
@@ -90,19 +119,19 @@ public class FirstMenu extends AppCompatActivity {
                                 jamesImage,
                                 "x",
                                 jamesFinalXPosition)
-                        .setDuration(Numbers.FIRST_MENU_JAMES_ANIM_DURATION),
+                                .setDuration(Numbers.FIRST_MENU_JAMES_ANIM_DURATION),
                         ObjectAnimator.ofFloat( //Animating the speech bubble onto the screen
                                 speechBubbleLayout,
                                 "y",
                                 speechBounceYPosition)
-                        .setDuration(Numbers.FIRST_MENU_SPEECH_BUBBLE_ANIM_DURATION));
+                                .setDuration(Numbers.FIRST_MENU_SPEECH_BUBBLE_ANIM_DURATION));
 
                 speechBounceAndButtonIntroAnimSet.play(
                         ObjectAnimator.ofFloat( //Animating the speech bubble bouncing up
                                 speechBubbleLayout,
                                 "y",
                                 speechFinalYPosition)
-                        .setDuration(Numbers.FIRST_MENU_SPEECH_BUBBLE_BOUNCE_ANIM_DURATION));
+                                .setDuration(Numbers.FIRST_MENU_SPEECH_BUBBLE_BOUNCE_ANIM_DURATION));
 
                 fullSet.playSequentially(manAndSpeechIntroAnimSet, speechBounceAndButtonIntroAnimSet);
                 fullSet.addListener(new Animator.AnimatorListener() {
@@ -131,28 +160,6 @@ public class FirstMenu extends AppCompatActivity {
             }
         }, Numbers.FIRST_MENU_JAMES_APPEAR_WAIT);
 
-    }
-
-    void nextStep() {
-
-        if (readyToProgress) {
-            switch (tutorialStep) {
-                case 1:
-                    speechBubbleText.setText(getString(R.string.first_menu_intro_text_2_1));
-                    break;
-                case 2:
-                    speechBubbleText.setText(getString(R.string.first_menu_intro_text_2_2));
-                    readyToProgress = false;
-                    populateFitnessAppList();
-                    showMenu(fitnessAppsLayout);
-                    break;
-                case 3:
-                    speechBubbleText.setText(getString(R.string.first_menu_intro_text_3));
-
-            }
-
-            tutorialStep++;
-        }
     }
 
     void showMenu(ConstraintLayout layoutToShow) {
@@ -268,8 +275,8 @@ public class FirstMenu extends AppCompatActivity {
     void selectFitnessApp(int app) {
         switch (app) {
             case FitnessApps.MOCKED:
-                speechBubbleText.setText(R.string.first_menu_app_connected);
                 hideMenu(fitnessAppsLayout);
+                confirmAppConnected();
                 break;
             case FitnessApps.GOOGLE_FIT:
                 speechBubbleText.setText(R.string.first_menu_calling_app);
@@ -279,8 +286,19 @@ public class FirstMenu extends AppCompatActivity {
                     confirmAppConnected();
                 }
                 break;
+            case FitnessApps.FITBIT:
+                speechBubbleText.setText(R.string.first_menu_calling_app);
+                hideMenu(fitnessAppsLayout);
+                FitbitSavedData.createFitbitSavedDataInstance(this);
+                if (FitbitSavedData.getInstance().getTopData() != null) {
+                    confirmAppConnected();
+                }
+                else {
+                    FitbitAPI.createFitbitAPIInstance(this);
+                }
+                break;
             default:
-                speechBubbleText.setText(R.string.first_menu_app_unavailable);
+                speechBubbleText.setText(R.string.first_menu_app_connected);
         }
         AppSettings.getInstance().changeFitnessApp(app);
 
@@ -289,7 +307,7 @@ public class FirstMenu extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 1234) {
+        if(requestCode == FitnessApps.GOOGLE_FIT_INIT_REQUEST_CODE) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             int statusCode = result.getStatus().getStatusCode();
             if (statusCode == GoogleSignInStatusCodes.SUCCESS) {
@@ -299,7 +317,17 @@ public class FirstMenu extends AppCompatActivity {
                 confirmCantConnect();
             }
         }
+        if (requestCode == FitnessApps.FITBIT_INIT_REQUEST_CODE) {
+            if (FitbitSavedData.getInstance() != null &&
+            FitbitSavedData.getInstance().getTopData() != null) {
+                confirmAppConnected();
+            }
+            else {
+                confirmCantConnect();
+            }
+        }
     }
+
 
     void confirmAppConnected() {
         speechBubbleText.setText(getString(R.string.first_menu_app_connected));

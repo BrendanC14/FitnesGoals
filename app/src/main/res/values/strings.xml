@@ -19,6 +19,7 @@
     <string name="first_menu_calling_app">Alright give me a sec just calling.</string>
     <string name="first_menu_app_unavailable">I can\'t get in touch with them right now, can we try another?</string>
     <string name="first_menu_app_cant_connect">Can\'t get hold of them, did you give me permission?</string>
+    <string name="first_menu_app_fitbit_pickup">Sorry about that, all sorted now got the details.</string>
     <string name="first_menu_intro_text_3">Next up, you need to decide what you\'re going to be; player or manager?</string>
 
     <string name="fitness_app_small_card_select_button">Select this App</string>

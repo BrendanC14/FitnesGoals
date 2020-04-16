@@ -9,6 +9,9 @@ public class FitnessApps {
     public static final int FITBIT = 2;
     public static final int NUM_OF_APPS = 3;
 
+    public static final int GOOGLE_FIT_INIT_REQUEST_CODE = 1234;
+    public static final int FITBIT_INIT_REQUEST_CODE = 4321;
+
     private static final String GOOGLE_FIT_STRING = "Google Fit";
     private static final String FITBIT_STRING = "FitBit";
     private static final String MOCKED_STRING = "Mocked";
