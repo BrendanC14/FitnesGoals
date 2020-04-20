@@ -7,41 +7,88 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.Constants.FitnessApps;
+import com.cutlerdevelopment.fitnessgoals.Constants.GameModes;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
+import com.cutlerdevelopment.fitnessgoals.Constants.StepModes;
+import com.cutlerdevelopment.fitnessgoals.Constants.TutorialSteps;
+import com.cutlerdevelopment.fitnessgoals.Constants.Words;
 import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitAPI;
-import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitResponse;
-import com.cutlerdevelopment.fitnessgoals.Integrations.GoogleFitAPI;
+import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitStringsSavedData;
+import com.cutlerdevelopment.fitnessgoals.Integrations.GoogleFitIntegrations.GoogleFitAPI;
+import com.cutlerdevelopment.fitnessgoals.Integrations.IntegrationConnectionHandler;
 import com.cutlerdevelopment.fitnessgoals.R;
-import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitSavedData;
-import com.cutlerdevelopment.fitnessgoals.Settings.AppSettings;
+import com.cutlerdevelopment.fitnessgoals.SavedData.SettingsSavedData;
+import com.cutlerdevelopment.fitnessgoals.Settings.Settings;
+import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.FitnessAppSmallCardAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.FitnessAppSmallCard;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
-public class FirstMenu extends AppCompatActivity  {
+public class FirstMenu extends AppCompatActivity implements IntegrationConnectionHandler.IntegrationListener {
 
     Boolean readyToProgress = false;
     ConstraintLayout backgroundLayout;
     ImageView jamesImage;
     ConstraintLayout speechBubbleLayout;
     TextView speechBubbleText;
+
     ConstraintLayout fitnessAppsLayout;
     ListView fitnessAppsList;
+
+    ConstraintLayout playerModeLayout;
+    ImageView teamModeBackgroundColour;
+    ImageView playerModeBackgroundColour;
+
+    ConstraintLayout teamPlayerNameLayout;
+    TextInputLayout teamPlayerNameText;
+
+    ConstraintLayout spinnerLayout;
+    Spinner teamColourSpinner;
+
+    ConstraintLayout targetModeLayout;
+    ImageView targetModeBackgroundColour;
+    ImageView scaledModeBackgroundColour;
+
+    ConstraintLayout stepTargetLayout;
+    Spinner stepTargetSpinner;
+
+    ConstraintLayout daysBetweenLayout;
+    Spinner daysBetweenSpinner;
+
+    Button readyButton;
+
+    int gameMode;
+    int stepMode;
+    String teamPlayerName;
+    String teamColourChoice;
+    int stepTarget;
+    int daysBetween;
     int tutorialStep = 1;
 
     @Override
@@ -55,6 +102,21 @@ public class FirstMenu extends AppCompatActivity  {
         speechBubbleText = findViewById(R.id.firstMenuSpeechText);
         fitnessAppsLayout = findViewById(R.id.firstMenuAppOptions);
         fitnessAppsList = findViewById(R.id.firstMenuAppList);
+        playerModeLayout = findViewById(R.id.firstMenuPlayerModeMenu);
+        teamModeBackgroundColour = findViewById(R.id.firstMenuTeamModeColour);
+        playerModeBackgroundColour = findViewById(R.id.firstMenuPlayerModeColour);
+        teamPlayerNameLayout = findViewById(R.id.firstMenuTeamPlayerNameLayout);
+        teamPlayerNameText = findViewById(R.id.firstMenuTeamPlayerName);
+        spinnerLayout = findViewById(R.id.firstMenuSpinnerLayout);
+        teamColourSpinner = findViewById(R.id.firstMenuSpinner);
+        targetModeLayout = findViewById(R.id.firstMenuTargetModeLayout);
+        targetModeBackgroundColour = findViewById(R.id.firstMenuTargetModeColour);
+        scaledModeBackgroundColour = findViewById(R.id.firstMenuScaledModeColour);
+        stepTargetLayout = findViewById(R.id.firstMenuStepTargetLayout);
+        stepTargetSpinner = findViewById(R.id.firstMenuStepTargetSpinner);
+        daysBetweenLayout = findViewById(R.id.firstMenuDaysBetweenLayout);
+        daysBetweenSpinner = findViewById(R.id.firstMenuDaysBetweenSpinner);
+        readyButton = findViewById(R.id.firstMenuReadyButton);
 
         speechBubbleText.setText(getText(R.string.first_menu_intro_text_1));
         backgroundLayout.setOnClickListener(new View.OnClickListener() {
@@ -69,27 +131,233 @@ public class FirstMenu extends AppCompatActivity  {
 
     }
 
-
     void nextStep() {
 
         if (readyToProgress) {
             switch (tutorialStep) {
-                case 1:
+                case TutorialSteps.FIRST_MENU_MEDICAL_INTRO:
                     speechBubbleText.setText(getString(R.string.first_menu_intro_text_2_1));
                     break;
-                case 2:
+                case TutorialSteps.FIRST_MENU_FITNESS_APP_STEP:
                     speechBubbleText.setText(getString(R.string.first_menu_intro_text_2_2));
                     readyToProgress = false;
                     populateFitnessAppList();
                     showMenu(fitnessAppsLayout);
+                    pushSpeechBubbleToRight(fitnessAppsLayout);
                     break;
-                case 3:
+                case TutorialSteps.FIRST_MENU_TEAM_PLAYER_INTRO:
                     speechBubbleText.setText(getString(R.string.first_menu_intro_text_3));
+                    break;
+                case TutorialSteps.FIRST_MENU_PLAYER_MODE_STEP:
+                    speechBubbleText.setText(getString(R.string.first_menu_intro_text_4));
+                    readyToProgress = false;
+                    showMenu(playerModeLayout);
+                    moveSpeechBubbleUp(playerModeLayout);
+                    break;
+                case TutorialSteps.FIRST_MENU_NAME_COLOUR_STEP:
+                    showMenu(teamPlayerNameLayout);
+                    readyToProgress = false;
+                    if (gameMode == GameModes.TEAM_MODE) {
+                        speechBubbleText.setText(getString(R.string.firs_menu_confirm_name, "team"));
+                        teamPlayerNameText.setHint("Team Name");
+                    }
+                    else {
+                        speechBubbleText.setText(getString(R.string.firs_menu_confirm_name, "player"));
+                        teamPlayerNameText.setHint("Player Name");
+                        if (Settings.getInstance().getFitnessApp() == FitnessApps.GOOGLE_FIT) {
+                            String name = GoogleFitAPI.getInstance().getName();
+                            teamPlayerNameText.getEditText().setText(name);
+                        }
 
+                    }
+                    pushSpeechBubbleToRight(teamPlayerNameLayout);
+                    break;
+                case TutorialSteps.FIRST_MENU_TARGET_MODE_STEP_1:
+                    showMenu(targetModeLayout);
+                    readyToProgress = false;
+                    speechBubbleText.setText(getString(R.string.first_menu_intro_text_6));
+                    moveSpeechBubbleUp(targetModeLayout);
+                    break;
+                case TutorialSteps.FIRST_MENU_TARGET_MODE_STEP_2:
+                    if (stepMode == StepModes.TARGETED_MODE) {
+                        populateStepTargetSpinner();
+                        showMenu(stepTargetLayout);
+                        readyToProgress = false;
+                        speechBubbleText.setText(getString(R.string.first_menu_step_target_question));
+                        pushSpeechBubbleToRight(stepTargetLayout);
+                    }
+                    else {
+
+                    }
+                    break;
+                case TutorialSteps.FIRST_MENU_DAYS_BETWEEN_INTRO:
+                    speechBubbleText.setText(getString(R.string.first_menu_days_between_intro));
+                    break;
+                case TutorialSteps.FIRST__MENU_DAYS_BETWEEN_STEP:
+                    populateDaysBetweenSpinner();
+                    showMenu(daysBetweenLayout);
+                    readyToProgress = false;
+                    speechBubbleText.setText(getString(R.string.first_menu_choose_days_between));
+                    pushSpeechBubbleToRight(daysBetweenLayout);
+
+                    break;
+                case TutorialSteps.FIRST_MENU_COMPLETE_STEP_1:
+
+
+                    break;
             }
 
             tutorialStep++;
         }
+    }
+
+
+    void confirmAppConnected() {
+        speechBubbleText.setText(getString(R.string.first_menu_app_connected));
+        readyToProgress = true;
+    }
+    void confirmCantConnect() {
+        speechBubbleText.setText(getString(R.string.first_menu_app_cant_connect));
+        showMenu(fitnessAppsLayout);
+        pushSpeechBubbleToRight(fitnessAppsLayout);
+    }
+
+    public void whatIsTeamMode(View view) {
+        speechBubbleText.setText(getString(R.string.team_mode_details));
+        teamModeBackgroundColour.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        playerModeBackgroundColour.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+    }
+    public void whatIsPlayerMode(View view) {
+        speechBubbleText.setText(getString(R.string.player_mode_details));
+        teamModeBackgroundColour.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+        playerModeBackgroundColour.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+    }
+    public void selectTeamMode(View view) {
+        gameMode = GameModes.TEAM_MODE;
+        hideMenu(playerModeLayout);
+        speechBubbleText.setText(getString(R.string.first_menu_game_mode_selected, "manager", "team"));
+        moveSpeechBubbleUp(jamesImage);
+        readyToProgress = true;
+
+    }
+    public void selectPlayerMode(View view) {
+        gameMode = GameModes.PLAYER_MODE;
+        hideMenu(playerModeLayout);
+        speechBubbleText.setText(getString(R.string.first_menu_game_mode_selected, "player", "player"));
+        moveSpeechBubbleUp(jamesImage);
+        readyToProgress = true;
+    }
+
+    public void confirmTeamPlayerName(View view) {
+        teamPlayerName = teamPlayerNameText.getEditText().getText().toString();
+        if (teamPlayerName.equals("")) {
+            speechBubbleText.setText(getString(R.string.first_menu_empty_name));
+            return;
+        }
+        hideKeyboard(this);
+        if (gameMode == GameModes.TEAM_MODE) { speechBubbleText.setText(getString(R.string.first_menu_team_nane_confirmed, teamPlayerName)); }
+        else { speechBubbleText.setText(getString(R.string.first_menu_player_name_confirmed, teamPlayerName)); }
+
+        hideMenu(teamPlayerNameLayout);
+        populateSpinner();
+        showMenu(spinnerLayout);
+    }
+
+    public void confirmTeamColourSpinner(View view) {
+        teamColourChoice =  teamColourSpinner.getSelectedItem().toString();
+        hideMenu(spinnerLayout);
+        putSpeechBubbleBackIntoMiddle();
+        readyToProgress = true;
+        if(gameMode == GameModes.TEAM_MODE) {
+            speechBubbleText.setText(getString(R.string.first_menu_team_colour_confirmed, teamPlayerName, Words.getLeagueName(4)));
+        }
+        else {
+            speechBubbleText.setText(getString(R.string.first_menu_favourite_club_confirmed, teamColourChoice));
+        }
+    }
+
+    public void whatIsTargetMode(View view) {
+        speechBubbleText.setText(getString(R.string.target_mode_details));
+        targetModeBackgroundColour.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        scaledModeBackgroundColour.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+    }
+    public void whatIsScaledMode(View view) {
+        speechBubbleText.setText(getString(R.string.scaled_mode_details));
+        targetModeBackgroundColour.setBackgroundColor(getResources().getColor(R.color.colorBlack));
+        scaledModeBackgroundColour.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+    }
+    public void selectTargetMode(View view) {
+        stepMode = StepModes.TARGETED_MODE;
+        hideMenu(targetModeLayout);
+        speechBubbleText.setText(getString(R.string.first_menu_targeted_mode_selected));
+        moveSpeechBubbleUp(jamesImage);
+        readyToProgress = true;
+
+    }
+    public void selectScaledMode(View view) {
+        stepMode = StepModes.TARGETED_MODE;
+        hideMenu(targetModeLayout);
+        speechBubbleText.setText(getString(R.string.first_menu_scaled_mode_selected));
+        moveSpeechBubbleUp(jamesImage);
+        readyToProgress = true;
+    }
+
+    public void whatIsMyAverage(View view) {
+        hideMenu(stepTargetLayout);
+        speechBubbleText.setText(getString(R.string.first_menu_getting_average));
+        putSpeechBubbleBackIntoMiddle();
+
+        IntegrationConnectionHandler.getInstance().setListener(this);
+        Date yesterday = DateHelper.addDays(new Date(), -1);
+        IntegrationConnectionHandler.getInstance().getAverageStepsFrom(DateHelper.addDays(yesterday, -7), yesterday);
+
+    }
+
+    public void confirmStepTarget(View view) {
+
+        stepTarget = Integer.parseInt(stepTargetSpinner.getSelectedItem().toString()) * 1000;
+        hideMenu(stepTargetLayout);
+        putSpeechBubbleBackIntoMiddle();
+        readyToProgress = true;
+        speechBubbleText.setText(getString(R.string.first_menu_got_step_target));
+
+    }
+
+    public void confirmDaysBetween(View view) {
+        daysBetween = Integer.parseInt(daysBetweenSpinner.getSelectedItem().toString());
+        hideMenu(daysBetweenLayout);
+        putSpeechBubbleBackIntoMiddle();
+        readyToProgress = true;
+        if (gameMode == GameModes.TEAM_MODE && stepMode == StepModes.TARGETED_MODE) {
+            speechBubbleText.setText(getString(
+                    R.string.first_menu_team_target_final_conf,
+                    teamPlayerName,
+                    Words.getLeagueName(4),
+                    teamColourChoice,
+                    String.valueOf(daysBetween),
+                    Words.getNumberWithCommas(stepTarget),
+                    FitnessApps.getFitnessAppName(Settings.getInstance().getFitnessApp())));
+        }
+
+        readyButton.setVisibility(View.VISIBLE);
+    }
+
+    public void confirmReady(View view) {
+
+        SettingsSavedData.createSettingsSavedData(this);
+        Settings.getInstance().setupTeamGame(stepMode, stepTarget, daysBetween);
+
+
+
+    }
+
+    @Override
+    public void getAverageSteps(int average) {
+        if (average > 0) { speechBubbleText.setText(getString(R.string.first_menu_got_average, "7", Words.getNumberWithCommas(average))); }
+        else { speechBubbleText.setText(getString(R.string.first_menu_cant_get_average)); }
+        showMenu(stepTargetLayout);
+        pushSpeechBubbleToRight(stepTargetLayout);
+
     }
 
     /**
@@ -105,7 +373,6 @@ public class FirstMenu extends AppCompatActivity  {
             public void run() {
 
                 float jamesPositionForBounce = jamesImage.getHeight() / Numbers.FIRST_MENU_SPEECH_BUBBLE_BOUNCE_POSITION;
-
                 float jamesFinalXPosition = backgroundLayout.getX() + (backgroundLayout.getWidth() - jamesImage.getWidth());
                 float speechBounceYPosition = (jamesImage.getTop() - speechBubbleLayout.getHeight()) + jamesPositionForBounce + Numbers.SPEECH_BUBBLE_PADDING_OFFSET;
                 float speechFinalYPosition = speechBounceYPosition - jamesPositionForBounce;
@@ -136,24 +403,15 @@ public class FirstMenu extends AppCompatActivity  {
                 fullSet.playSequentially(manAndSpeechIntroAnimSet, speechBounceAndButtonIntroAnimSet);
                 fullSet.addListener(new Animator.AnimatorListener() {
                     @Override
-                    public void onAnimationStart(Animator animator) {
-
-                    }
-
+                    public void onAnimationStart(Animator animator) { }
                     @Override
                     public void onAnimationEnd(Animator animator) {
                         readyToProgress = true;
                     }
-
                     @Override
-                    public void onAnimationCancel(Animator animator) {
-
-                    }
-
+                    public void onAnimationCancel(Animator animator) { }
                     @Override
-                    public void onAnimationRepeat(Animator animator) {
-
-                    }
+                    public void onAnimationRepeat(Animator animator) { }
                 });
                 fullSet.start();
 
@@ -162,13 +420,15 @@ public class FirstMenu extends AppCompatActivity  {
 
     }
 
-    void showMenu(ConstraintLayout layoutToShow) {
+    void pushSpeechBubbleToRight(View layoutToRightOf) {
+        int speechBubbleWidth = backgroundLayout.getWidth() - (int) ( + layoutToRightOf.getWidth()
+                + Numbers.FIRST_MENU_FITNESS_MARGIN_PADDING * 3);
 
-        float speechBubbleStart = backgroundLayout.getWidth() / Numbers.FIRST_MENU_FITNESS_APP_DIVIDER;
+        float speechBubbleStart = layoutToRightOf.getWidth() + Numbers.FIRST_MENU_FITNESS_MARGIN_PADDING;
 
         ValueAnimator resizeSpeechBubbleAnimator = ValueAnimator.ofInt(
                 speechBubbleLayout.getMeasuredWidth(),
-                (speechBubbleLayout.getMeasuredWidth() / 2));
+                speechBubbleWidth);
         resizeSpeechBubbleAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -181,30 +441,24 @@ public class FirstMenu extends AppCompatActivity  {
         });
         resizeSpeechBubbleAnimator.setDuration(Numbers.FIRST_MENU_FITNESS_ANIM_DURATION);
 
-        AnimatorSet moveSpeechBubbleAndShowFitnessAppsSet = new AnimatorSet();
+        AnimatorSet resizeAndMoveSpeechBubble = new AnimatorSet();
 
-        moveSpeechBubbleAndShowFitnessAppsSet.playTogether(resizeSpeechBubbleAnimator,
+        resizeAndMoveSpeechBubble.playTogether(resizeSpeechBubbleAnimator,
                 ObjectAnimator.ofFloat( //Animating the speech bubble moving over
                         speechBubbleLayout,
                         "x",
                         speechBubbleStart)
-                        .setDuration(Numbers.FIRST_MENU_FITNESS_ANIM_DURATION),
-                ObjectAnimator.ofFloat(
-                        layoutToShow,
-                        "x",
-                        Numbers.FIRST_MENU_FITNESS_MARGIN_PADDING)
-                .setDuration(Numbers.FIRST_MENU_FITNESS_ANIM_DURATION)
-                );
-        moveSpeechBubbleAndShowFitnessAppsSet.start();
+                        .setDuration(Numbers.FIRST_MENU_FITNESS_ANIM_DURATION)
+        );
+        resizeAndMoveSpeechBubble.start();
     }
-    void hideMenu(ConstraintLayout layoutToHide) {
-
-        float speechBubbleXPos = (backgroundLayout.getWidth() / Numbers.FIRST_MENU_FITNESS_APP_DIVIDER)
-                - (speechBubbleLayout.getWidth() * 2 / Numbers.FIRST_MENU_FITNESS_APP_DIVIDER);
+    void putSpeechBubbleBackIntoMiddle() {
+        int speechBubbleWidth = backgroundLayout.getWidth() - (int) (Numbers.FIRST_MENU_FITNESS_MARGIN_PADDING * 2);
+        float speechBubbleXPos = Numbers.FIRST_MENU_FITNESS_MARGIN_PADDING;
 
         ValueAnimator resizeSpeechBubbleAnimator = ValueAnimator.ofInt(
                 speechBubbleLayout.getMeasuredWidth(),
-                (speechBubbleLayout.getMeasuredWidth() * 2));
+                speechBubbleWidth);
         resizeSpeechBubbleAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -217,21 +471,75 @@ public class FirstMenu extends AppCompatActivity  {
         });
         resizeSpeechBubbleAnimator.setDuration(Numbers.FIRST_MENU_FITNESS_ANIM_DURATION);
 
-        AnimatorSet moveSpeechBubbleAndHideFitnessAppsSet = new AnimatorSet();
+        AnimatorSet resizeAndMoveSpeechBubble = new AnimatorSet();
 
-        moveSpeechBubbleAndHideFitnessAppsSet.playTogether(resizeSpeechBubbleAnimator,
+        resizeAndMoveSpeechBubble.playTogether(resizeSpeechBubbleAnimator,
                 ObjectAnimator.ofFloat( //Animating the speech bubble moving over
                         speechBubbleLayout,
                         "x",
                         speechBubbleXPos)
-                        .setDuration(Numbers.FIRST_MENU_FITNESS_ANIM_DURATION),
+                        .setDuration(Numbers.FIRST_MENU_FITNESS_ANIM_DURATION));
+        resizeAndMoveSpeechBubble.start();
+    }
+    void moveSpeechBubbleUp(final View aboveView) {
+
+        AnimatorSet moveSpeechBubbleDownSlightly = new AnimatorSet();
+        moveSpeechBubbleDownSlightly.play(
+                ObjectAnimator.ofFloat(
+                        speechBubbleLayout,
+                        "y",
+                        speechBubbleLayout.getY())
+                        .setDuration(100)
+        );
+        moveSpeechBubbleDownSlightly.addListener(new Animator.AnimatorListener() {
+            @Override public void onAnimationStart(Animator animator) { }
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                final AnimatorSet moveSpeechBubble = new AnimatorSet();
+                float speechBubbleYPos = aboveView.getY() - speechBubbleLayout.getMeasuredHeight() + Numbers.SPEECH_BUBBLE_PADDING_OFFSET;
+
+                moveSpeechBubble.play(
+                        ObjectAnimator.ofFloat(
+                                speechBubbleLayout,
+                                "y",
+                                speechBubbleYPos)
+                                .setDuration(Numbers.FIRST_MENU_FITNESS_ANIM_DURATION)
+                );
+                moveSpeechBubble.start();
+            }
+            @Override public void onAnimationCancel(Animator animator) { }
+            @Override public void onAnimationRepeat(Animator animator) { }
+        });
+
+        moveSpeechBubbleDownSlightly.start();
+
+    }
+    void showMenu(ConstraintLayout layoutToShow) {
+
+        AnimatorSet showLayoutSet = new AnimatorSet();
+
+        showLayoutSet.play(
+                ObjectAnimator.ofFloat(
+                        layoutToShow,
+                        "x",
+                        Numbers.FIRST_MENU_FITNESS_MARGIN_PADDING)
+                        .setDuration(Numbers.FIRST_MENU_FITNESS_ANIM_DURATION)
+        );
+        showLayoutSet.start();
+    }
+    void hideMenu(ConstraintLayout layoutToHide) {
+
+
+        AnimatorSet hideLayoutSet = new AnimatorSet();
+
+        hideLayoutSet.playTogether(
                 ObjectAnimator.ofFloat(
                         layoutToHide,
                         "x",
-                        0 - fitnessAppsLayout.getWidth())
+                        0 - layoutToHide.getWidth())
                         .setDuration(Numbers.FIRST_MENU_FITNESS_ANIM_DURATION)
         );
-        moveSpeechBubbleAndHideFitnessAppsSet.start();
+        hideLayoutSet.start();
     }
 
     void populateFitnessAppList() {
@@ -272,15 +580,56 @@ public class FirstMenu extends AppCompatActivity  {
 
     }
 
+    void populateSpinner() {
+        List<String> spinnerList = new ArrayList<>();
+
+        if (gameMode == GameModes.TEAM_MODE) {
+            for (int i = 1; i <= Colours.NUM_TEAM_COLOURS; i++) {
+                spinnerList.add(Colours.getColourName(i));
+            }
+        }
+        else {
+            spinnerList = Words.teamNames;
+            Collections.sort(spinnerList);
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this, R.layout.spinner_item, spinnerList);
+        teamColourSpinner.setAdapter(adapter);
+    }
+
+    void populateStepTargetSpinner() {
+        List<String> spinnerList = new ArrayList<>();
+        for (int i = 1; i <= Numbers.MAX_NUM_STEPS_TARGET; i++) {
+            spinnerList.add(String.valueOf(i));
+        }
+        ArrayAdapter<String> stepAdapter = new ArrayAdapter<>(
+                this, R.layout.spinner_item, spinnerList);
+        stepTargetSpinner.setAdapter(stepAdapter);
+    }
+
+    void populateDaysBetweenSpinner() {
+        List<String> spinnerList = new ArrayList<>();
+        for (int i = 2; i <= Numbers.MAX_NUM_DAYS_BETWEEN; i+=2) {
+            spinnerList.add(String.valueOf(i));
+        }
+        ArrayAdapter<String> daysAdapter = new ArrayAdapter<>(
+                this, R.layout.spinner_item, spinnerList);
+        daysBetweenSpinner.setAdapter(daysAdapter);
+    }
+
+
     void selectFitnessApp(int app) {
         switch (app) {
             case FitnessApps.MOCKED:
                 hideMenu(fitnessAppsLayout);
+                putSpeechBubbleBackIntoMiddle();
                 confirmAppConnected();
                 break;
             case FitnessApps.GOOGLE_FIT:
                 speechBubbleText.setText(R.string.first_menu_calling_app);
                 hideMenu(fitnessAppsLayout);
+                putSpeechBubbleBackIntoMiddle();
                 GoogleFitAPI.createGoogleFitAPIInstance(this);
                 if (GoogleFitAPI.getInstance().hasPermissions(this)) {
                     confirmAppConnected();
@@ -289,18 +638,15 @@ public class FirstMenu extends AppCompatActivity  {
             case FitnessApps.FITBIT:
                 speechBubbleText.setText(R.string.first_menu_calling_app);
                 hideMenu(fitnessAppsLayout);
-                FitbitSavedData.createFitbitSavedDataInstance(this);
-                if (FitbitSavedData.getInstance().getTopData() != null) {
-                    confirmAppConnected();
-                }
-                else {
-                    FitbitAPI.createFitbitAPIInstance(this);
-                }
+                putSpeechBubbleBackIntoMiddle();
+                FitbitStringsSavedData.createFitbitStringsSavedDataInstance(this);
+                FitbitAPI.createFitbitAPIInstance(this);
+                FitbitAPI.getInstance().requestFitbitPermission(this);
                 break;
             default:
                 speechBubbleText.setText(R.string.first_menu_app_connected);
         }
-        AppSettings.getInstance().changeFitnessApp(app);
+        Settings.getInstance().changeFitnessApp(app);
 
     }
     @Override
@@ -318,8 +664,8 @@ public class FirstMenu extends AppCompatActivity  {
             }
         }
         if (requestCode == FitnessApps.FITBIT_INIT_REQUEST_CODE) {
-            if (FitbitSavedData.getInstance() != null &&
-            FitbitSavedData.getInstance().getTopData() != null) {
+            if (FitbitStringsSavedData.getInstance() != null &&
+                    FitbitStringsSavedData.getInstance().getTopData() != null) {
                 confirmAppConnected();
             }
             else {
@@ -329,13 +675,12 @@ public class FirstMenu extends AppCompatActivity  {
     }
 
 
-    void confirmAppConnected() {
-        speechBubbleText.setText(getString(R.string.first_menu_app_connected));
-        AppSettings.getInstance().changeFitnessApp(FitnessApps.GOOGLE_FIT);
-        readyToProgress = true;
-    }
-    void confirmCantConnect() {
-        speechBubbleText.setText(getString(R.string.first_menu_app_cant_connect));
-        showMenu(fitnessAppsLayout);
+
+    public void hideKeyboard(Activity activity) {
+        View view = activity.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }

@@ -23,12 +23,12 @@ public class FitbitStrings {
         this.accessToken = accessToken;
         this.tokenType = tokenType;
 
-        FitbitSavedData.getInstance().saveObject(this);
+        FitbitStringsSavedData.getInstance().saveObject(this);
 
         instance = this;
     }
 
-    private FitbitStrings() {
+    public FitbitStrings() {
         instance = this;
     }
 
@@ -43,7 +43,7 @@ public class FitbitStrings {
     public void setAccessToken(String accessToken) { this.accessToken = accessToken; }
     public void changeAccessToken(String accessToken) {
         this.accessToken = accessToken;
-        FitbitSavedData.getInstance().updateObject(this);
+        FitbitStringsSavedData.getInstance().updateObject(this);
     }
 
     private String tokenType;
@@ -51,6 +51,6 @@ public class FitbitStrings {
     public void setTokenType(String tokenType) { this.tokenType = tokenType; }
     public void changeTokenType(String tokenType) {
         this.tokenType = tokenType;
-        FitbitSavedData.getInstance().updateObject(this);
+        FitbitStringsSavedData.getInstance().updateObject(this);
     }
 }

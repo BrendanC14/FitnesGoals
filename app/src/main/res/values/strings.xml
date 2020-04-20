@@ -6,6 +6,38 @@
     <string name="app_name">&appname;</string>
 
     <string name="next_button_text">Next</string>
+    <string name="confirm_button_text">Confirm</string>
+    <string name="ready_button_text">Ready!</string>
+
+    <string name="team_mode">Team</string>
+    <string name="player_mode">Player</string>
+    <string name="what_is_team_mode"><u>What is Team Mode?</u></string>
+    <string name="what_is_player_mode"><u>What is Player Mode?</u></string>
+    <string name="select_team_mode">Select Team</string>
+    <string name="select_player_mode">Select Player</string>
+    <string name="team_mode_details">
+        In Team Mode you will manage your own club and be responsible for the entire team. If you reach your step target the whole team will perform well.
+        \nYou will remain with your club throughout your career and can\'t move to other clubs.
+    </string>
+    <string name="player_mode_details">
+        In Player Mode you will sign for a club. If you reach your step target you will perform well, but a team is made up of ten other AI players.
+        \nAs a Player, you will be subject to transfer bids and can switch between clubs.
+    </string>
+    <string name="target_mode">Targeted</string>
+    <string name="scaled_mode">Scaled</string>
+    <string name="what_is_target_mode"><u>What is Targeted Mode?</u></string>
+    <string name="what_is_scaled_mode"><u>What is Scaled Mode?</u></string>
+    <string name="select_target_mode">Select Targeted</string>
+    <string name="select_scaled_mode">Select Scaled</string>
+    <string name="target_mode_details">
+        In Targeted mode you will choose a number of steps that you want to aim for. Regardless of opponent, or league, your performance will be judged against your chosen target.
+        \nThis is an easier mode, but less realistic.
+    </string>
+    <string name="scaled_mode_details">
+        In Scaled mode, the number of steps needed will vary based on what team you are playing and what league they\'re in. You\'ll find your target will fluctuate and more steps will be needed as you climb the leagues.
+        \nThis mode is more difficult, but more realistic.
+    </string>
+    <string name="what_is_my_average">What\'s my average?</string>
 
     <string name="first_menu_intro_text_1">
         Welcome to &appname;, the app where your real-life activity will determine your on-field performances.
@@ -20,10 +52,51 @@
     <string name="first_menu_app_unavailable">I can\'t get in touch with them right now, can we try another?</string>
     <string name="first_menu_app_cant_connect">Can\'t get hold of them, did you give me permission?</string>
     <string name="first_menu_app_fitbit_pickup">Sorry about that, all sorted now got the details.</string>
-    <string name="first_menu_intro_text_3">Next up, you need to decide what you\'re going to be; player or manager?</string>
-
+    <string name="first_menu_intro_text_3">
+        Next up, you need to decide what you\'re going to be; player or manager.
+        \nBoth modes will take your steps into account, but they\'ll be used in different ways.
+    </string>
+    <string name="first_menu_intro_text_4">What do you wanna be?</string>
+    <string name="first_menu_game_mode_selected">
+        Cool, let\'s get you setup as a %1s.
+        \nNext up I\m gonna need to take some details about your %2s.
+    </string>
+    <string name="firs_menu_confirm_name">What\'s your %1ss name?</string>
+    <string name="first_menu_team_player_name_hint">tea</string>
+    <string name="first_menu_empty_name">Come on, you gotta put a name in.</string>
+    <string name="first_menu_player_name_confirmed">Alright %1s nice to meet you. What\'s your favourite team?</string>
+    <string name="first_menu_team_nane_confirmed">Alright let\'s get %1s in the leagues. What\'s your team colour?</string>
+    <string name="first_menu_favourite_club_confirmed">
+        Alright I\'ll get you a contract with %1s. You\'ve got potential but I dunno if you\'re ready. You\'ll be monitored over the next week. Do well, you\'ll stay at the club. Not quite there yet, they\'ll send you out on loan.
+        \nI just need to get a couple more preferences and we\'ll get started.
+    </string>
+    <string name="first_menu_team_colour_confirmed">
+        Alright let\s get %1s setup in %2s.
+        \nI just need to get a couple more preferences and we\'ll get started.
+    </string>
+    <string name="first_menu_intro_text_6">How do you wanna play?</string>
+    <string name="first_menu_targeted_mode_selected">Targeted it is. We\'ll set you up a target, but you can change this at any time. Or if you fancy a specific challenge you can change your target for specific fixtures.</string>
+    <string name="first_menu_scaled_mode_selected">Scaled it is. Each league\s average can be edited at any time. Or if necessary you can change your target for specific fixtures.</string>
+    <string name="first_menu_step_target_question">Alright then, what\'s your <u>daily</u> target?</string>
+    <string name="first_menu_step_target_000s">,000</string>
+    <string name="first_menu_getting_average">Gimme a sec I\'ll find out</string>
+    <string name="first_menu_cant_get_average">Hmm sorry, can\'t seem to get hold of step details, you might have to check with the app yourself.</string>
+    <string name="first_menu_got_average">In the last %1s days, not including today, you\'ve averaged %2s steps a day.</string>
+    <string name="first_menu_got_step_target">Alright, %1s saved, We\'re almost done with setup I just need to know how many days you want in between games.</string>
+    <string name="first_menu_days_between_intro">
+        Your steps are still important in between games. Half of the days will contribute towards your defensive performance, the other half towards your attacking performance.
+        \nIf you\'re a consistent stepper, you don\'t need many days between games. If you\'d rather be judged on an average of more days, choose more.
+    </string>
+    <string name="first_menu_choose_days_between">How many days you thinking?</string>
+    <string name="first_menu_team_target_final_conf">Alright, I think that\'s everything! Let\'s confirm.
+        \nYou\'ll be manager of %1s starting in %2s.
+        \nYou\'ll play in %3s every %4s days, aiming for %5s steps.
+        \nWe\'ll be speaking to %6s to get your steps.
+        \nWhen you're ready let me know, I'll make a few calls and get started!
+    </string>
+]
     <string name="fitness_app_small_card_select_button">Select this App</string>
 
     <string name="content_description_james">Business man in a white shirt</string>
-    <string name="content_description_googlefit">Google Fit logo</string>
+    <string name="content_description_aoo_logo">Fitness App logo</string>
 </resources>

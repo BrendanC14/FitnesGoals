@@ -24,8 +24,8 @@ public class FitbitResponse extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         onNewIntent(getIntent());
         if (!string.contains("error_description")) {
-            String accessToken = string.substring(string.indexOf("&access_token") + 14);
-            String userId = string.substring(string.indexOf("&user_id") + 9, string.indexOf("&token_type"));
+            String accessToken = string.substring(string.indexOf("#access_token") + 14, string.indexOf("&user_id"));
+            String userId = string.substring(string.indexOf("&user_id") + 9, string.indexOf("&scope=activity"));
             String tokenType = string.substring(string.indexOf("&token_type") + 12, string.indexOf("&expires_in"));
             new FitbitStrings(userId, accessToken, tokenType);
         }

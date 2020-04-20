@@ -17,17 +17,18 @@
 
     <item android:bottom="0dp"
         android:top="0dp"
+        android:left="35dp"
         android:gravity="center_horizontal|bottom">
         <rotate
-            android:fromDegrees="55"
+            android:fromDegrees="30"
             android:toDegrees="45"
-            android:pivotX="145%"
-            android:pivotY="15%">
+            android:pivotX="250%"
+            android:pivotY="30%">
             <shape android:shape="rectangle">
                 <solid android:color="@color/colorAccent" />
                 <size
-                    android:height="80dp"
-                    android:width="80dp"/>
+                    android:height="75dp"
+                    android:width="75dp"/>
 
             </shape>
         </rotate>

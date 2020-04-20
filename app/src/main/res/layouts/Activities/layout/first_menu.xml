@@ -5,6 +5,7 @@
     android:id="@+id/firstMenuBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@drawable/mainmenubackground"
     tools:context=".Activities.FirstMenu">
 
@@ -38,6 +39,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <Button
+            android:id="@+id/firstMenuReadyButton"
+            style="@style/Widget.FitnessGoals.Button"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:maxLines="1"
+            android:visibility="gone"
+            android:onClick="confirmReady"
+            android:text="@string/ready_button_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/firstMenuSpeechText" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -64,4 +78,552 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/firstMenuPlayerModeMenu"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/rounded_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/firstMenuTeamMode"
+            style="@style/Widget.FitnessGoals.CardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/firstMenuWhatIsTeamMode"
+                style="@style/Widget.FitnessGoals.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:maxLines="2"
+                android:onClick="whatIsTeamMode"
+                android:text="@string/what_is_team_mode"
+                app:layout_constraintEnd_toStartOf="@+id/teamCentreGuideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/firstMenuTeamModeColour" />
+
+            <Button
+                android:id="@+id/firstMenuSelectTeamMode"
+                style="@style/Widget.FitnessGoals.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:onClick="selectTeamMode"
+                android:text="@string/select_team_mode"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/teamCentreGuideline"
+                app:layout_constraintTop_toTopOf="@+id/firstMenuWhatIsTeamMode" />
+
+            <ImageView
+                android:id="@+id/firstMenuTeamModeColour"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:background="#000000"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/firstMenuTeamModeImage"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/emptybadge" />
+
+            <TextView
+                android:id="@+id/firstMenuTeamModeString"
+                style="@style/TextAppearance.FitnessGoals.Title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:maxLines="1"
+                android:text="@string/team_mode"
+                app:layout_constraintBottom_toBottomOf="@+id/firstMenuTeamModeColour"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/firstMenuTeamModeColour"
+                app:layout_constraintTop_toTopOf="@+id/firstMenuTeamModeColour" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/teamCentreGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/firstMenuPlayerMode"
+            style="@style/Widget.FitnessGoals.CardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/firstMenuTeamMode">
+
+            <Button
+                android:id="@+id/firstMenuWhatIsPlayerMode"
+                style="@style/Widget.FitnessGoals.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:maxLines="2"
+                android:onClick="whatIsPlayerMode"
+                android:text="@string/what_is_player_mode"
+                app:layout_constraintEnd_toStartOf="@+id/playerCentreGuideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/firstMenuPlayerModeColour" />
+
+            <Button
+                android:id="@+id/firstMenuSelectPlayerMode"
+                style="@style/Widget.FitnessGoals.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:onClick="selectPlayerMode"
+                android:text="@string/select_player_mode"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/playerCentreGuideline"
+                app:layout_constraintTop_toTopOf="@+id/firstMenuWhatIsPlayerMode" />
+
+            <ImageView
+                android:id="@+id/firstMenuPlayerModeColour"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:background="#000000"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/firstMenuPlayerModeImage"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/emptyshirt" />
+
+            <TextView
+                android:id="@+id/firstMenuPlayerModeString"
+                style="@style/TextAppearance.FitnessGoals.Title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:maxLines="1"
+                android:text="@string/player_mode"
+                app:layout_constraintBottom_toBottomOf="@+id/firstMenuPlayerModeColour"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/firstMenuPlayerModeColour"
+                app:layout_constraintTop_toTopOf="@+id/firstMenuPlayerModeColour" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/playerCentreGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/firstMenuTeamPlayerNameLayout"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/rounded_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="parent">
+
+        <Button
+            android:id="@+id/firstMenuTeamPlayerNameConfirmButton"
+            style="@style/Widget.FitnessGoals.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:maxLines="1"
+            android:onClick="confirmTeamPlayerName"
+            android:text="@string/confirm_button_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/firstMenuTeamPlayerName" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/firstMenuTeamPlayerName"
+            style="@style/Widget.FitnessGoals.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/firstMenuSpinnerLayout"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/rounded_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="parent">
+
+        <Button
+            android:id="@+id/firstMenuSpinnerConfirmButton"
+            style="@style/Widget.FitnessGoals.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:maxLines="1"
+            android:onClick="confirmTeamColourSpinner"
+            android:text="@string/confirm_button_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/firstMenuSpinner" />
+
+        <Spinner
+            android:id="@+id/firstMenuSpinner"
+            style="@style/Widget.FitnessGoals.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/firstMenuTargetModeLayout"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/rounded_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="parent">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/firstMenuTargetMode"
+            style="@style/Widget.FitnessGoals.CardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/firstMenuWhatIsTargetMode"
+                style="@style/Widget.FitnessGoals.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:maxLines="2"
+                android:onClick="whatIsTargetMode"
+                android:text="@string/what_is_target_mode"
+                app:layout_constraintEnd_toStartOf="@+id/targetCentreGuideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/firstMenuTargetModeColour" />
+
+            <Button
+                android:id="@+id/firstMenuSelectTargetMode"
+                style="@style/Widget.FitnessGoals.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:onClick="selectTargetMode"
+                android:text="@string/select_target_mode"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/targetCentreGuideline"
+                app:layout_constraintTop_toTopOf="@+id/firstMenuWhatIsTargetMode" />
+
+            <ImageView
+                android:id="@+id/firstMenuTargetModeColour"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:background="#000000"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/firstMenuTargetModeImage"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/target" />
+
+            <TextView
+                android:id="@+id/firstMenuTargetModeString"
+                style="@style/TextAppearance.FitnessGoals.Title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:maxLines="1"
+                android:text="@string/target_mode"
+                app:layout_constraintBottom_toBottomOf="@+id/firstMenuTargetModeColour"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/firstMenuTargetModeColour"
+                app:layout_constraintTop_toTopOf="@+id/firstMenuTargetModeColour" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/targetCentreGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/firstMenuScaledMode"
+            style="@style/Widget.FitnessGoals.CardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/firstMenuTargetMode">
+
+            <Button
+                android:id="@+id/firstMenuWhatIsScaledMode"
+                style="@style/Widget.FitnessGoals.Button.TextButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:maxLines="2"
+                android:onClick="whatIsScaledMode"
+                android:text="@string/what_is_scaled_mode"
+                app:layout_constraintEnd_toStartOf="@+id/scaledCentreGuideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/firstMenuScaledModeColour" />
+
+            <Button
+                android:id="@+id/firstMenuSelectScaledMode"
+                style="@style/Widget.FitnessGoals.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:onClick="selectScaledMode"
+                android:text="@string/select_scaled_mode"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/scaledCentreGuideline"
+                app:layout_constraintTop_toTopOf="@+id/firstMenuWhatIsScaledMode" />
+
+            <ImageView
+                android:id="@+id/firstMenuScaledModeColour"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:background="#000000"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/firstMenuScaledModeImage"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/scaled" />
+
+            <TextView
+                android:id="@+id/firstMenuScaledModeString"
+                style="@style/TextAppearance.FitnessGoals.Title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:maxLines="1"
+                android:text="@string/scaled_mode"
+                app:layout_constraintBottom_toBottomOf="@+id/firstMenuScaledModeColour"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/firstMenuScaledModeColour"
+                app:layout_constraintTop_toTopOf="@+id/firstMenuScaledModeColour" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/scaledCentreGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/firstMenuStepTargetLayout"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/rounded_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="parent">
+
+        <Button
+            android:id="@+id/firstMenuStepTargetConfirmButton"
+            style="@style/Widget.FitnessGoals.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:onClick="confirmStepTarget"
+            android:text="@string/confirm_button_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/firstMenuStepTargetSpinner" />
+
+        <Spinner
+            android:id="@+id/firstMenuStepTargetSpinner"
+            style="@style/Widget.FitnessGoals.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toStartOf="@+id/firstMenu000sString"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/firstMenu000sString"
+            style="@style/TextAppearance.FitnessGoals.NormalText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:maxLines="1"
+            android:text="@string/first_menu_step_target_000s"
+            app:layout_constraintBottom_toBottomOf="@+id/firstMenuStepTargetSpinner"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/firstMenuStepTargetSpinner" />
+
+
+        <Button
+            android:id="@+id/firstMenuStepTargetGetAverage"
+            style="@style/Widget.FitnessGoals.Button.TextButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="whatIsMyAverage"
+            android:text="@string/what_is_my_average"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/firstMenuStepTargetConfirmButton" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/firstMenuDaysBetweenLayout"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/rounded_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="parent">
+
+        <Button
+            android:id="@+id/firstMenuDaysBetweenConfirmButton"
+            style="@style/Widget.FitnessGoals.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:layout_marginBottom="8dp"
+            android:onClick="confirmDaysBetween"
+            android:text="@string/confirm_button_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/firstMenuDaysBetweenSpinner" />
+
+        <Spinner
+            android:id="@+id/firstMenuDaysBetweenSpinner"
+            style="@style/Widget.FitnessGoals.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

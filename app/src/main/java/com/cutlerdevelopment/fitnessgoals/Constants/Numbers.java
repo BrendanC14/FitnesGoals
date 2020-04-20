@@ -2,6 +2,8 @@ package com.cutlerdevelopment.fitnessgoals.Constants;
 
 public class Numbers {
 
+    public static final int MOCKED_AVERAGE_STEPS = 6000;
+
     //UI Numbers
     public static final long FIRST_MENU_JAMES_ANIM_DURATION = 1000;
     public static final long FIRST_MENU_JAMES_APPEAR_WAIT = 2000;
@@ -11,12 +13,14 @@ public class Numbers {
     public static final long FIRST_MENU_SPEECH_BUBBLE_ANIM_DURATION = 1000;
     public static final long FIRST_MENU_SPEECH_BUBBLE_BOUNCE_ANIM_DURATION = 500;
 
-
     public static final float FIRST_MENU_FITNESS_APP_DIVIDER = 2;
     public static final long FIRST_MENU_FITNESS_ANIM_DURATION = 1000;
     public static final long FIRST_MENU_FITNESS_MARGIN_PADDING = 32;
 
 
-    public static final float SPEECH_BUBBLE_PADDING_OFFSET = 100;
+    public static final float SPEECH_BUBBLE_PADDING_OFFSET = 114;
 
+    //Settings
+    public static final int MAX_NUM_STEPS_TARGET = 20;
+    public static final int MAX_NUM_DAYS_BETWEEN = 8;
 }

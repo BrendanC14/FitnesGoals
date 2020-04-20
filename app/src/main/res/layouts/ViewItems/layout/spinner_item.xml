@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/TextAppearance.FitnessGoals.NormalText"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:maxLines="1"
+    android:textColor="#111111"
+    android:padding="10dp"
+    android:textAlignment="center"
+    android:layout_gravity="center"
+    />

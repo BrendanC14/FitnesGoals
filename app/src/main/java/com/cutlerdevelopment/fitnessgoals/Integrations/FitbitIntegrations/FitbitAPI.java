@@ -2,6 +2,8 @@ package com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 
 import androidx.browser.customtabs.CustomTabsClient;
@@ -12,8 +14,22 @@ import androidx.core.content.ContextCompat;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.cutlerdevelopment.fitnessgoals.Constants.FitnessApps;
+import com.cutlerdevelopment.fitnessgoals.Constants.Words;
 import com.cutlerdevelopment.fitnessgoals.R;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.cutlerdevelopment.fitnessgoals.Constants.Words.getDateInFitbitFormat;
 
 @Entity
 public class FitbitAPI {
@@ -22,6 +38,14 @@ public class FitbitAPI {
     private static final String CLIENT_ID = "22BNWX";
     private static final String CLIENT_SECRET = "cc7290baf51817b20a7bcbed82dad566";
 
+    Activity act;
+
+    public interface FitbitListener {
+        void getAverage(int average);
+    }
+
+    FitbitListener listener;
+    public void setListener(FitbitListener listener) {this.listener = listener; }
     private static final String CUSTOM_TAB_PACKAGE_NAME = "com.android.chrome";
     private CustomTabsClient mClient;
     private CustomTabsSession mCustomTabsSession;
@@ -41,6 +65,11 @@ public class FitbitAPI {
     }
 
     private FitbitAPI(Activity activity) {
+        this.act = activity;
+        instance = this;
+    }
+
+    public void requestFitbitPermission(Activity activity) {
 
         speedUpChromeTabs();
         CustomTabsClient.bindCustomTabsService(activity, CUSTOM_TAB_PACKAGE_NAME, mCustomTabsServiceConnection);
@@ -60,10 +89,10 @@ public class FitbitAPI {
                 "&scope=activity" +
                 "&redirect_uri=my-fitbit-app://my.fitbit.app/handle_auth" +
                 "&prompt=login";
-         customTabsIntent.launchUrl(activity, Uri.parse(url));
+        customTabsIntent.launchUrl(activity, Uri.parse(url));
 
         activity.startActivityForResult(customTabsIntent.intent, FitnessApps.FITBIT_INIT_REQUEST_CODE);
-        instance = this;
+
     }
 
     private void speedUpChromeTabs() {
@@ -82,4 +111,49 @@ public class FitbitAPI {
             }
         };
     }
+
+
+    public void getAverageFromDates(Date startDate, Date endDate) {
+
+        String startDateString = getDateInFitbitFormat(startDate);
+        String endDateString = getDateInFitbitFormat(endDate);
+
+        RequestQueue queue = Volley.newRequestQueue(act);
+        String url = "https://api.fitbit.com/1/user/" +
+                "-/" +
+                "activities/steps/date/" +
+                startDateString + "/" +
+                endDateString +".json";
+
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        listener.getAverage(0);
+                    }
+                },
+                new Response.ErrorListener() {
+                  @Override
+                  public void onErrorResponse(VolleyError error) {
+                        listener.getAverage(0);
+                    }
+        }) {
+            /** Passing some request headers* */
+            @Override
+            public Map getHeaders() throws AuthFailureError {
+                HashMap headers = new HashMap();
+                headers.put("Authorization", "Bearer  " + FitbitStrings.getInstance().getAccessToken());
+                return headers;
+            }
+
+
+
+        };
+
+        queue.add(stringRequest);
+    }
+
 }
