@@ -545,7 +545,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
     /**
      * When GoogleFit or FitbitAPI get authorisation we startActivity for result with a defined Request Code from FitnessApps.
      * Depending on result, will either confirmAppConnected or confirmCantConnect
-     * @param requestCode 
+     * @param requestCode
      * @param resultCode
      * @param data
      */
