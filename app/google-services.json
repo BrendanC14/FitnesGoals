@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "717213059371",
+    "firebase_url": "https://fitness-goals-274618.firebaseio.com",
+    "project_id": "fitness-goals-274618",
+    "storage_bucket": "fitness-goals-274618.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:717213059371:android:fbedb579c53c4202859d6e",
+        "android_client_info": {
+          "package_name": "com.cutlerdevelopment.fitnessgoals"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "717213059371-fbik6ts3f7mnhhqu4qsgq1dprsn3fka6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALyaYBBzdstUTFCKk9isO3IEiwPXjE3Z4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "717213059371-fbik6ts3f7mnhhqu4qsgq1dprsn3fka6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

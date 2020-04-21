@@ -1,4 +1,4 @@
-package com.cutlerdevelopment.fitnessgoals.Integrations.GoogleFitIntegrations;
+package com.cutlerdevelopment.fitnessgoals.Integrations.GoogleIntegrations;
 
 import android.app.Activity;
 import android.content.Context;

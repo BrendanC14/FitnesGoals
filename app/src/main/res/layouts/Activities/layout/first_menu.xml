@@ -307,7 +307,33 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/firstMenuSpinnerLayout"
+        android:id="@+id/firstMenuTeamColourLayout"
+        android:layout_width="200dp"
+        android:layout_height="400dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/rounded_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="parent">
+
+
+        <GridView
+            android:id="@+id/firstMenuColourGrid"
+            android:layout_width="198dp"
+            android:layout_height="398dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/firstMenuFavouriteTeamLayout"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
@@ -316,21 +342,21 @@
         app:layout_constraintEnd_toStartOf="parent">
 
         <Button
-            android:id="@+id/firstMenuSpinnerConfirmButton"
+            android:id="@+id/firstMenuFavouriteTeamConfirmButton"
             style="@style/Widget.FitnessGoals.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:maxLines="1"
-            android:onClick="confirmTeamColourSpinner"
+            android:onClick="confirmFavouriteTeam"
             android:text="@string/confirm_button_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/firstMenuSpinner" />
+            app:layout_constraintTop_toBottomOf="@+id/firstMenuFavouriteTeamSpinner" />
 
         <Spinner
-            android:id="@+id/firstMenuSpinner"
+            android:id="@+id/firstMenuFavouriteTeamSpinner"
             style="@style/Widget.FitnessGoals.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

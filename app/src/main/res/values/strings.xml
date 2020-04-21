@@ -90,10 +90,12 @@
     <string name="first_menu_choose_days_between">How many days you thinking?</string>
     <string name="first_menu_team_target_final_conf">Alright, I think that\'s everything! Let\'s confirm.
         \nYou\'ll be manager of %1s starting in %2s.
-        \nYou\'ll play in %3s every %4s days, aiming for %5s steps.
-        \nWe\'ll be speaking to %6s to get your steps.
-        \nWhen you're ready let me know, I'll make a few calls and get started!
+        \nYou\'ll play every %3s days, aiming for %4s steps.
+        \nWe\'ll be speaking to %5s to get your steps.
+        \nWhen you\'re ready let me know!
     </string>
+    <string name="first_menu_ready_to_go">Excellent! Give me a couple secs to get the details sorted! If you need anything, feel free to give me a call. Good luck!</string>
+    <string name="first_menu_still_loading">Sorry still on calls, couple more seconds.</string>
 ]
     <string name="fitness_app_small_card_select_button">Select this App</string>
 

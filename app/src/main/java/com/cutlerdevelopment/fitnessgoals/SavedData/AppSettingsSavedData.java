@@ -13,26 +13,26 @@ import androidx.room.RoomDatabase;
 import androidx.room.Update;
 
 import com.cutlerdevelopment.fitnessgoals.Constants.Words;
-import com.cutlerdevelopment.fitnessgoals.Settings.Settings;
+import com.cutlerdevelopment.fitnessgoals.Settings.AppSettings;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class SettingsSavedData {
+public class AppSettingsSavedData {
 
-    public static void createSettingsSavedData(Context c) {
-        new SettingsSavedData(c);
+    public static void createAppSettingsSavedData(Context c) {
+        new AppSettingsSavedData(c);
     }
-    private static SettingsSavedData instance = null;
+    private static AppSettingsSavedData instance = null;
 
-    public static SettingsSavedData getInstance() {
+    public static AppSettingsSavedData getInstance() {
         if (instance != null) {
             return instance;
         }
         return null;
     }
 
-    private SettingsSavedData(Context context) {
+    private AppSettingsSavedData(Context context) {
         instance = this;
         //TODO: stop allowing Main Thread Queries and figure out a better way to load a game
         db = Room.databaseBuilder(context, AppDatabase.class, Words.APPSETTINGS_SAVED_DATA_DB_NAME).allowMainThreadQueries().build();
@@ -41,7 +41,7 @@ public class SettingsSavedData {
     /**
      * App Database class is the Room Database that contains the instances of the Dao interfaces.
      */
-    @Database(entities = {Settings.class}, version = 1)
+    @Database(entities = {AppSettings.class}, version = 1)
     public static abstract class AppDatabase extends RoomDatabase {
         public abstract MyDao getDao();
     }
@@ -52,36 +52,36 @@ public class SettingsSavedData {
     public interface MyDao {
 
         @Insert(onConflict = OnConflictStrategy.REPLACE)
-        void insertData(Settings data);
+        void insertData(AppSettings data);
         @Update
-        void updateData(Settings data);
+        void updateData(AppSettings data);
         @Delete
-        void deleteData(Settings data);
+        void deleteData(AppSettings data);
 
-        @Query("SELECT * FROM FitbitStrings")
-        Settings[] selectAllData();
+        @Query("SELECT * FROM AppSettings")
+        AppSettings[] selectAllData();
     }
 
-    public void saveObject(Settings data) {
+    public void saveObject(AppSettings data) {
         db.getDao().insertData(data);
     }
 
-    public void updateObject(Settings data) {
+    public void updateObject(AppSettings data) {
         db.getDao().updateData(data);
     }
 
 
-    public void deleteObject(Settings data) {
+    public void deleteObject(AppSettings data) {
         db.getDao().deleteData(data);
     }
 
-    public Settings getTopData() {
+    public AppSettings loadSettings() {
         if (db.getDao().selectAllData().length > 0) {
             return Arrays.asList(db.getDao().selectAllData()).get(0);
         }
         return null;
     }
-    public List<Settings> getAllData() {
+    public List<AppSettings> getAllData() {
         return Arrays.asList(db.getDao().selectAllData());
     }
     public void resetDB() {
