@@ -23,8 +23,10 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.Constants.FitnessApps;
 import com.cutlerdevelopment.fitnessgoals.Constants.GameModes;
+import com.cutlerdevelopment.fitnessgoals.Constants.Leagues;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.Constants.StepModes;
 import com.cutlerdevelopment.fitnessgoals.Constants.TutorialSteps;
@@ -57,12 +59,12 @@ import java.util.Random;
 
 /**
  * FirstMenu Activity is the first Activity that loads when the User first opens the app. It's a setup menu.
- * The class is organised into the different steps, overridden activity results then some animation methods.
+ * However if some CareerSettings are found in RoomDB then it will load the existing game.
  */
 public class FirstMenu extends AppCompatActivity implements IntegrationConnectionHandler.IntegrationListener {
 
     Boolean readyToProgress = false;
-    Boolean readyToStart = false;
+
     ConstraintLayout backgroundLayout;
     ImageView jamesImage;
     ConstraintLayout speechBubbleLayout;
@@ -147,6 +149,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         CareerSavedData.createCareerSavedData(this);
         if (CareerSavedData.getInstance().loadSettings() != null) {
             loadGame();
+            finish();
         }
         else {
             IntegrationConnectionHandler.getInstance().setListener(this);
@@ -155,6 +158,13 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
 
     }
 
+    /**
+     * Once IntegrationConnectionHandler has added all the teams this method is called.
+     */
+    @Override
+    public void teamsRetrieved() {
+        animateJamesIntroduction();
+    }
     /**
      * nextStep is called whenever the User presses anywhere on the screen.
      * If the readyToProgress boolean is true a switch statement checks which step the user is on, updates the UI, sets readyToProgress to false and increases tutorialStep.
@@ -229,15 +239,6 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                     pushSpeechBubbleToRight(daysBetweenLayout);
 
                     break;
-                case TutorialSteps.FIRST_MENU_COMPLETE_STEP_1:
-                    if (readyToStart) {
-                        speechBubbleText.setText("WOO");
-                    }
-                    else {
-                        speechBubbleText.setText(getString(R.string.first_menu_still_loading));
-                    }
-
-                    break;
             }
 
             tutorialStep++;
@@ -304,11 +305,15 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
 
     }
 
+    /**
+     * In this method the speech bubble is moved to the right of another layout, layout refreshed so text isn't squished
+     * @param layoutToRightOf the layout the speech bubble needs to be to the right of.
+     */
     void pushSpeechBubbleToRight(View layoutToRightOf) {
         int speechBubbleWidth = backgroundLayout.getWidth() - (int) ( + layoutToRightOf.getWidth()
-                + Numbers.FIRST_MENU_FITNESS_MARGIN_PADDING * 3);
+                + Numbers.FIRST_MENU_MARGIN_PADDING * 3);
 
-        float speechBubbleStart = layoutToRightOf.getWidth() + Numbers.FIRST_MENU_FITNESS_MARGIN_PADDING;
+        float speechBubbleStart = layoutToRightOf.getWidth() + Numbers.FIRST_MENU_MARGIN_PADDING;
 
         ValueAnimator resizeSpeechBubbleAnimator = ValueAnimator.ofInt(
                 speechBubbleLayout.getMeasuredWidth(),
@@ -323,7 +328,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                 speechBubbleLayout.requestLayout();
             }
         });
-        resizeSpeechBubbleAnimator.setDuration(Numbers.FIRST_MENU_FITNESS_ANIM_DURATION);
+        resizeSpeechBubbleAnimator.setDuration(Numbers.FIRST_MENU_ANIM_DURATION);
 
         AnimatorSet resizeAndMoveSpeechBubble = new AnimatorSet();
 
@@ -332,13 +337,17 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                         speechBubbleLayout,
                         "x",
                         speechBubbleStart)
-                        .setDuration(Numbers.FIRST_MENU_FITNESS_ANIM_DURATION)
+                        .setDuration(Numbers.FIRST_MENU_ANIM_DURATION)
         );
         resizeAndMoveSpeechBubble.start();
     }
+
+    /**
+     * In this method the speech bubble is moved back to the centre of the screen.
+     */
     void putSpeechBubbleBackIntoMiddle() {
-        int speechBubbleWidth = backgroundLayout.getWidth() - (int) (Numbers.FIRST_MENU_FITNESS_MARGIN_PADDING * 2);
-        float speechBubbleXPos = Numbers.FIRST_MENU_FITNESS_MARGIN_PADDING;
+        int speechBubbleWidth = backgroundLayout.getWidth() - (int) (Numbers.FIRST_MENU_MARGIN_PADDING * 2);
+        float speechBubbleXPos = Numbers.FIRST_MENU_MARGIN_PADDING;
 
         ValueAnimator resizeSpeechBubbleAnimator = ValueAnimator.ofInt(
                 speechBubbleLayout.getMeasuredWidth(),
@@ -353,7 +362,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                 speechBubbleLayout.requestLayout();
             }
         });
-        resizeSpeechBubbleAnimator.setDuration(Numbers.FIRST_MENU_FITNESS_ANIM_DURATION);
+        resizeSpeechBubbleAnimator.setDuration(Numbers.FIRST_MENU_ANIM_DURATION);
 
         AnimatorSet resizeAndMoveSpeechBubble = new AnimatorSet();
 
@@ -362,9 +371,13 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                         speechBubbleLayout,
                         "x",
                         speechBubbleXPos)
-                        .setDuration(Numbers.FIRST_MENU_FITNESS_ANIM_DURATION));
+                        .setDuration(Numbers.FIRST_MENU_ANIM_DURATION));
         resizeAndMoveSpeechBubble.start();
     }
+    /**
+     * In this method the speech bubble is moved above another layout, layout refreshed so text isn't squished
+     * @param aboveView the layout the speech bubble needs to be above.
+     */
     void moveSpeechBubbleUp(final View aboveView) {
 
         AnimatorSet moveSpeechBubbleDownSlightly = new AnimatorSet();
@@ -387,7 +400,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                                 speechBubbleLayout,
                                 "y",
                                 speechBubbleYPos)
-                                .setDuration(Numbers.FIRST_MENU_FITNESS_ANIM_DURATION)
+                                .setDuration(Numbers.FIRST_MENU_ANIM_DURATION)
                 );
                 moveSpeechBubble.start();
             }
@@ -398,6 +411,12 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         moveSpeechBubbleDownSlightly.start();
 
     }
+
+    /**
+     * This method takes a Constraint Layout that is currently off screen and moves it into the bottom left of the screen.
+     * The layout is already placed at the bottom in the editor, it uses Numbers.FIRST_MENU_MARGIN_PADDING to know how far from the left.
+     * @param layoutToShow The layout to show
+     */
     void showMenu(ConstraintLayout layoutToShow) {
 
         AnimatorSet showLayoutSet = new AnimatorSet();
@@ -406,11 +425,16 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                 ObjectAnimator.ofFloat(
                         layoutToShow,
                         "x",
-                        Numbers.FIRST_MENU_FITNESS_MARGIN_PADDING)
-                        .setDuration(Numbers.FIRST_MENU_FITNESS_ANIM_DURATION)
+                        Numbers.FIRST_MENU_MARGIN_PADDING)
+                        .setDuration(Numbers.FIRST_MENU_ANIM_DURATION)
         );
         showLayoutSet.start();
     }
+
+    /**
+     * This method takes a Constraint Layout and moves it back off screen
+     * @param layoutToHide The layout to hide
+     */
     void hideMenu(ConstraintLayout layoutToHide) {
 
 
@@ -421,7 +445,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                         layoutToHide,
                         "x",
                         0 - layoutToHide.getWidth())
-                        .setDuration(Numbers.FIRST_MENU_FITNESS_ANIM_DURATION)
+                        .setDuration(Numbers.FIRST_MENU_ANIM_DURATION)
         );
         hideLayoutSet.start();
     }
@@ -462,24 +486,19 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         fitnessAppsList.setAdapter(adapter);
 
         ViewGroup.LayoutParams layoutParams = fitnessAppsLayout.getLayoutParams();
-        layoutParams.width = (int) (jamesImage.getX() - Numbers.FIRST_MENU_FITNESS_MARGIN_PADDING);
+        layoutParams.width = (int) (jamesImage.getX() - Numbers.FIRST_MENU_MARGIN_PADDING);
         fitnessAppsLayout.setLayoutParams(layoutParams);
         fitnessAppsLayout.requestLayout();
 
     }
 
+    /**
+     * This method gets a list of Strings from Colours that's made up of all the different colours from the different teams.
+     */
     void populateTeamColourSpinner() {
 
         final ArrayList<ColourDisplaySmallCard> colourItems = new ArrayList<>();
-        List<String> colours = new ArrayList<>();
-        List<Team> allTeams = CareerSavedData.getInstance().getAllTeams();
-        for (Team t : allTeams) {
-            if(!colours.contains(t.getColour())) {
-                colours.add(t.getColour());
-            }
-        }
-        Collections.sort(colours);
-        for (String c : colours) {
+        for (String c : Colours.getAllTeamColours()) {
             ColourDisplaySmallCard item = new ColourDisplaySmallCard();
             item.setTeamColour(c);
             colourItems.add(item);
@@ -500,12 +519,12 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
 
     }
 
+    /**
+     * This method gets a list of all team names from Words and populates a spinner with them.
+     */
     void populateFavouriteTeamSpinner() {
-        List<String> spinnerList = new ArrayList<>();
-
-        spinnerList = Words.teamNames;
-        Collections.sort(spinnerList);
-
+        List<String> spinnerList;
+        spinnerList = Words.getAllTeamNames();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this, R.layout.spinner_item, spinnerList);
@@ -684,6 +703,11 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         readyToProgress = true;
     }
 
+    /**
+     * This method checks the user hasn't tried to commit an empty String and populates the speech bubble appropriately if so.
+     * Otherwise, it will save their input in class variable, hide the name Layout and then show either the colour choice layout or the favourite team layout.
+     * @param view needed for onClick
+     */
     public void confirmTeamPlayerName(View view) {
         teamPlayerName = teamPlayerNameText.getEditText().getText().toString();
         if (teamPlayerName.equals("")) {
@@ -707,13 +731,20 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         }
     }
 
+    /**
+     * Hides team colour layout and sets readyToProgress = true
+     */
     public void confirmTeamColour() {
         hideMenu(teamColourLayout);
         putSpeechBubbleBackIntoMiddle();
         readyToProgress = true;
-        speechBubbleText.setText(getString(R.string.first_menu_team_colour_confirmed, teamPlayerName, Words.getLeagueName(4)));
+        speechBubbleText.setText(getString(R.string.first_menu_team_colour_confirmed, teamPlayerName, Leagues.getLeagueName(4)));
     }
 
+    /**
+     * Hides favourite team layout and sets readyToProgress = true
+     * @param view needed for onClick
+     */
     public void confirmFavouriteTeam(View view) {
         favouriteTeam = favouriteTeamSpinner.getSelectedItem().toString();
         hideMenu(favouriteTeamLayout);
@@ -723,16 +754,29 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
 
     }
 
+    /**
+     * Populates text with target mode info and highlights the target box.
+     * @param view needed for onClick
+     */
     public void whatIsTargetMode(View view) {
         speechBubbleText.setText(getString(R.string.target_mode_details));
         targetModeBackgroundColour.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
         scaledModeBackgroundColour.setBackgroundColor(getResources().getColor(R.color.colorBlack));
     }
+    /**
+     * Populates text with scaled mode info and highlights the target box.
+     * @param view needed for onClick
+     */
     public void whatIsScaledMode(View view) {
         speechBubbleText.setText(getString(R.string.scaled_mode_details));
         targetModeBackgroundColour.setBackgroundColor(getResources().getColor(R.color.colorBlack));
         scaledModeBackgroundColour.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
     }
+
+    /**
+     * Hides targetLayout and sets readyToProgress to true
+     * @param view needed for onClick
+     */
     public void selectTargetMode(View view) {
         stepMode = StepModes.TARGETED_MODE;
         hideMenu(targetModeLayout);
@@ -741,6 +785,10 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         readyToProgress = true;
 
     }
+    /**
+     * Hides targetLayout and sets readyToProgress to true
+     * @param view needed for onClick
+     */
     public void selectScaledMode(View view) {
         stepMode = StepModes.TARGETED_MODE;
         hideMenu(targetModeLayout);
@@ -749,6 +797,10 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         readyToProgress = true;
     }
 
+    /**
+     * Calls IntegrationConnectionHandler and asks to get get average number of steps in last 7 days.
+     * @param view needed for onClick
+     */
     public void whatIsMyAverage(View view) {
         hideMenu(stepTargetLayout);
         speechBubbleText.setText(getString(R.string.first_menu_getting_average));
@@ -771,6 +823,10 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
 
     }
 
+    /**
+     * Hides stepTargetLayout and sets readyToProgress to true
+     * @param view needed for onClick
+     */
     public void confirmStepTarget(View view) {
 
         stepTarget = Integer.parseInt(stepTargetSpinner.getSelectedItem().toString()) * 1000;
@@ -781,6 +837,10 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
 
     }
 
+    /**
+     * Hides daysBetweenLayout, populates speech bubble with final conf and sets readyButton to visible.
+     * @param view needed for onClick
+     */
     public void confirmDaysBetween(View view) {
         daysBetween = Integer.parseInt(daysBetweenSpinner.getSelectedItem().toString());
         hideMenu(daysBetweenLayout);
@@ -789,7 +849,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
             speechBubbleText.setText(getString(
                     R.string.first_menu_team_target_final_conf,
                     teamPlayerName,
-                    Words.getLeagueName(4),
+                    Leagues.getLeagueName(4),
                     String.valueOf(daysBetween),
                     Words.getNumberWithCommas(stepTarget),
                     FitnessApps.getFitnessAppName(AppSettings.getInstance().getFitnessApp())));
@@ -798,12 +858,17 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         readyButton.setVisibility(View.VISIBLE);
     }
 
-    public void confirmReady(View view) {
+    /**
+     * Calls newGame
+     * @param view needed for onClick
+     */
+    public void confirmReady(View view) { newGame(); }
 
-        newGame();
-
-    }
-
+    /**
+     * Sets up a team game in AppSettings, creates new Career Settings and starts new season on CareerSettings.
+     * If game mode is team mode then will also replace a random team in the Room DB with the details input in this one.
+     * Then starts the TMMainMenut
+     */
     void newGame() {
 
         AppSettings.getInstance().setupTeamGame(stepMode, stepTarget);
@@ -819,21 +884,12 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
 
     }
 
-    @Override
-    public void teamsRetrieved() {
-
-        animateJamesIntroduction();
-
-
-
-
-    }
-
-
-
-
+    /**
+     * Gets a list of all teams in the bottom league and picks a random one. Changes the name and colour to the one chosen by User.
+     * Saves this User ID in the CareerSettings.
+     */
     void replaceRandomTeam() {
-        List<Team> league4Teams = CareerSavedData.getInstance().getAllTeamsInLeague(4);
+        List<Team> league4Teams = CareerSavedData.getInstance().getAllTeamsInLeague(Leagues.BOTTOM_LEAGUE);
         Random r = new Random();
         int randomTeam = r.nextInt(league4Teams.size());
         Team teamToReplace = league4Teams.get(randomTeam);
@@ -842,16 +898,17 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         CareerSettings.getInstance().setTeamID(teamToReplace.getID());
     }
 
-
+    /**
+     * Loads AppSettings & CareerSettings, then stats TMMainMenu.
+     */
     void loadGame() {
         AppSettingsSavedData.getInstance().loadSettings();
         CareerSavedData.getInstance().loadSettings();
 
         Intent intent = new Intent(this, TMMainMenu.class);
         startActivity(intent);
+        finish();
     }
-
-
 
     public void hideKeyboard(Activity activity) {
         View view = activity.getCurrentFocus();

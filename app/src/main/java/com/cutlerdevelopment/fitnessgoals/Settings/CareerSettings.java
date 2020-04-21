@@ -109,7 +109,7 @@ public class CareerSettings {
     }
 
     void createFixtures() {
-        for (int league = 1; league <= Leagues.NUM_OF_LEAGUES; league++) {
+        for (int league = Leagues.TOP_LEAGUE; league <= Leagues.BOTTOM_LEAGUE; league++) {
             List<Team> teamsInLeague = CareerSavedData.getInstance().getAllTeamsInLeague(league);
             int numTeamsInLeague = teamsInLeague.size();
             List<Integer> availableWeeks = new ArrayList<>();

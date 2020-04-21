@@ -7,9 +7,10 @@ public class Leagues {
     public static final int LEAGUE1 = 3;
     public static final int LEAGUE2 = 4;
 
-    public static final int NUM_OF_LEAGUES = 4;
+    public static final int TOP_LEAGUE = 1;
+    public static final int BOTTOM_LEAGUE = 4;
 
-    public String getLeagueName(int league) {
+    public static String getLeagueName(int league) {
         switch (league) {
             case PREMIER_LEAGUE: return "Premier League";
             case CHAMPIONSHIP: return "Championship";
