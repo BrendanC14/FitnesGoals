@@ -96,8 +96,23 @@
     </string>
     <string name="first_menu_ready_to_go">Excellent! Give me a couple secs to get the details sorted! If you need anything, feel free to give me a call. Good luck!</string>
     <string name="first_menu_still_loading">Sorry still on calls, couple more seconds.</string>
-]
+
+
     <string name="fitness_app_small_card_select_button">Select this App</string>
+    <string name="full_table_button">Full Table</string>
+    <string name="expand_league_table"><u>Expand</u></string>
+    <string name="collapse_league_table">Collapse</string>
+    <string name="league_table_header">League Table</string>
+    <string name="league_table_position_column">Pos</string>
+    <string name="league_table_team_column">Team Name</string>
+    <string name="league_table_games_played_column">GP</string>
+    <string name="league_table_wins_column">W</string>
+    <string name="league_table_draws_column">D</string>
+    <string name="league_table_losses_column">L</string>
+    <string name="league_table_scored_column">F</string>
+    <string name="league_table_conceded_column">A</string>
+    <string name="league_table_goal_difference_column">GD</string>
+    <string name="league_table_points_column">Pts</string>
 
     <string name="content_description_james">Business man in a white shirt</string>
     <string name="content_description_aoo_logo">Fitness App logo</string>

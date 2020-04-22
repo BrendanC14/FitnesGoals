@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fullTableBackground"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/full_table_row_height"
+    android:layout_gravity="center"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/fullTableRowPosition"
+        android:layout_width="25dp"
+        android:layout_height="20dp"
+        android:gravity="center"
+        android:text="@string/league_table_position_column"
+        android:textColor="@color/colorWhite"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/fullTableRowTeam"
+        android:layout_width="115dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/league_table_team_column"
+        android:textColor="@color/colorWhite"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/fullTableRowGamesPlayed"
+        android:layout_width="25dp"
+        android:layout_height="20dp"
+        android:gravity="center"
+        android:text="@string/league_table_games_played_column"
+        android:textColor="@color/colorWhite"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/fullTableRowWins"
+        android:layout_width="25dp"
+        android:layout_height="20dp"
+        android:gravity="center"
+        android:text="@string/league_table_wins_column"
+        android:textColor="@color/colorWhite"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/fullTableRowDraws"
+        android:layout_width="25dp"
+        android:layout_height="20dp"
+        android:gravity="center"
+        android:text="@string/league_table_draws_column"
+        android:textColor="@color/colorWhite"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/fullTableRowLosses"
+        android:layout_width="25dp"
+        android:layout_height="20dp"
+        android:gravity="center"
+        android:text="@string/league_table_losses_column"
+        android:textColor="@color/colorWhite"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/fullTableRowScored"
+        android:layout_width="25dp"
+        android:layout_height="20dp"
+        android:gravity="center"
+        android:text="@string/league_table_scored_column"
+        android:textColor="@color/colorWhite"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/fullTableRowConceded"
+        android:layout_width="25dp"
+        android:layout_height="20dp"
+        android:gravity="center"
+        android:text="@string/league_table_conceded_column"
+        android:textColor="@color/colorWhite"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/fullTableRowGoalDifference"
+        android:layout_width="25dp"
+        android:layout_height="20dp"
+        android:gravity="center"
+        android:text="@string/league_table_goal_difference_column"
+        android:textColor="@color/colorWhite"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/fullTableRowPoints"
+        android:layout_width="25dp"
+        android:layout_height="20dp"
+        android:gravity="center"
+        android:text="@string/league_table_points_column"
+        android:textColor="@color/colorWhite"
+        android:textSize="12sp" />
+</LinearLayout>

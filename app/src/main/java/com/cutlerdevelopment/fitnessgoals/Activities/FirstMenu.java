@@ -895,7 +895,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         Team teamToReplace = league4Teams.get(randomTeam);
         teamToReplace.changeName(teamPlayerName);
         teamToReplace.changeColour(teamColour);
-        CareerSettings.getInstance().setTeamID(teamToReplace.getID());
+        CareerSettings.getInstance().changeTeamID(teamToReplace.getID());
     }
 
     /**
