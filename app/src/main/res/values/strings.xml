@@ -8,6 +8,9 @@
     <string name="next_button_text">Next</string>
     <string name="confirm_button_text">Confirm</string>
     <string name="ready_button_text">Ready!</string>
+    <string name="done_button_text">Done</string>
+    <string name="next_arrows_button_text">">>"</string>
+    <string name="previous_arrows_button_text">&lt;&lt;</string>
     <string name="slash">/</string>
 
     <string name="team_mode">Team</string>
@@ -117,6 +120,21 @@
 
     <string name="tm_main_menu_not_enough_date_for_progress">Your career hasn\'t been going long enough to know this yet.</string>
     <string name="tm_main_menu_target_achieved">Target Achieved!</string>
+    <string name="tm_main_menu_steps_title">Steps</string>
+    <string name="tm_main_menu_days_title">Days</string>
+    <string name="tm_main_menu_next_match_title">Next Match</string>
+    <string name="tm_main_menu_opponent">vs %1s</string>
+    <string name="tm_main_menu_play_match_button_text">Play Match</string>
+    <string name="tm_main_menu_james_description1">
+        Hey how\'s it going.
+        \nThis is your main menu and has 3 items. The first card is the league table which can be expanded. Teams with a light green background are in a promotion place. Teams with a red background are in a relegation place.
+    </string>
+    <string name="tm_main_menu_james_description2">
+        The second is your progress. The filters along the top can be customised in your career settings. Numbers on the left of the progress circle are steps, numbers on the right are how many days you reached your target. This is based on your current target.
+    </string>
+    <string name="tm_main_menu_james_description3">
+        The final card is your next, un-played fixture. Hitting Play Match will open up your tactics before getting a result.
+    </string>
 
     <string name="content_description_james">Business man in a white shirt</string>
     <string name="content_description_aoo_logo">Fitness App logo</string>

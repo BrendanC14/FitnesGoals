@@ -32,7 +32,7 @@
     <style name="Widget.FitnessGoals.Button" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textColor">@color/textColorPrimary</item>
         <item name="materialButtonOutlinedStyle">@color/colorAccent</item>
-        <item name="backgroundTint">?attr/colorPrimaryDark</item>
+        <item name="backgroundTint">@color/colorBackground</item>
         <item name="fontFamily">@font/cherry_cream_soda</item>
         <item name="android:textSize">10sp</item>
         <item name="autoSizeTextType">uniform</item>

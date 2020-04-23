@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.os.Build;
@@ -14,6 +15,7 @@ import android.provider.Telephony;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.textclassifier.TextClassificationManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -48,7 +50,15 @@ import static android.view.View.VISIBLE;
 
 public class TMMainMenu extends AppCompatActivity implements IntegrationConnectionHandler.TMListener {
 
-    ConstraintLayout teamHeaderBackground;
+    ImageView jamesImage;
+    ConstraintLayout speechBubbleLayout;
+    TextView speechBubbleText;
+    Button speechBubbleButton;
+    Button jamesNextButton;
+    Button jamesPreviousButton;
+    ConstraintLayout backgroundLayout;
+
+    CardView teamHeaderBackground;
     TextView teamNameText;
     TextView leagueNameText;
     ListView leagueTableHolder;
@@ -69,20 +79,37 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
     TextView notEnoughDataText;
     ImageView goldenFootball;
 
+    TextView nextFixtureDateText;
+    TextView nextFixtureOpponentText;
+    Button playMatchButton;
+    CardView footer;
+
+    ImageButton phoneButton;
+
     Team usersTeam;
     int teamsPosition;
     int usersLeague;
     int leagueToDisplay;
+    int tutorialStep = 1;
 
     boolean leagueCollapsed;
     boolean animatingGoldenFootball;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tm_main_menu);
 
-        teamHeaderBackground = findViewById(R.id.tmMainMenuBackgroundColour);
+        jamesImage = findViewById(R.id.tmMainMenuJamesImage);
+        speechBubbleLayout = findViewById(R.id.tmMainMenuSpeechBubble);
+        speechBubbleText = findViewById(R.id.tmMainMenuSpeechText);
+        backgroundLayout = findViewById(R.id.tmMainMenuBackground);
+        jamesNextButton = findViewById(R.id.tmMainMenuSpeechBubbleNext);
+        jamesPreviousButton = findViewById(R.id.tmMainMenuSpeechBubblePrevious);
+
+        speechBubbleButton = findViewById(R.id.tmMainMenuSpeechBubbleButton);
+        teamHeaderBackground = findViewById(R.id.tmMainMenuheader);
         teamNameText = findViewById(R.id.tmMainMenuTeamName);
         leagueTableHolder = findViewById(R.id.tmMainMenuTableItemList);
         expandCollapseButton = findViewById(R.id.tmMainMenuExpandCollapseButton);
@@ -100,6 +127,11 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
         stepsSlash = findViewById(R.id.tmMainMenuProgressSlash);
         numDaysSlash = findViewById(R.id.tmMainMenuProgressSlash2);
         goldenFootball = findViewById(R.id.tmMainMenuGoldFootball);
+        nextFixtureDateText = findViewById(R.id.tmMainMenuNextMatchDate);
+        nextFixtureOpponentText = findViewById(R.id.tmMainMenuNextMatchOpponent);
+        playMatchButton = findViewById(R.id.tmMainMenuPlayMatchButton);
+        footer = findViewById(R.id.tmMainMenuFooter);
+        phoneButton = findViewById(R.id.tmMainMenuPhoneButton);
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -124,6 +156,7 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
         teamNameText.setText(usersTeam.getName());
         leagueNameText.setText(Leagues.getLeagueName(leagueToDisplay));
         teamHeaderBackground.setBackgroundColor(Color.parseColor(usersTeam.getColour()));
+        footer.setBackgroundColor(Color.parseColor(usersTeam.getColour()));
         leagueToDisplay = usersTeam.getLeague();
         teamsPosition = Leagues.getPositionInLeague(usersTeam.getID(), leagueToDisplay);
 
@@ -159,6 +192,11 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
                 takeFootballOut();
             }
         });
+
+        int teamID = CareerSettings.getInstance().getTeamID();
+        Fixture f = CareerSavedData.getInstance().getNextFixtureForTeam(teamID);
+        nextFixtureDateText.setText(DateHelper.formatDateToString(f.getDate()));
+        nextFixtureOpponentText.setText(getString(R.string.tm_main_menu_opponent, f.getOpponent(teamID).getName()));
     }
 
     void fillLeagueTableDisplay() {
@@ -535,5 +573,82 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
         refreshStepCircle(0);
     }
 
+    public void callJames(View view) {
+        animateJamesIntroduction();
+    }
+    /**
+     * In this method James slides onto the screen from the right, the speech bubble drops down too far then bounces back up, and
+     * the Next button slides in from the left. It does all of this after a delay.
+     * Delays and speed are controlled by FIRST_MENU variables in Numbers.
+     */
+    void animateJamesIntroduction() {
+
+        speechBubbleText.setText(getString(R.string.tm_main_menu_james_description1));
+        jamesNextButton.setVisibility(VISIBLE);
+        jamesPreviousButton.setVisibility(GONE);
+        tutorialStep = 1;
+
+        float jamesFinalXPosition = backgroundLayout.getX() + (backgroundLayout.getWidth() - jamesImage.getWidth());
+        float speechBounceYPosition = jamesImage.getScaleY() + Numbers.SPEECH_BUBBLE_PADDING_OFFSET;
+        float speechFinalYPosition = jamesImage.getScaleY() + Numbers.SPEECH_BUBBLE_PADDING_OFFSET;
+
+        AnimatorSet manAndSpeechIntroAnimSet = new AnimatorSet();
+        AnimatorSet speechBounceAndButtonIntroAnimSet = new AnimatorSet();
+        AnimatorSet fullSet = new AnimatorSet();
+
+        manAndSpeechIntroAnimSet.playTogether(
+                ObjectAnimator.ofFloat( //Animating the man onto the screen
+                        jamesImage,
+                        "x",
+                        jamesFinalXPosition)
+                        .setDuration(Numbers.FIRST_MENU_JAMES_ANIM_DURATION),
+                ObjectAnimator.ofFloat( //Animating the speech bubble onto the screen
+                        speechBubbleLayout,
+                        "y",
+                        speechBounceYPosition)
+                        .setDuration(Numbers.FIRST_MENU_SPEECH_BUBBLE_ANIM_DURATION));
+
+        speechBounceAndButtonIntroAnimSet.play(
+                ObjectAnimator.ofFloat( //Animating the speech bubble bouncing up
+                        speechBubbleLayout,
+                        "y",
+                        speechFinalYPosition)
+                        .setDuration(Numbers.FIRST_MENU_SPEECH_BUBBLE_BOUNCE_ANIM_DURATION));
+
+        fullSet.playSequentially(manAndSpeechIntroAnimSet, speechBounceAndButtonIntroAnimSet);
+        fullSet.start();
+
+
+    }
+
+    public void nextJames(View view) {
+        tutorialStep++;
+        jamesPreviousButton.setVisibility(VISIBLE);
+        if (tutorialStep == 2) {
+            speechBubbleText.setText(getString(R.string.tm_main_menu_james_description2));
+        }
+        else if (tutorialStep == 3) {
+            speechBubbleText.setText(getString(R.string.tm_main_menu_james_description3));
+            jamesNextButton.setVisibility(GONE);
+        }
+
+    }
+
+    public void previousJames(View view) {
+        tutorialStep--;
+        jamesNextButton.setVisibility(VISIBLE);
+        if (tutorialStep == 1) {
+            speechBubbleText.setText(getString(R.string.tm_main_menu_james_description1));
+            jamesPreviousButton.setVisibility(GONE);
+        }
+        else if (tutorialStep == 2) {
+            speechBubbleText.setText(getString(R.string.tm_main_menu_james_description2));
+        }
+    }
+
+    public void doneJames(View view) {
+        jamesImage.setX(backgroundLayout.getWidth());
+        speechBubbleLayout.setY(0 - speechBubbleLayout.getHeight());
+    }
 
 }

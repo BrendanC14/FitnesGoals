@@ -161,7 +161,6 @@ public class FitbitAPI {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        listener.getAverage(0);
                     }
                 }) {
             /** Passing some request headers* */
@@ -197,9 +196,25 @@ public class FitbitAPI {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        int steps = 0;
+                        int numDays = 0;
+
+                        try {
+                            JSONObject object = new JSONObject(response);
+                            JSONArray jsonArray = object.getJSONArray("activities-steps");
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                JSONObject dateObject = jsonArray.getJSONObject(i);
+                                String stepString = dateObject.getString("value");
+                                steps += Integer.valueOf(stepString);
+                                numDays++;
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
 
 
-                        listener.getAverage(0);
+                        listener.getAverage(steps / numDays);
                     }
                 },
                 new Response.ErrorListener() {

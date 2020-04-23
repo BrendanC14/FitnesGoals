@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey;
 
 import com.cutlerdevelopment.fitnessgoals.Constants.MatchResult;
 import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
+import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
 
 import java.util.Date;
 
@@ -173,6 +174,12 @@ public class Fixture implements Comparable<Fixture> {
 
     public boolean matchPlayed() {
         return homeScore >= 0;
+    }
+
+
+    public Team getOpponent(int teamID) {
+        if (teamID == homeTeamID) { return CareerSavedData.getInstance().getTeamFromID(awayTeamID); }
+        else { return CareerSavedData.getInstance().getTeamFromID(homeTeamID); }
     }
 
     @Override
