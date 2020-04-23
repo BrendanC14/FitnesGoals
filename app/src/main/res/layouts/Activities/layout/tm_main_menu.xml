@@ -103,7 +103,7 @@
                 <ImageButton
                     android:id="@+id/tmMainMenuLeagueDown"
                     android:layout_width="35dp"
-                    android:layout_height="50dp"
+                    android:layout_height="35dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
@@ -318,8 +318,8 @@
                 android:id="@+id/tmMainMenuSteps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="@+id/tmMainMenuStepProgress"
-                app:layout_constraintBottom_toBottomOf="@+id/tmMainMenuStepProgress"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/tmMainMenuProgressSlash"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tmMainMenuStepProgress"
                 style="@style/TextAppearance.FitnessGoals.WhiteTitle">
@@ -330,10 +330,10 @@
                 android:id="@+id/tmMainMenuStepTarget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="@+id/tmMainMenuStepProgress"
-                app:layout_constraintBottom_toBottomOf="@+id/tmMainMenuStepProgress"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tmMainMenuStepProgress"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/tmMainMenuProgressSlash"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tmMainMenuStepProgress"
                 style="@style/TextAppearance.FitnessGoals.WhiteTitle">
 
             </TextView>
@@ -341,14 +341,53 @@
             <TextView
                 android:id="@+id/tmMainMenuProgressSlash"
                 style="@style/TextAppearance.FitnessGoals.NormalText"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@string/slash"
                 android:textSize="28sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/tmMainMenuStepProgress"
-                app:layout_constraintEnd_toEndOf="@+id/tmMainMenuStepProgress"
-                app:layout_constraintStart_toStartOf="@+id/tmMainMenuStepProgress"
+                app:layout_constraintEnd_toStartOf="@+id/tmMainMenuStepProgress"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/tmMainMenuStepProgress">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tmMainMenuDaysAchieved"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/tmMainMenuProgressSlash2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tmMainMenuStepProgress"
+                style="@style/TextAppearance.FitnessGoals.WhiteTitle">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tmMainMenuNumDays"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/tmMainMenuProgressSlash2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tmMainMenuStepProgress"
+                style="@style/TextAppearance.FitnessGoals.WhiteTitle">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tmMainMenuProgressSlash2"
+                style="@style/TextAppearance.FitnessGoals.NormalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/slash"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tmMainMenuStepProgress"
+                app:layout_constraintStart_toEndOf="@+id/tmMainMenuStepProgress"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tmMainMenuStepProgress">
 
             </TextView>
@@ -367,6 +406,7 @@
                 android:layout_marginBottom="8dp">
 
             </TextView>
+
             <ProgressBar
                 android:id="@+id/tmMainMenuStepProgress"
                 style="?android:progressBarStyleHorizontal"

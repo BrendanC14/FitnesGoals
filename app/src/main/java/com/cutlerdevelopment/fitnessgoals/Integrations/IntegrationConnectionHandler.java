@@ -1,15 +1,19 @@
 package com.cutlerdevelopment.fitnessgoals.Integrations;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.cutlerdevelopment.fitnessgoals.Constants.FitnessApps;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitAPI;
+import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitStrings;
+import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitStringsSavedData;
 import com.cutlerdevelopment.fitnessgoals.Integrations.GoogleIntegrations.GoogleFirestoreConnector;
 import com.cutlerdevelopment.fitnessgoals.Integrations.GoogleIntegrations.GoogleFitAPI;
 import com.cutlerdevelopment.fitnessgoals.Settings.AppSettings;
 import com.cutlerdevelopment.fitnessgoals.Settings.UserActivity;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
+import com.google.android.gms.fitness.Fitness;
 
 import java.security.KeyPair;
 import java.util.Date;
@@ -47,11 +51,16 @@ public class IntegrationConnectionHandler implements GoogleFitAPI.GoogleFitListe
         instance = this;
     }
 
-    public void initialiseFitnessAppConnection(Context context) {
+    public void initialiseFitnessAppConnection(Activity activity, Context context) {
 
         int chosenApp = AppSettings.getInstance().getFitnessApp();
         if (chosenApp == FitnessApps.GOOGLE_FIT) {
             GoogleFitAPI.createGoogleFitAPIInstance(context);
+        }
+        else if (chosenApp == FitnessApps.FITBIT) {
+            FitbitAPI.createFitbitAPIInstance(activity);
+            FitbitStringsSavedData.createFitbitStringsSavedDataInstance(context);
+            FitbitStringsSavedData.getInstance().getTopData();
         }
 
     }
@@ -100,6 +109,8 @@ public class IntegrationConnectionHandler implements GoogleFitAPI.GoogleFitListe
             GoogleFitAPI.getInstance().getStepsFromDates(startDate, endDate);
         }
         else if (chosenApp == FitnessApps.FITBIT) {
+            FitbitAPI.getInstance().setListener(this);
+            FitbitAPI.getInstance().getStepsFromDates(startDate, endDate);
         }
     }
 

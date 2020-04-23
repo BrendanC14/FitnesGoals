@@ -916,7 +916,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
     void loadGame() {
         AppSavedData.getInstance().loadSettings();
         CareerSavedData.getInstance().loadSettings();
-        IntegrationConnectionHandler.getInstance().initialiseFitnessAppConnection(this);
+        IntegrationConnectionHandler.getInstance().initialiseFitnessAppConnection(this, this);
         CareerSettings.getInstance().refreshPlayerActivity();
 
         Intent intent = new Intent(this, TMMainMenu.class);

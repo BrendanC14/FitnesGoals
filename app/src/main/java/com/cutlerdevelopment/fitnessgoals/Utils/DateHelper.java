@@ -3,6 +3,7 @@ package com.cutlerdevelopment.fitnessgoals.Utils;
 import android.icu.util.ULocale;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,15 +28,21 @@ public class DateHelper {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.add(Calendar.DATE, numDays);
-        cal.set(Calendar.HOUR_OF_DAY, 12);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
     }
 
-    public static String formatDate(Date date) {
+    public static String formatDateToString(Date date) {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         return formatter.format(date);
+    }
+
+    public static Date formatStringToDate(String date) throws ParseException {
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        return formatter.parse(date);
+
     }
 }
