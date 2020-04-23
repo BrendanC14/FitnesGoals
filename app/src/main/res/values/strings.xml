@@ -8,6 +8,7 @@
     <string name="next_button_text">Next</string>
     <string name="confirm_button_text">Confirm</string>
     <string name="ready_button_text">Ready!</string>
+    <string name="slash">/</string>
 
     <string name="team_mode">Team</string>
     <string name="player_mode">Player</string>
@@ -113,6 +114,9 @@
     <string name="league_table_conceded_column">A</string>
     <string name="league_table_goal_difference_column">GD</string>
     <string name="league_table_points_column">Pts</string>
+
+    <string name="tm_main_menu_not_enough_date_for_progress">Your career hasn\'t been going long enough to know this yet.</string>
+    <string name="tm_main_menu_target_achieved">Target Achieved!</string>
 
     <string name="content_description_james">Business man in a white shirt</string>
     <string name="content_description_aoo_logo">Fitness App logo</string>

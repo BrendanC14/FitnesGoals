@@ -163,6 +163,14 @@ public class Fixture implements Comparable<Fixture> {
 
     }
 
+    public int getSteps(int teamID) {
+        if (teamID == this.homeTeamID) {
+            return homeAttackingSteps + homeDefendingSteps;
+        }
+
+        return awayAttackingSteps + awayDefendingSteps;
+    }
+
     public boolean matchPlayed() {
         return homeScore >= 0;
     }

@@ -1,32 +1,54 @@
 package com.cutlerdevelopment.fitnessgoals.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.animation.Animator;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.service.autofill.TextValueSanitizer;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.FilterOptions;
 import com.cutlerdevelopment.fitnessgoals.Constants.Leagues;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
+import com.cutlerdevelopment.fitnessgoals.Constants.Words;
+import com.cutlerdevelopment.fitnessgoals.Integrations.IntegrationConnectionHandler;
+import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.R;
+import com.cutlerdevelopment.fitnessgoals.SavedData.AppSavedData;
 import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
+import com.cutlerdevelopment.fitnessgoals.Settings.AppSettings;
 import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
+import com.cutlerdevelopment.fitnessgoals.Settings.UserActivity;
+import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.FullTableRowAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.FullTableRow;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
-public class TMMainMenu extends AppCompatActivity {
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
+public class TMMainMenu extends AppCompatActivity implements IntegrationConnectionHandler.TMListener {
 
     ConstraintLayout teamHeaderBackground;
     TextView teamNameText;
@@ -35,20 +57,31 @@ public class TMMainMenu extends AppCompatActivity {
     Button expandCollapseButton;
     ImageButton upLeagueButton;
     ImageButton downLeagueButton;
-
     FullTableRowAdapter adapter;
+
+    CardView progressCard;
+    TabLayout tabLayout;
+    ProgressBar stepProgress;
+    TextView stepProgressAchieved;
+    TextView stepProgressTarget;
+    TextView notEnoughDataText;
+    TextView slashText;
+    ImageView goldenFootball;
+    TextView targetAchieved;
 
     Team usersTeam;
     int teamsPosition;
     int usersLeague;
     int leagueToDisplay;
 
-    Boolean leagueCollapsed;
+    boolean leagueCollapsed;
+    boolean animatingGoldenFootball;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tm_main_menu);
+
         teamHeaderBackground = findViewById(R.id.tmMainMenuBackgroundColour);
         teamNameText = findViewById(R.id.tmMainMenuTeamName);
         leagueTableHolder = findViewById(R.id.tmMainMenuTableItemList);
@@ -56,7 +89,32 @@ public class TMMainMenu extends AppCompatActivity {
         leagueNameText = findViewById(R.id.tmMainMenuLeagueHeader);
         upLeagueButton = findViewById(R.id.tmMainMenuLeagueUp);
         downLeagueButton = findViewById(R.id.tmMainMenuLeagueDown);
+        progressCard = findViewById(R.id.tmMainMenuStepDisplayCard);
+        tabLayout = findViewById(R.id.tmMainMenuStepTabs);
+        stepProgress = findViewById(R.id.tmMainMenuStepProgress);
+        notEnoughDataText = findViewById(R.id.tmMainMenuNotEnoughData);
+        stepProgressTarget = findViewById(R.id.tmMainMenuStepTarget);
+        stepProgressAchieved = findViewById(R.id.tmMainMenuSteps);
+        slashText = findViewById(R.id.tmMainMenuProgressSlash);
+        goldenFootball = findViewById(R.id.tmMainMenuGoldFootball);
+        targetAchieved = findViewById(R.id.tmMainMenuTargetAchieved);
 
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                refreshStepCircle(FilterOptions.getFilterOption(tab.getText().toString()));
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
         usersTeam = CareerSavedData.getInstance().getTeamFromID(CareerSettings.getInstance().getTeamID());
         usersLeague = usersTeam.getLeague();
         leagueCollapsed = false;
@@ -73,10 +131,32 @@ public class TMMainMenu extends AppCompatActivity {
                 animateLeagueTable();
             }
         });
+        List<Integer> choices = CareerSettings.getInstance().getFilterChoices();
+       /* for (Integer choice : choices) {
+            tabLayout.addTab(tabLayout.newTab().setText(FilterOptions.getTabName(choice)));
+        }*/
+        for (int i = 1; i < 6; i++) {
+            tabLayout.addTab(tabLayout.newTab().setText(FilterOptions.getTabName(i)));
 
-        fillLeagueTableDisplay();
-        checkLeagueButtonValidity();
-        animateLeagueTable();
+        }
+        //refreshStepCircle(choices.get(0));
+
+        progressCard.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    progressCard.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    progressCard.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
+                //here the size is already available. create new button2 here with the size of button1
+
+                fillLeagueTableDisplay();
+                checkLeagueButtonValidity();
+                animateLeagueTable();
+                takeFootballOut();
+            }
+        });
     }
 
     void fillLeagueTableDisplay() {
@@ -112,21 +192,33 @@ public class TMMainMenu extends AppCompatActivity {
 
     public void animateLeagueTable() {
 
-        int newHeight = 0;
-        //Gets the height of one
+        int newTableHeight = 0;
+        int newProgressCardHeight = (int) getResources().getDimension(R.dimen.progress_card_height);
         int rowHeight = (int) getResources().getDimension(R.dimen.full_table_row_height) + leagueTableHolder.getDividerHeight();
+
+        int tabHeight = (int) getResources().getDimension(R.dimen.progress_tabs_height);
+        int newTabHeight = 0;
         if (leagueCollapsed) {
-            newHeight = rowHeight * Numbers.TM_MAIN_MENU_BIG_TABLE_ROW_NUMBER;
+            newTableHeight = rowHeight * Numbers.TM_MAIN_MENU_BIG_TABLE_ROW_NUMBER;
             expandCollapseButton.setText(getString(R.string.collapse_league_table));
+            newProgressCardHeight -= tabHeight;
         }
         else {
-            newHeight = rowHeight * Numbers.TM_MAIN_MENU_SMALL_TABLE_ROW_NUMBER;
+            newTableHeight = rowHeight * Numbers.TM_MAIN_MENU_SMALL_TABLE_ROW_NUMBER;
             expandCollapseButton.setText(getString(R.string.expand_league_table));
+            newTabHeight = tabHeight;
         }
+
+        updateLeagueTable(newTableHeight);
+        updateProgressCard(newProgressCardHeight);
+        updateProgressTabs(newTabHeight);
+    }
+
+    void updateLeagueTable(int newTableHeight) {
 
         ValueAnimator expandLeagueTable = ValueAnimator.ofInt(
                 leagueTableHolder.getMeasuredHeight(),
-                newHeight);
+                newTableHeight);
         expandLeagueTable.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -138,31 +230,56 @@ public class TMMainMenu extends AppCompatActivity {
         });
         expandLeagueTable.addListener(new Animator.AnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animator) {
-            }
-
+            public void onAnimationStart(Animator animator) { }
             @Override
             public void onAnimationEnd(Animator animator) {
                 if (leagueCollapsed && leagueToDisplay == usersLeague) {
                     leagueTableHolder.smoothScrollToPosition(teamsPosition + 1);
                 }
-
             }
-
             @Override
-            public void onAnimationCancel(Animator animator) {
-
-            }
-
+            public void onAnimationCancel(Animator animator) { }
             @Override
-            public void onAnimationRepeat(Animator animator) {
+            public void onAnimationRepeat(Animator animator) { }
+        });
+        expandLeagueTable.setDuration(Numbers.TM_MAIN_MENU_EXPAND_TABLE_ANIM_DURATION);
+        expandLeagueTable.start();
+    }
 
+    void updateProgressCard(int newProgressCardHeight) {
+        ValueAnimator resizeProgressCard = ValueAnimator.ofInt(
+                progressCard.getHeight(),
+                newProgressCardHeight);
+        resizeProgressCard.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int val = (Integer) valueAnimator.getAnimatedValue();
+                ViewGroup.LayoutParams layoutParams = progressCard.getLayoutParams();
+                layoutParams.height = val;
+                progressCard.setLayoutParams(layoutParams);
             }
         });
 
+        resizeProgressCard.setDuration(Numbers.TM_MAIN_MENU_EXPAND_TABLE_ANIM_DURATION);
+        resizeProgressCard.start();
+    }
 
-        expandLeagueTable.setDuration(Numbers.TM_MAIN_MENU_EXPAND_TABLE_ANIM_DURATION);
-        expandLeagueTable.start();
+    void updateProgressTabs(int newTabHeight) {
+        ValueAnimator hideProgressTabs = ValueAnimator.ofInt(
+                tabLayout.getHeight(),
+                newTabHeight);
+        hideProgressTabs.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int val = (Integer) valueAnimator.getAnimatedValue();
+                ViewGroup.LayoutParams layoutParams = tabLayout.getLayoutParams();
+                layoutParams.height = val;
+                tabLayout.setLayoutParams(layoutParams);
+            }
+        });
+
+        hideProgressTabs.setDuration(Numbers.TM_MAIN_MENU_EXPAND_TABLE_ANIM_DURATION);
+        hideProgressTabs.start();
         leagueCollapsed = !leagueCollapsed;
     }
 
@@ -195,5 +312,175 @@ public class TMMainMenu extends AppCompatActivity {
             downLeagueButton.setEnabled(true);
         }
     }
+
+    void refreshStepCircle(int filterOption) {
+        stepProgress.setVisibility(VISIBLE);
+        notEnoughDataText.setVisibility(GONE);
+        stepProgressTarget.setVisibility(VISIBLE);
+        stepProgressAchieved.setVisibility(VISIBLE);
+        slashText.setVisibility(VISIBLE);
+        if (animatingGoldenFootball) {
+            takeFootballOut();
+            animatingGoldenFootball = false;
+        }
+
+        stepProgressAchieved.setText(String.valueOf(1));
+        stepProgressTarget.setText(String.valueOf(1));
+        stepProgressAchieved.setTextColor(getResources().getColor(R.color.colorWhite));
+
+
+        AppSavedData savedData = AppSavedData.getInstance();
+        AppSettings appSettings = AppSettings.getInstance();
+        CareerSettings careerSettings = CareerSettings.getInstance();
+        stepProgress.setProgress(0);
+
+        Date today = new Date();
+        Date yesterday = DateHelper.addDays(new Date(), -1);
+        Date careerStartDate = careerSettings.getStartDate();
+        if (savedData.getActivityOnDate(yesterday) == null) {
+            displayNotEnoughDataMessage();
+            return;
+        }
+
+        int max = appSettings.getStepTarget();
+        int steps = savedData.getActivityOnDate(yesterday).getSteps();
+
+        Date startDate;
+        switch (filterOption) {
+
+            case FilterOptions.LAST_7_DAYS:
+                startDate = DateHelper.addDays(today, - 7);
+
+                if (startDate.before(careerStartDate)) {
+                    displayNotEnoughDataMessage();
+                    return;
+                }
+                max = appSettings.getStepTarget() * 7;
+                steps = 0;
+                for (UserActivity activity : savedData.getActivityOnAllDates(startDate, yesterday)) {
+                    steps += activity.getSteps();
+                }
+                break;
+            case FilterOptions.LAST_MONTH:
+                startDate = DateHelper.addDays(today, - 30);
+                if (startDate.before(careerStartDate)) {
+                    displayNotEnoughDataMessage();
+                    return;
+                }
+
+                max = appSettings.getStepTarget() * 30;
+                steps = 0;
+                for (UserActivity activity : savedData.getActivityOnAllDates(startDate, yesterday)) {
+                    steps += activity.getSteps();
+                }
+                break;
+            case FilterOptions.LAST_MATCH:
+                //TODO: Get numbers from match
+                int teamID = careerSettings.getTeamID();
+                Fixture f = CareerSavedData.getInstance().getLastResultForTeam(teamID);
+                if (f == null) {
+                    displayNotEnoughDataMessage();
+                    return;
+                }
+                max = f.getStepTarget();
+                steps = f.getSteps(teamID);
+                break;
+            case FilterOptions.SEASON:
+                if (yesterday.before(careerStartDate)) {
+                    displayNotEnoughDataMessage();
+                    return;
+                }
+
+                int daysBeteenYestAndSeasonStart = DateHelper.getDaysBetween(today, careerStartDate);
+                max = appSettings.getStepTarget() * daysBeteenYestAndSeasonStart;
+                startDate = DateHelper.addDays(yesterday, daysBeteenYestAndSeasonStart * -1);
+                steps = 0;
+                for (UserActivity activity : savedData.getActivityOnAllDates(startDate, yesterday)) {
+                    steps += activity.getSteps();
+                }
+
+                break;
+
+
+        }
+        stepProgress.setMax(max);
+        stepProgressTarget.setText(Words.getNumberWithCommas(max));
+        updateProgressCircleAndSteps(steps);
+
+    }
+
+    void displayNotEnoughDataMessage() {
+        stepProgress.setVisibility(GONE);
+        notEnoughDataText.setVisibility(VISIBLE);
+        stepProgressTarget.setVisibility(GONE);
+        stepProgressAchieved.setVisibility(GONE);
+    }
+
+    void updateProgressCircleAndSteps(int steps) {
+        final ValueAnimator animateProgressCircle = ValueAnimator.ofInt(
+                1,
+                steps);
+        animateProgressCircle.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int val = (Integer) valueAnimator.getAnimatedValue();
+                stepProgress.setProgress(val);
+                stepProgressAchieved.setText(Words.getNumberWithCommas(val));
+                if (val > stepProgress.getMax()) {
+                    stepProgressAchieved.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    if (!animatingGoldenFootball) {
+                        enlargeFootball();
+                        animatingGoldenFootball = true;
+                    }
+                }
+            }
+        });
+        animateProgressCircle.setDuration(Numbers.TM_MAIN_MENU_STEP_PROGRESS_ANIM_DURATION);
+        animateProgressCircle.start();
+    }
+
+    void enlargeFootball() {
+        slashText.setVisibility(GONE);
+        ValueAnimator enlargeFootballAnim = ValueAnimator.ofInt(
+                goldenFootball.getWidth(),
+                (int) getResources().getDimension(R.dimen.golden_football_height));
+        enlargeFootballAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int val = (Integer) valueAnimator.getAnimatedValue();
+                ViewGroup.LayoutParams layoutParams = goldenFootball.getLayoutParams();
+                layoutParams.height = val;
+                layoutParams.width = val;
+                goldenFootball.setLayoutParams(layoutParams);
+            }
+        });
+        enlargeFootballAnim.setDuration(Numbers.TM_MAIN_MENU_GOLDEN_FOOTBALL_ANIM_DURATION);
+
+        float newAchievedTextX = (progressCard.getWidth() / 2.0f) - (targetAchieved.getWidth() / 2.0f);
+        AnimatorSet resizeFootballAndMoveText = new AnimatorSet();
+
+        resizeFootballAndMoveText.playTogether(enlargeFootballAnim,
+                ObjectAnimator.ofFloat( //Animating the speech bubble moving over
+                        targetAchieved,
+                        "x",
+                        newAchievedTextX)
+                        .setDuration(Numbers.TM_MAIN_MENU_GOLDEN_FOOTBALL_ANIM_DURATION)
+        );
+        resizeFootballAndMoveText.start();
+
+    }
+    void takeFootballOut() {
+        ViewGroup.LayoutParams layoutParams = goldenFootball.getLayoutParams();
+        layoutParams.height = 1;
+        layoutParams.width = 1;
+        goldenFootball.setLayoutParams(layoutParams);
+
+        targetAchieved.setX(targetAchieved.getWidth() * -1);
+    }
+    @Override
+    public void gotStepMap() {
+        refreshStepCircle(0);
+    }
+
 
 }

@@ -10,6 +10,7 @@ import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,7 @@ import com.cutlerdevelopment.fitnessgoals.Integrations.IntegrationConnectionHand
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.R;
 import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
-import com.cutlerdevelopment.fitnessgoals.SavedData.AppSettingsSavedData;
+import com.cutlerdevelopment.fitnessgoals.SavedData.AppSavedData;
 import com.cutlerdevelopment.fitnessgoals.Settings.AppSettings;
 import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
@@ -52,7 +53,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInStatusCodes;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -61,7 +61,7 @@ import java.util.Random;
  * FirstMenu Activity is the first Activity that loads when the User first opens the app. It's a setup menu.
  * However if some CareerSettings are found in RoomDB then it will load the existing game.
  */
-public class FirstMenu extends AppCompatActivity implements IntegrationConnectionHandler.IntegrationListener {
+public class FirstMenu extends AppCompatActivity implements IntegrationConnectionHandler.SetupListener {
 
     Boolean readyToProgress = false;
 
@@ -106,6 +106,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
     int stepTarget;
     int daysBetween;
     int tutorialStep = 1;
+    Boolean stillLoading = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,14 +146,14 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         });
 
 
-        AppSettingsSavedData.createAppSettingsSavedData(this);
+        AppSavedData.createAppSavedData(this);
         CareerSavedData.createCareerSavedData(this);
         if (CareerSavedData.getInstance().loadSettings() != null) {
             loadGame();
             finish();
         }
         else {
-            IntegrationConnectionHandler.getInstance().setListener(this);
+            IntegrationConnectionHandler.getInstance().setSetupListener(this);
             IntegrationConnectionHandler.getInstance().getTeamsForNewGame();
         }
 
@@ -238,6 +239,9 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                     speechBubbleText.setText(getString(R.string.first_menu_choose_days_between));
                     pushSpeechBubbleToRight(daysBetweenLayout);
 
+                    break;
+                case TutorialSteps.FIRST_MENU_COMPLETE_STEP_1:
+                    speechBubbleText.setText(getString(R.string.first_menu_still_loading));
                     break;
             }
 
@@ -833,7 +837,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         hideMenu(stepTargetLayout);
         putSpeechBubbleBackIntoMiddle();
         readyToProgress = true;
-        speechBubbleText.setText(getString(R.string.first_menu_got_step_target, String.valueOf(stepTarget)));
+        speechBubbleText.setText(getString(R.string.first_menu_got_step_target, Words.getNumberWithCommas(stepTarget)));
 
     }
 
@@ -862,7 +866,15 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
      * Calls newGame
      * @param view needed for onClick
      */
-    public void confirmReady(View view) { newGame(); }
+    public void confirmReady(View view) {
+        if (stillLoading) {
+            speechBubbleText.setText(getString(R.string.first_menu_still_loading));
+            return;
+        }
+        stillLoading = true;
+        SetupGameAsync game = new SetupGameAsync();
+        game.execute(this);
+    }
 
     /**
      * Sets up a team game in AppSettings, creates new Career Settings and starts new season on CareerSettings.
@@ -902,8 +914,10 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
      * Loads AppSettings & CareerSettings, then stats TMMainMenu.
      */
     void loadGame() {
-        AppSettingsSavedData.getInstance().loadSettings();
+        AppSavedData.getInstance().loadSettings();
         CareerSavedData.getInstance().loadSettings();
+        IntegrationConnectionHandler.getInstance().initialiseFitnessAppConnection(this);
+        CareerSettings.getInstance().refreshPlayerActivity();
 
         Intent intent = new Intent(this, TMMainMenu.class);
         startActivity(intent);
@@ -916,5 +930,25 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    private class SetupGameAsync extends AsyncTask<Context, String, Intent> {
+
+        @Override
+        protected Intent doInBackground(Context... contexts) {
+            publishProgress(getString(R.string.first_menu_ready_to_go));
+            newGame();
+            return new Intent(contexts[0], TMMainMenu.class);
+        }
+
+        @Override
+        protected void onPostExecute(Intent result) {
+            startActivity(result);
+        }
+        @Override
+        protected void onProgressUpdate(String...strings) {
+            speechBubbleText.setText(strings[0]);
+        }
+
     }
 }

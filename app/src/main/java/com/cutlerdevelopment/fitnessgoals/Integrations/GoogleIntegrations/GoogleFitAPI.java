@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.cutlerdevelopment.fitnessgoals.Constants.FitnessApps;
+import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.fitness.Fitness;
@@ -18,6 +19,7 @@ import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -29,6 +31,7 @@ public class GoogleFitAPI {
 
     public interface GoogleFitListener {
         void getAverage(int average);
+        void getSteps(HashMap<Date, Integer> map);
     }
 
     GoogleFitListener listener;
@@ -76,6 +79,42 @@ public class GoogleFitAPI {
         return account.getDisplayName();
     }
 
+    public void getStepsFromDates(Date startDate, Date endDate) {
+        long endTime = DateHelper.addDays(endDate, 1).getTime();
+        long startTime =startDate.getTime();
+
+        DataReadRequest readRequest = new DataReadRequest.Builder()
+                .aggregate(DataType.TYPE_STEP_COUNT_DELTA, DataType.AGGREGATE_STEP_COUNT_DELTA)
+                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+                .bucketByTime(1, TimeUnit.DAYS)
+                .enableServerQueries()
+                .build();
+
+        Fitness.getHistoryClient(c, account)
+                .readData(readRequest).addOnSuccessListener(new OnSuccessListener<DataReadResponse>() {
+            @Override
+            public void onSuccess(DataReadResponse response) {
+                // Use response data here
+                HashMap<Date, Integer> map = new HashMap<>();
+                if (response.getBuckets().size() > 0) {
+                    for (Bucket bucket :response.getBuckets()) {
+                        List<DataSet> dataSets = bucket.getDataSets();
+                        for (DataSet dataSet : dataSets) {
+                            for (DataPoint dp : dataSet.getDataPoints()) {
+                                for (Field field : dp.getDataType().getFields()) {
+                                    map.put(
+                                    new Date(bucket.getStartTime(TimeUnit.MILLISECONDS)),
+                                    dp.getValue(field).asInt());
+                                }
+                            }
+                        }
+                    }
+                }
+                listener.getSteps(map);
+
+            }
+        });
+    }
 
 
     public void getAverageFromDates(Date startDate, Date endDate) {

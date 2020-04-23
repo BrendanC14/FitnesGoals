@@ -29,6 +29,9 @@
                 style="@style/TextAppearance.FitnessGoals.WhiteTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="parent"
@@ -66,8 +69,8 @@
 
                 <ImageButton
                     android:id="@+id/tmMainMenuLeagueUp"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="8dp"
@@ -99,11 +102,11 @@
 
                 <ImageButton
                     android:id="@+id/tmMainMenuLeagueDown"
-                    android:layout_width="50dp"
+                    android:layout_width="35dp"
                     android:layout_height="50dp"
+                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
-                    android:layout_marginTop="8dp"
                     android:background="@drawable/downarrow"
                     android:onClick="downALeague"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -257,6 +260,142 @@
             </LinearLayout>
 
         </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/tmMainMenuStepDisplayCard"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/progress_card_height"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:cardBackgroundColor="@color/colorAccent"
+        app:cardElevation="20dp"
+        app:cardPreventCornerOverlap="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tmMainMenuLeagueTableCard">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tmMainMenuStepTabs"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/progress_tabs_height"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            app:tabPaddingBottom="0dp"
+            app:tabPaddingEnd="0dp"
+            app:tabPaddingStart="0dp"
+            app:tabPaddingTop="0dp"
+            app:tabIndicatorHeight="3dp">
+
+        </com.google.android.material.tabs.TabLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/tmMainMenuGoldFootball"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                app:layout_constraintTop_toTopOf="@+id/tmMainMenuStepProgress"
+                app:layout_constraintBottom_toBottomOf="@+id/tmMainMenuStepProgress"
+                app:layout_constraintStart_toStartOf="@+id/tmMainMenuStepProgress"
+                app:layout_constraintEnd_toEndOf="@+id/tmMainMenuStepProgress"
+                android:visibility="visible"
+                app:srcCompat="@drawable/goldfootball" />
+
+            <TextView
+                android:id="@+id/tmMainMenuSteps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@+id/tmMainMenuStepProgress"
+                app:layout_constraintBottom_toBottomOf="@+id/tmMainMenuStepProgress"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tmMainMenuStepProgress"
+                style="@style/TextAppearance.FitnessGoals.WhiteTitle">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tmMainMenuStepTarget"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@+id/tmMainMenuStepProgress"
+                app:layout_constraintBottom_toBottomOf="@+id/tmMainMenuStepProgress"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tmMainMenuStepProgress"
+                style="@style/TextAppearance.FitnessGoals.WhiteTitle">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tmMainMenuProgressSlash"
+                style="@style/TextAppearance.FitnessGoals.NormalText"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:text="@string/slash"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/tmMainMenuStepProgress"
+                app:layout_constraintEnd_toEndOf="@+id/tmMainMenuStepProgress"
+                app:layout_constraintStart_toStartOf="@+id/tmMainMenuStepProgress"
+                app:layout_constraintTop_toTopOf="@+id/tmMainMenuStepProgress">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tmMainMenuTargetAchieved"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.FitnessGoals.WhiteTitle"
+                android:text="@string/tm_main_menu_target_achieved"
+                app:layout_constraintTop_toBottomOf="@id/tmMainMenuStepProgress"
+                app:layout_constraintEnd_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:textColor="@color/colorGold"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+
+            </TextView>
+            <ProgressBar
+                android:id="@+id/tmMainMenuStepProgress"
+                style="?android:progressBarStyleHorizontal"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:progress="1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:progressDrawable="@drawable/circular_progress_bar" />
+
+            <TextView
+                android:id="@+id/tmMainMenuNotEnoughData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.FitnessGoals.NormalText"
+                android:text="@string/tm_main_menu_not_enough_date_for_progress"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone">
+            </TextView>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 

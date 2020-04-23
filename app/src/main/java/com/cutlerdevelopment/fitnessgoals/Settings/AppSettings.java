@@ -4,7 +4,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.cutlerdevelopment.fitnessgoals.Constants.GameModes;
-import com.cutlerdevelopment.fitnessgoals.SavedData.AppSettingsSavedData;
+import com.cutlerdevelopment.fitnessgoals.SavedData.AppSavedData;
 
 @Entity
 public class AppSettings {
@@ -30,7 +30,7 @@ public class AppSettings {
         this.stepMode = stepMode;
         this.stepTarget = stepTarget;
 
-        AppSettingsSavedData.getInstance().saveObject(this);
+        AppSavedData.getInstance().saveObject(this);
 
     }
 
@@ -40,7 +40,7 @@ public class AppSettings {
     public void setFitnessApp(int fitnessApp) { this.fitnessApp = fitnessApp; }
     public void changeFitnessApp(int fitnessApp) {
         this.fitnessApp = fitnessApp;
-        //TODO: Save update
+        AppSavedData.getInstance().updateObject(this);
     }
 
     private int gameMode;
@@ -48,7 +48,7 @@ public class AppSettings {
     public void setGameMode(int gameMode) { this.gameMode = gameMode; }
     public void changeGameMode(int gameMode) {
         this.gameMode = gameMode;
-        AppSettingsSavedData.getInstance().saveObject(this);
+        AppSavedData.getInstance().updateObject(this);
 
     }
 
@@ -57,7 +57,7 @@ public class AppSettings {
     public void setStepMode(int stepMode) { this.stepMode = stepMode; }
     public void changeStepMode(int stepMode) {
         this.stepMode = stepMode;
-        AppSettingsSavedData.getInstance().saveObject(this);
+        AppSavedData.getInstance().updateObject(this);
 
     }
 
@@ -66,6 +66,6 @@ public class AppSettings {
     public void setStepTarget(int stepTarget) { this.stepTarget = stepTarget; }
     public void changeStepTarget(int stepTarget) {
         this.stepTarget = stepTarget;
-        AppSettingsSavedData.getInstance().saveObject(this);
+        AppSavedData.getInstance().updateObject(this);
     }
 }

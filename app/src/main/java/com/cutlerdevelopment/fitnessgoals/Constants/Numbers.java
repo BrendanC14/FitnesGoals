@@ -16,6 +16,8 @@ public class Numbers {
     public static final int TM_MAIN_MENU_SMALL_TABLE_ROW_NUMBER = 5;
     public static final int TM_MAIN_MENU_BIG_TABLE_ROW_NUMBER = 12;
     public static final long TM_MAIN_MENU_EXPAND_TABLE_ANIM_DURATION = 1000;
+    public static final int TM_MAIN_MENU_STEP_PROGRESS_ANIM_DURATION = 2000;
+    public static final long TM_MAIN_MENU_GOLDEN_FOOTBALL_ANIM_DURATION = 1500;
 
     //Settings
     public static final int MAX_NUM_STEPS_TARGET = 20;

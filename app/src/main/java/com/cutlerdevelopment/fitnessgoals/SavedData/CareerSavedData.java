@@ -111,6 +111,13 @@ public class CareerSavedData {
     public int getNumRowsFromFixtureTable() { return db.fixtureDao().getRowCount(); }
     public List<Fixture> getAllUpcomingFixturesForTeam(int teamID) { return Arrays.asList(db.fixtureDao().selectAllUpcomingFixturesFromTeam(teamID)); }
     public List<Fixture> getAllResultsForTeam(int teamID) { return Arrays.asList(db.fixtureDao().selectAllResultsFromTeam(teamID)); }
+    public Fixture getLastResultForTeam(int teamID) {
+        List<Fixture> results = Arrays.asList(db.fixtureDao().selectAllResultsFromTeam(teamID));
+        if (results.size() > 0) {
+            return results.get(0);
+        }
+        return null;
+    }
     public Fixture getNextFixtureForTeam(int teamID) {
         List<Fixture> fixes = Arrays.asList(db.fixtureDao().selectAllUpcomingFixturesFromTeam(teamID));
         Collections.sort(fixes);

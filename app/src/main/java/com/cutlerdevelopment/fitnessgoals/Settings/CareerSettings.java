@@ -4,10 +4,12 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.cutlerdevelopment.fitnessgoals.Constants.Defaults;
+import com.cutlerdevelopment.fitnessgoals.Constants.FilterOptions;
 import com.cutlerdevelopment.fitnessgoals.Constants.Leagues;
-import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
+import com.cutlerdevelopment.fitnessgoals.Integrations.IntegrationConnectionHandler;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
+import com.cutlerdevelopment.fitnessgoals.SavedData.AppSavedData;
 import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 
@@ -39,6 +41,10 @@ public class CareerSettings {
     public void createNewCareerSettings(int daysBetween) {
         this.daysBetween = daysBetween;
 
+        filterChoices = new ArrayList<>();
+        filterChoices.add(FilterOptions.YESTERDAY);
+        filterChoices.add(FilterOptions.LAST_MATCH);
+        filterChoices.add(FilterOptions.LAST_7_DAYS);
         this.pointsForWin = Defaults.DEFAULT_POINTS_FOR_WIN;
         this.pointsForDraw = Defaults.DEFAULT_POINTS_FOR_DRAW;
         this. pointsForLoss = Defaults.DEFAULT_POINTS_FOR_LOSS;
@@ -55,6 +61,13 @@ public class CareerSettings {
         CareerSavedData.getInstance().saveObject(this);
     }
 
+    private List<Integer> filterChoices;
+    public List<Integer> getFilterChoices() { return filterChoices; }
+    public void setFilterChoices(List<Integer> filterChoices) { this.filterChoices = filterChoices; }
+    public void updateFilterChoices(List<Integer> filterChoices) {
+        this.filterChoices = filterChoices;
+        CareerSavedData.getInstance().updateObject(this);
+    }
 
     private int daysBetween;
     public int getDaysBetween() { return daysBetween; }
@@ -103,9 +116,24 @@ public class CareerSettings {
 
     public void startNewSeason() {
         season++;
-        startDate = new Date();
+        startDate = DateHelper.addDays(new Date(), -14);
         CareerSavedData.getInstance().saveObject(this);
         createFixtures();
+    }
+
+
+    public void refreshPlayerActivity() {
+        Date lastActivityDate = startDate;
+
+        UserActivity lastActivity = AppSavedData.getInstance().getLastAddedActivity();
+        if (lastActivity != null) {
+            lastActivityDate = lastActivity.getDate();
+        }
+
+        Date yesterday = DateHelper.addDays(new Date(), -1);
+        if (lastActivityDate.before(yesterday)) {
+            IntegrationConnectionHandler.getInstance().refreshStepActivity(DateHelper.addDays(lastActivityDate, 1), yesterday);
+        }
     }
 
     void createFixtures() {

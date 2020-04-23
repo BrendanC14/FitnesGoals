@@ -4,6 +4,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.cutlerdevelopment.fitnessgoals.SavedData.AppSavedData;
+
 import java.util.Date;
 
 
@@ -17,13 +19,9 @@ public class UserActivity {
         this.date = date;
         this.steps = steps;
 
-        //TODO: Save
-
+        AppSavedData.getInstance().saveObject(this);
     }
 
-    /**
-     * Used when loading a player for the solo career. Doesn't take any variables as takes them from RoomDB
-     */
     public UserActivity() {
 
     }
@@ -34,7 +32,7 @@ public class UserActivity {
     public void setDate(Date date) { this.date = date; }
     public void changeDate(Date date) {
         this.date = date;
-
+        AppSavedData.getInstance().updateObject(this);
     }
 
     private int steps;
@@ -42,6 +40,7 @@ public class UserActivity {
     public void setSteps(int steps) { this.steps = steps; }
     public void changeSteps(int steps) {
         this.steps = steps;
+        AppSavedData.getInstance().updateObject(this);
 
     }
 
@@ -50,6 +49,15 @@ public class UserActivity {
     public void setActiveMinutes(int mins) {this.activeMinutes = mins; }
     public void changeActiveMinutes(int mins) {
         this.activeMinutes = mins;
+        AppSavedData.getInstance().updateObject(this);
 
+    }
+
+    private boolean targetAchieved;
+    public boolean isTargetAchieved() { return targetAchieved; }
+    public void setTargetAchieved(boolean targetAchieved) { this.targetAchieved = targetAchieved; }
+    public void changeTargetAchieved(boolean targetAchieved) {
+        this.targetAchieved = targetAchieved;
+        AppSavedData.getInstance().updateObject(this);
     }
 }

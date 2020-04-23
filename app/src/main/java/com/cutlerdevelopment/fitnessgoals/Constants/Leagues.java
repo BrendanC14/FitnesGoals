@@ -10,21 +10,25 @@ import java.util.List;
 
 public class Leagues {
 
-    public static final int PREMIER_LEAGUE = 1;
-    public static final int CHAMPIONSHIP = 2;
-    public static final int LEAGUE1 = 3;
-    public static final int LEAGUE2 = 4;
+    public static final int LEAGUE1 = 1;
+    public static final int LEAGUE2 = 2;
+    public static final int LEAGUE3 = 3;
+    public static final int LEAGUE4 = 4;
 
+    private static final String LEAGUE_1_STRING = "Premier League";
+    private static final String LEAGUE_2_STRING = "Championship";
+    private static final String LEAGUE_3_STRING = "League 1";
+    private static final String LEAGUE_4_STRING = "League 2";
 
     public static final int TOP_LEAGUE = 1;
     public static final int BOTTOM_LEAGUE = 4;
 
     public static String getLeagueName(int league) {
         switch (league) {
-            case PREMIER_LEAGUE: return "Premier League";
-            case CHAMPIONSHIP: return "Championship";
-            case LEAGUE1: return "League One";
-            default: return "League Two";
+            case LEAGUE1: return LEAGUE_1_STRING;
+            case LEAGUE2: return LEAGUE_2_STRING;
+            case LEAGUE3: return LEAGUE_3_STRING;
+            default: return LEAGUE_4_STRING;
         }
     }
 
