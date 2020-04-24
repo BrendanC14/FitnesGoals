@@ -96,7 +96,7 @@ public class IntegrationConnectionHandler implements GoogleFitAPI.GoogleFitListe
                 int target = AppSettings.getInstance().getStepTarget();
                 new UserActivity(
                         DateHelper.addDays(startDate, i),
-                        r.nextInt((target + 2000) - (target)) + target
+                        r.nextInt((target + 2000) - (target - 2000)) + target - 2000
                 );
                 if (tmListener != null) { tmListener.gotStepMap(); }
             }

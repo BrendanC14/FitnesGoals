@@ -14,7 +14,8 @@
 
     <style name="Widget.FitnessGoals.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="hintTextAppearance">@style/TextAppearance.FitnessGoals.TextInputLayout.HintText</item>
-        <item name="hintTextColor">@color/textColorPrimary</item>
+        <item name="hintTextColor">@color/colorWhite</item>
+        <item name="android:textColor">@color/colorWhite</item>
         <item name="fontFamily">@font/cherry_cream_soda</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
@@ -23,7 +24,7 @@
     </style>
 
     <style name="TextAppearance.FitnessGoals.TextInputLayout.HintText" parent="TextAppearance.MaterialComponents.Subtitle2">
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textColor">@color/colorWhite</item>
         <item name="fontFamily">@font/cherry_cream_soda</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
@@ -32,7 +33,7 @@
     <style name="Widget.FitnessGoals.Button" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="android:textColor">@color/textColorPrimary</item>
         <item name="materialButtonOutlinedStyle">@color/colorAccent</item>
-        <item name="backgroundTint">@color/colorBackground</item>
+        <item name="backgroundTint">@color/colorPrimaryDark</item>
         <item name="fontFamily">@font/cherry_cream_soda</item>
         <item name="android:textSize">10sp</item>
         <item name="autoSizeTextType">uniform</item>
@@ -63,7 +64,7 @@
 
 
     <style name="Widget.FitnessGoals.Button.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:textColor">@color/colorWhite</item>
         <item name="fontFamily">@font/cherry_cream_soda</item>
         <item name="android:textSize">10sp</item>
         <item name="autoSizeTextType">uniform</item>

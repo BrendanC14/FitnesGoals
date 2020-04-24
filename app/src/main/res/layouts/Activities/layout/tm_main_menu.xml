@@ -514,12 +514,13 @@
 
                 <Button
                     android:id="@+id/tmMainMenuPlayMatchButton"
+                    style="@style/Widget.FitnessGoals.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.FitnessGoals.Button"
+                    android:onClick="openMatchSetup"
+                    android:text="@string/tm_main_menu_play_match_button_text"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:text="@string/tm_main_menu_play_match_button_text">
+                    app:layout_constraintTop_toTopOf="parent">
 
                 </Button>
 

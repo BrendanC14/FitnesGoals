@@ -35,6 +35,12 @@ public class DateHelper {
         return cal.getTime();
     }
 
+    public static String getDateInFitbitFormat(Date date) {
+
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        return formatter.format(date);
+    }
+
     public static String formatDateToString(Date date) {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         return formatter.format(date);

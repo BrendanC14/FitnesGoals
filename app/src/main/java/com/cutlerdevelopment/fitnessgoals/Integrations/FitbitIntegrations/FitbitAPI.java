@@ -32,7 +32,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.cutlerdevelopment.fitnessgoals.Constants.Words.getDateInFitbitFormat;
 
 @Entity
 public class FitbitAPI {
@@ -118,8 +117,8 @@ public class FitbitAPI {
 
     public void getStepsFromDates(Date startDate, Date endDate) {
 
-        String startDateString = getDateInFitbitFormat(startDate);
-        String endDateString = getDateInFitbitFormat(endDate);
+        String startDateString = DateHelper.getDateInFitbitFormat(startDate);
+        String endDateString = DateHelper.getDateInFitbitFormat(endDate);
 
         RequestQueue queue = Volley.newRequestQueue(act);
         String url = "https://api.fitbit.com/1/user/" +
@@ -180,8 +179,8 @@ public class FitbitAPI {
 
     public void getAverageFromDates(Date startDate, Date endDate) {
 
-        String startDateString = getDateInFitbitFormat(startDate);
-        String endDateString = getDateInFitbitFormat(endDate);
+        String startDateString = DateHelper.getDateInFitbitFormat(startDate);
+        String endDateString = DateHelper.getDateInFitbitFormat(endDate);
 
         RequestQueue queue = Volley.newRequestQueue(act);
         String url = "https://api.fitbit.com/1/user/" +

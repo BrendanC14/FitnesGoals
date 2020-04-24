@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/rounded_menu"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/matchSetupTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/match_setup_title"
+            style="@style/TextAppearance.FitnessGoals.WhiteTitle"
+            android:layout_marginTop="8dp">
+
+        </TextView>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/matchSetupDefendingLayout"
+                android:layout_width="0dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tmMainMenuCentreDivider"
+                android:layout_height="wrap_content">
+
+                <GridView
+                    android:id="@+id/matchSetupDefendingList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintTop_toBottomOf="@+id/matchSetupDefendingHeader"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/matchSetupDefendingHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    style="@style/TextAppearance.FitnessGoals.NormalText"
+                    android:text="@string/match_setup_defending_header"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+
+                </TextView>
+
+
+                <TextView
+                    android:id="@+id/matchSetupDefendingAverage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    style="@style/TextAppearance.FitnessGoals.NormalText"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/matchSetupDefendingList"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:maxLines="1">
+
+                </TextView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/tmMainMenuCentreDivider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+            </TextView>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/matchSetupAttackingLayout"
+                android:layout_width="0dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/tmMainMenuCentreDivider"
+                android:layout_height="wrap_content">
+
+                <GridView
+                    android:id="@+id/matchSetupAttackingList"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/matchSetupAttackingHeader"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <TextView
+                    android:id="@+id/matchSetupAttackingHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.FitnessGoals.NormalText"
+                    android:text="@string/match_setup_attacking_header"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+                </TextView>
+
+
+                <TextView
+                    android:id="@+id/matchSetupAttackingAverage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    style="@style/TextAppearance.FitnessGoals.NormalText"
+                    app:layout_constraintTop_toBottomOf="@id/matchSetupAttackingList"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:maxLines="1">
+
+                </TextView>
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/matchSetupTargetLayout"
+            android:layout_width="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/matchSetupTargetCentreDivider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/matchSetupOpponentDefendingHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.FitnessGoals.NormalText"
+                android:text="@string/match_setup_opponent_defending_header"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/matchSetupTargetCentreDivider">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/matchSetupOpponentDefending"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.FitnessGoals.NormalText"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toStartOf="@id/matchSetupTargetCentreDivider">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/matchSetupOpponentAttackingHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.FitnessGoals.NormalText"
+                android:text="@string/match_setup_opponent_attacking_header"
+                app:layout_constraintTop_toBottomOf="@id/matchSetupOpponentDefendingHeader"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/matchSetupTargetCentreDivider">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/matchSetupOpponentAttacking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.FitnessGoals.NormalText"
+                app:layout_constraintTop_toBottomOf="@+id/matchSetupOpponentDefendingHeader"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintStart_toStartOf="@id/matchSetupTargetCentreDivider">
+
+            </TextView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/matchSetupUserStepsLayout"
+            android:layout_width="match_parent"
+            android:layout_marginTop="16dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/matchSetupUserStepsHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.FitnessGoals.NormalText"
+                android:text="@string/match_setup_user_steps_header">
+
+            </TextView>
+
+            <GridView
+                android:id="@+id/matchSetupUserStepsGrid"
+                android:layout_width="match_parent"
+                android:layout_marginTop="8dp"
+                android:horizontalSpacing="8dp"
+                android:gravity="center"
+                android:layout_height="wrap_content">
+
+            </GridView>
+
+        </LinearLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/matchSetupButtonMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/matchSetupDefendButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:maxLines="1"
+                style="@style/Widget.FitnessGoals.Button"
+                android:text="@string/match_setup_defending_tactic"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/matchSetupTacticCentreDivider"
+                >
+
+            </Button>
+
+            <Button
+                android:id="@+id/matchSetupAttackButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:maxLines="1"
+                style="@style/Widget.FitnessGoals.Button"
+                android:text="@string/match_setup_attacking_tactic"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/matchSetupDefendButton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/matchSetupTacticCentreDivider"
+                >
+
+            </Button>
+
+            <TextView
+                android:id="@+id/matchSetupTacticCentreDivider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
+            </TextView>
+
+            <Button
+                android:id="@+id/matchSetupRandomButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                style="@style/Widget.FitnessGoals.Button"
+                android:text="@string/match_setup_random_tactic"
+                app:layout_constraintStart_toEndOf="@+id/matchSetupTacticCentreDivider"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                >
+
+            </Button>
+
+            <Button
+                android:id="@+id/matchSetupEvenButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                style="@style/Widget.FitnessGoals.Button"
+                android:text="@string/match_setup_even_tactic"
+                app:layout_constraintStart_toEndOf="@id/matchSetupTacticCentreDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/matchSetupRandomButton"
+                app:layout_constraintBottom_toBottomOf="parent">
+
+            </Button>
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/matchSetupPlayMatchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="end"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            style="@style/Widget.FitnessGoals.Button"
+            android:text="@string/play_match"
+            android:visibility="gone">
+
+        </Button>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

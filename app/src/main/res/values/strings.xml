@@ -11,7 +11,9 @@
     <string name="done_button_text">Done</string>
     <string name="next_arrows_button_text">">>"</string>
     <string name="previous_arrows_button_text">&lt;&lt;</string>
+    <string name="average_word">Average: </string>
     <string name="slash">/</string>
+    <string name="play_match">Play Match</string>
 
     <string name="team_mode">Team</string>
     <string name="player_mode">Player</string>
@@ -135,6 +137,18 @@
     <string name="tm_main_menu_james_description3">
         The final card is your next, un-played fixture. Hitting Play Match will open up your tactics before getting a result.
     </string>
+
+    <string name="match_setup_title">Match Setup</string>
+    <string name="match_setup_defending_header"><u>Defending</u></string>
+    <string name="match_setup_attacking_header"><u>Attacking</u></string>
+    <string name="match_setup_user_steps_header"><u>Your Steps</u></string>
+    <string name="match_setup_average_steps"> %1s <i>steps</i></string>
+    <string name="match_setup_opponent_defending_header">Opp Defending </string>
+    <string name="match_setup_opponent_attacking_header">Opp Attacking: </string>
+    <string name="match_setup_defending_tactic">Defending</string>
+    <string name="match_setup_attacking_tactic">Attacking</string>
+    <string name="match_setup_random_tactic">Random</string>
+    <string name="match_setup_even_tactic">Even</string>
 
     <string name="content_description_james">Business man in a white shirt</string>
     <string name="content_description_aoo_logo">Fitness App logo</string>

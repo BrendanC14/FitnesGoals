@@ -3,6 +3,7 @@ package com.cutlerdevelopment.fitnessgoals.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.DialogFragment;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -27,6 +28,7 @@ import com.cutlerdevelopment.fitnessgoals.Constants.FilterOptions;
 import com.cutlerdevelopment.fitnessgoals.Constants.Leagues;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.Constants.Words;
+import com.cutlerdevelopment.fitnessgoals.DIalogFragments.MatchSetup;
 import com.cutlerdevelopment.fitnessgoals.Integrations.IntegrationConnectionHandler;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
@@ -37,6 +39,7 @@ import com.cutlerdevelopment.fitnessgoals.Settings.AppSettings;
 import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
 import com.cutlerdevelopment.fitnessgoals.Settings.UserActivity;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
+import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.FullTableRowAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.FullTableRow;
 import com.google.android.material.tabs.TabLayout;
@@ -94,6 +97,8 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
 
     boolean leagueCollapsed;
     boolean animatingGoldenFootball;
+
+
 
 
     @Override
@@ -403,7 +408,7 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
                 numDays = 7;
                 for (UserActivity activity : savedData.getActivityOnAllDates(startDate, yesterday)) {
                     steps += activity.getSteps();
-                    if (steps > appSettings.getStepTarget()) {
+                    if (activity.getSteps() > appSettings.getStepTarget()) {
                         daysAchieved++;
                     }
                 }
@@ -421,7 +426,7 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
                 numDays = 30;
                 for (UserActivity activity : savedData.getActivityOnAllDates(startDate, yesterday)) {
                     steps += activity.getSteps();
-                    if (steps > appSettings.getStepTarget()) {
+                    if (activity.getSteps() > appSettings.getStepTarget()) {
                         daysAchieved++;
                     }
                 }
@@ -458,7 +463,7 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
                 steps = 0;
                 for (UserActivity activity : savedData.getActivityOnAllDates(startDate, yesterday)) {
                     steps += activity.getSteps();
-                    if (steps > appSettings.getStepTarget()) {
+                    if (activity.getSteps() > appSettings.getStepTarget()) {
                         daysAchieved++;
                     }
                 }
@@ -468,7 +473,7 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
 
         }
         stepProgress.setMax(max);
-        stepProgressTarget.setText(Words.getNumberWithCommas(max));
+        stepProgressTarget.setText(StringHelper.getNumberWithCommas(max));
         updateProgressCircleAndSteps(steps);
         if (filterOption != FilterOptions.YESTERDAY) {
             numDaysText.setVisibility(VISIBLE);
@@ -494,6 +499,7 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
         numDaysText.setVisibility(GONE);
         numDaysSlash.setVisibility(GONE);
         daysAchievedText.setVisibility(GONE);
+        takeFootballOut();
     }
 
     void updateProgressCircleAndSteps(int steps) {
@@ -505,7 +511,7 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 int val = (Integer) valueAnimator.getAnimatedValue();
                 stepProgress.setProgress(val);
-                stepProgressAchieved.setText(Words.getNumberWithCommas(val));
+                stepProgressAchieved.setText(StringHelper.getNumberWithCommas(val));
                 if (val > stepProgress.getMax()) {
                     stepProgressAchieved.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                     if (!animatingGoldenFootball) {
@@ -528,7 +534,7 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 int val = (Integer) valueAnimator.getAnimatedValue();
-                daysAchievedText.setText(Words.getNumberWithCommas(val));
+                daysAchievedText.setText(StringHelper.getNumberWithCommas(val));
                 if (val >= Integer.parseInt(numDaysText.getText().toString())) {
                     daysAchievedText.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                 }
@@ -649,6 +655,12 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
     public void doneJames(View view) {
         jamesImage.setX(backgroundLayout.getWidth());
         speechBubbleLayout.setY(0 - speechBubbleLayout.getHeight());
+    }
+
+    public void openMatchSetup(View view) {
+
+        DialogFragment careerDialog = new MatchSetup();
+        careerDialog.show(getSupportFragmentManager(), "MatchSetup");
     }
 
 }

@@ -43,6 +43,7 @@ import com.cutlerdevelopment.fitnessgoals.SavedData.AppSavedData;
 import com.cutlerdevelopment.fitnessgoals.Settings.AppSettings;
 import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
+import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.ColourDisplaySmallCardAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.FitnessAppSmallCardAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.ColourDisplaySmallCard;
@@ -665,7 +666,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
      */
     public void whatIsTeamMode(View view) {
         speechBubbleText.setText(getString(R.string.team_mode_details));
-        teamModeBackgroundColour.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        teamModeBackgroundColour.setBackgroundColor(getResources().getColor(R.color.colorAccent));
         playerModeBackgroundColour.setBackgroundColor(getResources().getColor(R.color.colorBlack));
     }
 
@@ -677,7 +678,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
     public void whatIsPlayerMode(View view) {
         speechBubbleText.setText(getString(R.string.player_mode_details));
         teamModeBackgroundColour.setBackgroundColor(getResources().getColor(R.color.colorBlack));
-        playerModeBackgroundColour.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        playerModeBackgroundColour.setBackgroundColor(getResources().getColor(R.color.colorAccent));
     }
 
     /**
@@ -820,7 +821,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
      */
     @Override
     public void getAverageSteps(int average) {
-        if (average > 0) { speechBubbleText.setText(getString(R.string.first_menu_got_average, "7", Words.getNumberWithCommas(average))); }
+        if (average > 0) { speechBubbleText.setText(getString(R.string.first_menu_got_average, "7", StringHelper.getNumberWithCommas(average))); }
         else { speechBubbleText.setText(getString(R.string.first_menu_cant_get_average)); }
         showMenu(stepTargetLayout);
         pushSpeechBubbleToRight(stepTargetLayout);
@@ -837,7 +838,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         hideMenu(stepTargetLayout);
         putSpeechBubbleBackIntoMiddle();
         readyToProgress = true;
-        speechBubbleText.setText(getString(R.string.first_menu_got_step_target, Words.getNumberWithCommas(stepTarget)));
+        speechBubbleText.setText(getString(R.string.first_menu_got_step_target, StringHelper.getNumberWithCommas(stepTarget)));
 
     }
 
@@ -855,7 +856,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                     teamPlayerName,
                     Leagues.getLeagueName(4),
                     String.valueOf(daysBetween),
-                    Words.getNumberWithCommas(stepTarget),
+                    StringHelper.getNumberWithCommas(stepTarget),
                     FitnessApps.getFitnessAppName(AppSettings.getInstance().getFitnessApp())));
         }
 
