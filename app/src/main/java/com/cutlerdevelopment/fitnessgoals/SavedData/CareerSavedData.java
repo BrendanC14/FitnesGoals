@@ -106,6 +106,7 @@ public class CareerSavedData {
     public List<Fixture> getAllFixtures() { return Arrays.asList(db.fixtureDao().selectAllFixtures());}
     public Fixture getFixtureFromID(int ID) {return db.fixtureDao().selectFixtureFromID(ID); }
     public List<Fixture> getWeeksFixtureFromLeague(Date date, int league) { return Arrays.asList(db.fixtureDao().selectAllFixturesInLeagueFromDate(date, league)); }
+    public List<Fixture> getWeeksResultsFromLeague(Date date, int league) { return Arrays.asList(db.fixtureDao().selectAllResultsInLeagueFromDate(date, league)); }
     public List<Fixture> getFixturesForTeam(int teamID) { return Arrays.asList(db.fixtureDao().selectAllFixturesFromTeam(teamID)); }
     public Fixture getTeamsFixtureForWeek(int week, int teamID) { return db.fixtureDao().selectFixtureForWeekWithTeam(week, teamID); }
     public int getNumRowsFromFixtureTable() { return db.fixtureDao().getRowCount(); }
@@ -114,7 +115,7 @@ public class CareerSavedData {
     public Fixture getLastResultForTeam(int teamID) {
         List<Fixture> results = Arrays.asList(db.fixtureDao().selectAllResultsFromTeam(teamID));
         if (results.size() > 0) {
-            return results.get(0);
+            return results.get(results.size() - 1);
         }
         return null;
     }
@@ -122,7 +123,10 @@ public class CareerSavedData {
         List<Fixture> fixes = Arrays.asList(db.fixtureDao().selectAllUpcomingFixturesFromTeam(teamID));
         Collections.sort(fixes);
 
-        return fixes.get(0);
+        if (fixes.size() > 0) {
+            return fixes.get(0);
+        }
+        return null;
     }
 
     @Dao
@@ -176,13 +180,15 @@ public class CareerSavedData {
         Fixture[] selectAllFixtures();
         @Query("SELECT * FROM Fixture WHERE id = :fixtureID")
         Fixture selectFixtureFromID(int fixtureID);
-        @Query("SELECT * FROM Fixture WHERE date = :date AND league = :league")
+        @Query("SELECT * FROM Fixture WHERE homeScore = -1 AND date = :date AND league = :league")
         Fixture[] selectAllFixturesInLeagueFromDate(Date date, int league);
+        @Query("SELECT * FROM Fixture WHERE homeScore > -1 AND date = :date AND league = :league")
+        Fixture[] selectAllResultsInLeagueFromDate(Date date, int league);
         @Query("SELECT * FROM Fixture WHERE homeTeamID = :teamID OR awayTeamID = :teamID")
         Fixture[] selectAllFixturesFromTeam(int teamID);
         @Query("SELECT * FROM Fixture WHERE homeScore = -1 AND (homeTeamID = :teamID OR awayTeamID = :teamID)")
         Fixture[] selectAllUpcomingFixturesFromTeam(int teamID);
-        @Query("SELECT * FROM Fixture WHERE homeScore > -1 AND (homeTeamID = :teamID OR awayTeamID = :teamID)")
+        @Query("SELECT * FROM Fixture WHERE homeScore > -1 AND (homeTeamID = :teamID OR awayTeamID = :teamID) ORDER BY date")
         Fixture[] selectAllResultsFromTeam(int teamID);
         @Query("SELECT * FROM Fixture WHERE week = :week AND (homeTeamID = :teamID OR awayTeamID = :teamID)")
         Fixture selectFixtureForWeekWithTeam(int week, int teamID);

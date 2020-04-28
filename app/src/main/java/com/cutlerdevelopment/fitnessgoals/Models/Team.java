@@ -4,8 +4,8 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.Constants.MatchResult;
+import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
 import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
 
@@ -13,11 +13,15 @@ import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
 public class Team {
 
     @Ignore
-    public Team(String name, String colour, int league) {
+    public Team(String name, String colour, int league, int position) {
         this.ID = CareerSavedData.getInstance().getNumRowsFromTeamTable() + 1;
         this.name = name;
         this.colour = colour;
         this.league = league;
+
+        this.maxNumberOfSteps = 16000 - (60 * position);
+
+        this.minNumberOfSteps = maxNumberOfSteps - Numbers.DIFFERENCE_BETWEEN_TEAM_MIN_MAX;
 
         CareerSavedData.getInstance().saveObject(this);
     }
@@ -58,6 +62,50 @@ public class Team {
     public void changeLeague(int newLeague) {
         this.league = newLeague;
         CareerSavedData.getInstance().updateObject(league);
+    }
+
+    private int totalSteps;
+    public int getTotalSteps() { return totalSteps; }
+    public void setTotalSteps(int totalSteps) { this.totalSteps = totalSteps; }
+    public void changeTotalSteps(int totalSteps) {
+        this.totalSteps = totalSteps;
+        CareerSavedData.getInstance().saveObject(this);
+    }
+
+    public int getAverageSteps() {
+        return totalSteps / (getGamesPlayed() * CareerSettings.getInstance().getDaysBetween());
+    }
+
+    private int totalAttackingSteps;
+    public int getTotalAttackingSteps() { return totalAttackingSteps; }
+    public void setTotalAttackingSteps(int totalAttackingSteps) { this.totalAttackingSteps = totalAttackingSteps; }
+    public void changeAverageAttackingSteps(int averageAttackingSteps) {
+        this.totalAttackingSteps = averageAttackingSteps;
+        CareerSavedData.getInstance().updateObject(this);
+    }
+
+    private int totalDefendingSteps;
+    public int getTotalDefendingSteps() { return totalDefendingSteps; }
+    public void setTotalDefendingSteps(int totalDefendingSteps) { this.totalDefendingSteps = totalDefendingSteps; }
+    public void changeAverageDefendingSteps(int averageDefendingSteps) {
+        this.totalDefendingSteps = averageDefendingSteps;
+        CareerSavedData.getInstance().updateObject(this);
+    }
+
+    private int minNumberOfSteps;
+    public int getMinNumberOfSteps() { return minNumberOfSteps; }
+    public void setMinNumberOfSteps(int minNumberOfSteps) { this.minNumberOfSteps = minNumberOfSteps; }
+    public void changeMinNumberOfSteps (int minNumberOfSteps) {
+        this.minNumberOfSteps = minNumberOfSteps;
+        CareerSavedData.getInstance().saveObject(this);
+    }
+
+    private int maxNumberOfSteps;
+    public int getMaxNumberOfSteps() { return maxNumberOfSteps; }
+    public void setMaxNumberOfSteps(int maxNumberOfSteps) { this.maxNumberOfSteps = maxNumberOfSteps; }
+    public void changeMaxNumberOfSteps(int maxNumberOfSteps) {
+        this.maxNumberOfSteps = maxNumberOfSteps;
+        CareerSavedData.getInstance().saveObject(this);
     }
 
     private int points;
@@ -105,19 +153,27 @@ public class Team {
     public int getGoalDifference() { return scored - conceded; }
     public int getGamesPlayed() {return wins + draws + losses;}
 
-    public void replaceTeamWithUsersTeam(String name, String colour) {
-        this.name = name;
-        this.colour = colour;
 
-        CareerSavedData.getInstance().updateObject(this);
-    }
-
-    public void playMatch(int matchResult, int scored, int conceded) {
+    public void playMatch(int matchResult, int scored, int conceded, int attackingSteps, int defendingSteps) {
         addGoals(scored);
         concedeGoals(conceded);
         if (matchResult == MatchResult.DRAW) { addDraw(); }
         else if (matchResult == MatchResult.WIN) { addWin(); }
         else { addLoss(); }
+
+        int totalStepsInMatch = attackingSteps + defendingSteps;
+
+        this.totalAttackingSteps += attackingSteps;
+        this.totalDefendingSteps += defendingSteps;
+        this.totalSteps += totalStepsInMatch;
+
+        int dailySteps = totalStepsInMatch / CareerSettings.getInstance().getDaysBetween();
+        int currentAve = (minNumberOfSteps + maxNumberOfSteps) / 2;
+        minNumberOfSteps += (dailySteps - currentAve) / 25;
+        maxNumberOfSteps += (dailySteps - currentAve) / 25;
+
+        //this.minNumberOfSteps = getAverageSteps() - (Numbers.DIFFERENCE_BETWEEN_TEAM_MIN_MAX / 2);
+        //this.maxNumberOfSteps = getAverageSteps() + (Numbers.DIFFERENCE_BETWEEN_TEAM_MIN_MAX / 2);
 
         CareerSavedData.getInstance().updateObject(this);
 

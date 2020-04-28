@@ -493,8 +493,7 @@
                 android:id="@+id/tmMainMenuNextMatchDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/TextAppearance.FitnessGoals.NormalText"
-                android:text="12/04/2020">
+                style="@style/TextAppearance.FitnessGoals.NormalText">
 
             </TextView>
 
@@ -503,7 +502,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/TextAppearance.FitnessGoals.NormalText"
-                android:text="vs Tottenham Hotspur"
                 android:maxLines="1">
 
             </TextView>

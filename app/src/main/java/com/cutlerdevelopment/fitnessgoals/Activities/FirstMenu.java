@@ -165,6 +165,14 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
      */
     @Override
     public void teamsRetrieved() {
+
+        /*gameMode = GameModes.TEAM_MODE;
+        stepMode = StepModes.TARGETED_MODE;
+        stepTarget = 6000;
+        daysBetween = 6;
+        teamPlayerName = "Poole FC";
+        teamColour = "#ff0000";
+        newGame();*/
         animateJamesIntroduction();
     }
     /**

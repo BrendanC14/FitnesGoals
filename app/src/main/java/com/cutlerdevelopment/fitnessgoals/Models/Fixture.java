@@ -85,8 +85,8 @@ public class Fixture implements Comparable<Fixture> {
         Team homeTeam = CareerSavedData.getInstance().getTeamFromID(homeTeamID);
         Team awayTeam = CareerSavedData.getInstance().getTeamFromID(awayTeamID);
 
-        homeTeam.playMatch(getMatchResultForTeam(homeTeamID), homeScore, awayScore);
-        awayTeam.playMatch(getMatchResultForTeam(awayTeamID), awayScore, homeScore);
+        homeTeam.playMatch(getMatchResultForTeam(homeTeamID), homeScore, awayScore, homeAttack, homeDefence);
+        awayTeam.playMatch(getMatchResultForTeam(awayTeamID), awayScore, homeScore, awayAttack, awayDefence);
 
         this.homeAttackingSteps = homeAttack;
         this.homeDefendingSteps = homeDefence;

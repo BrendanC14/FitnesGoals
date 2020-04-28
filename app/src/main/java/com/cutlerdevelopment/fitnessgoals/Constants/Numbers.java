@@ -14,11 +14,20 @@ public class Numbers {
     public static final long FIRST_MENU_MARGIN_PADDING = 32;
     public static final float SPEECH_BUBBLE_PADDING_OFFSET = 114;
     public static final int TM_MAIN_MENU_SMALL_TABLE_ROW_NUMBER = 5;
-    public static final int TM_MAIN_MENU_BIG_TABLE_ROW_NUMBER = 12;
+    public static final int TM_MAIN_MENU_BIG_TABLE_ROW_NUMBER = 20;
     public static final long TM_MAIN_MENU_EXPAND_TABLE_ANIM_DURATION = 1000;
     public static final int TM_MAIN_MENU_STEP_PROGRESS_ANIM_DURATION = 2000;
     public static final long TM_MAIN_MENU_GOLDEN_FOOTBALL_ANIM_DURATION = 1500;
     public static final long MATCH_SETUP_TACTIC_MOVE_SPEED = 1000;
+
+    //Team
+    public static final int TOP_TEAM_STEPS = 20000;
+    public static final int TEAM_STEP_REDUCTION_PER_POSITION = 200;
+    public static final int DIFFERENCE_BETWEEN_TEAM_MIN_MAX = 3000;
+
+    //MatchEngine
+    public static final int TM_GOAL = 500;
+    public static final int MATCH_BUFFER = 1000;
 
     //Settings
     public static final int MAX_NUM_STEPS_TARGET = 20;

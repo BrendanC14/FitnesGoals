@@ -14,6 +14,7 @@
     <string name="average_word">Average: </string>
     <string name="slash">/</string>
     <string name="play_match">Play Match</string>
+    <string name="versus">vs</string>
 
     <string name="team_mode">Team</string>
     <string name="player_mode">Player</string>
@@ -149,6 +150,9 @@
     <string name="match_setup_attacking_tactic">Attacking</string>
     <string name="match_setup_random_tactic">Random</string>
     <string name="match_setup_even_tactic">Even</string>
+
+    <string name="match_results_title">Result</string>
+    <string name="match_results_other_results">Other Results</string>
 
     <string name="content_description_james">Business man in a white shirt</string>
     <string name="content_description_aoo_logo">Fitness App logo</string>

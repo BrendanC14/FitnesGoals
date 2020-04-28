@@ -59,8 +59,8 @@ public class FullTableRowAdapter extends BaseAdapter {
         TextView teamNameField = convertView.findViewById(R.id.fullTableRowTeam);
         TextView gamesPlayedField = convertView.findViewById(R.id.fullTableRowGamesPlayed);
         TextView gamesWonField = convertView.findViewById(R.id.fullTableRowWins);
-        TextView gamesDrawnField = convertView.findViewById(R.id.fullTableRowLosses);
-        TextView gamesLostField = convertView.findViewById(R.id.fullTableRowDraws);
+        TextView gamesDrawnField = convertView.findViewById(R.id.fullTableRowDraws);
+        TextView gamesLostField = convertView.findViewById(R.id.fullTableRowLosses);
         TextView goalsScoredField = convertView.findViewById(R.id.fullTableRowScored);
         TextView goalsConcededField = convertView.findViewById(R.id.fullTableRowConceded);
         TextView goalDifferenceField = convertView.findViewById(R.id.fullTableRowGoalDifference);
@@ -79,16 +79,6 @@ public class FullTableRowAdapter extends BaseAdapter {
         goalDifferenceField.setText(currentItem.getGoalDifference());
         pointsField.setText(currentItem.getPoints());
 
-        if (currentItem.getGoalDifference().equals("GD")) {
-            goalDifferenceField.setTextColor(getColor(context, R.color.colorWhite));
-        }
-        else {
-            if (Integer.parseInt(currentItem.getGoalDifference()) > 0) {
-                goalDifferenceField.setTextColor(getColor(context, R.color.colorPrimaryDark));
-            } else if (Integer.parseInt(currentItem.getGoalDifference()) < 0) {
-                goalDifferenceField.setTextColor(getColor(context, R.color.colorRed));
-            }
-        }
         /*if (currentItem.isBoldTeam()) {
             teamPosField.setTypeface(teamPosField.getTypeface(), Typeface.BOLD);
             teamNameField.setTypeface(teamNameField.getTypeface(), Typeface.BOLD);

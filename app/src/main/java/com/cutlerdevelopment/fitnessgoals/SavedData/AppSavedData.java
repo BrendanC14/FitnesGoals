@@ -17,6 +17,7 @@ import com.cutlerdevelopment.fitnessgoals.Constants.Words;
 import com.cutlerdevelopment.fitnessgoals.Settings.AppSettings;
 import com.cutlerdevelopment.fitnessgoals.Settings.UserActivity;
 import com.cutlerdevelopment.fitnessgoals.Utils.Converters;
+import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -91,7 +92,7 @@ public class AppSavedData {
         return Arrays.asList(db.userActivityDao().selectAllUserActivity());
     }
     public UserActivity getActivityOnDate(Date date) {
-        return db.userActivityDao().selectUserActivityWithDate(date);
+        return db.userActivityDao().selectUserActivityWithDate(date, (DateHelper.addDays(date, 1)));
     }
     public List<UserActivity> getActivityOnAllDates(Date startDate, Date endDate) {
         return Arrays.asList(db.userActivityDao().selectUserActivityBetweenDates(startDate, endDate));
@@ -127,8 +128,8 @@ public class AppSavedData {
 
         @Query("SELECT * FROM UserActivity")
         UserActivity[] selectAllUserActivity();
-        @Query("SELECT * FROM UserActivity WHERE date BETWEEN :date AND :date")
-        UserActivity selectUserActivityWithDate(Date date);
+        @Query("SELECT * FROM UserActivity WHERE date BETWEEN :date AND :date2")
+        UserActivity selectUserActivityWithDate(Date date, Date date2);
         @Query("SELECT * FROM UserActivity ORDER BY date DESC LIMIT 1")
         UserActivity selectLastAddedActivity();
         @Query("SELECT * FROM UserActivity WHERE date BETWEEN :date1 AND :date2")

@@ -40,10 +40,14 @@ public class GoogleFirestoreConnector {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot doc : task.getResult()) {
 
+
+
+
                                 new Team(
                                         doc.getString("Name"),
                                         doc.getString("PrimaryColour"),
-                                        doc.getLong("League").intValue());
+                                        doc.getLong("League").intValue(),
+                                        doc.getLong("Position").intValue());
                             }
                             listener.gotTeamsFromFirestore();
                         }

@@ -95,4 +95,4 @@
         android:text="@string/league_table_points_column"
         android:textColor="@color/colorWhite"
         android:textSize="12sp" />
-</LinearLayout>
+    </LinearLayout>

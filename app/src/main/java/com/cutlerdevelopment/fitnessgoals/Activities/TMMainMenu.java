@@ -28,9 +28,11 @@ import com.cutlerdevelopment.fitnessgoals.Constants.FilterOptions;
 import com.cutlerdevelopment.fitnessgoals.Constants.Leagues;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.Constants.Words;
+import com.cutlerdevelopment.fitnessgoals.DIalogFragments.MatchResult;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.MatchSetup;
 import com.cutlerdevelopment.fitnessgoals.Integrations.IntegrationConnectionHandler;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
+import com.cutlerdevelopment.fitnessgoals.Models.MatchEngine;
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.R;
 import com.cutlerdevelopment.fitnessgoals.SavedData.AppSavedData;
@@ -51,7 +53,7 @@ import java.util.List;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public class TMMainMenu extends AppCompatActivity implements IntegrationConnectionHandler.TMListener {
+public class TMMainMenu extends AppCompatActivity implements IntegrationConnectionHandler.TMListener, MatchEngine.MatchEngineListener {
 
     ImageView jamesImage;
     ConstraintLayout speechBubbleLayout;
@@ -189,7 +191,6 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
                 } else {
                     progressCard.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                 }
-                //here the size is already available. create new button2 here with the size of button1
 
                 fillLeagueTableDisplay();
                 checkLeagueButtonValidity();
@@ -198,10 +199,8 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
             }
         });
 
-        int teamID = CareerSettings.getInstance().getTeamID();
-        Fixture f = CareerSavedData.getInstance().getNextFixtureForTeam(teamID);
-        nextFixtureDateText.setText(DateHelper.formatDateToString(f.getDate()));
-        nextFixtureOpponentText.setText(getString(R.string.tm_main_menu_opponent, f.getOpponent(teamID).getName()));
+        addNextFixture();
+
     }
 
     void fillLeagueTableDisplay() {
@@ -328,6 +327,23 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
         leagueCollapsed = !leagueCollapsed;
     }
 
+    void addNextFixture() {
+
+        int teamID = CareerSettings.getInstance().getTeamID();
+        Fixture f = CareerSavedData.getInstance().getNextFixtureForTeam(teamID);
+        if (f != null) {
+            nextFixtureDateText.setText(DateHelper.formatDateToString(f.getDate()));
+            nextFixtureOpponentText.setText(getString(R.string.tm_main_menu_opponent, f.getOpponent(teamID).getName()));
+            if (f.getDate().before(new Date())) {
+                playMatchButton.setVisibility(VISIBLE);
+            } else {
+                playMatchButton.setVisibility(GONE);
+            }
+        }else {
+            playMatchButton.setVisibility(GONE);
+        }
+    }
+
     public void upALeague(View view) {
         leagueToDisplay--;
         leagueNameText.setText(Leagues.getLeagueName(leagueToDisplay));
@@ -439,9 +455,9 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
                     displayNotEnoughDataMessage();
                     return;
                 }
-                max = f.getStepTarget();
                 steps = f.getSteps(teamID);
                 numDays = careerSettings.getDaysBetween();
+                max = f.getStepTarget() * numDays;
                 Date start = DateHelper.addDays(f.getDate(), numDays * -1);
                 Date end = DateHelper.addDays(f.getDate(), -1);
                 for (UserActivity activity : savedData.getActivityOnAllDates(start, end)) {
@@ -661,6 +677,20 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
 
         DialogFragment careerDialog = new MatchSetup();
         careerDialog.show(getSupportFragmentManager(), "MatchSetup");
+        MatchEngine.setListener(this);
+    }
+
+    @Override
+    public void matchesPlayed() {
+
+        fillLeagueTableDisplay();
+        addNextFixture();
+        teamsPosition = Leagues.getPositionInLeague(usersTeam.getID(), leagueToDisplay);
+        leagueTableHolder.smoothScrollToPosition(teamsPosition + 1);
+
+        DialogFragment careerDialog = new MatchResult();
+        careerDialog.show(getSupportFragmentManager(), "MatchResult");
+
     }
 
 }

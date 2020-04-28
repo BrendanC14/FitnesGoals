@@ -1,16 +1,10 @@
 package com.cutlerdevelopment.fitnessgoals.DIalogFragments;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -18,9 +12,9 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 
-import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.Constants.TacticOptions;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
+import com.cutlerdevelopment.fitnessgoals.Models.MatchEngine;
 import com.cutlerdevelopment.fitnessgoals.R;
 import com.cutlerdevelopment.fitnessgoals.SavedData.AppSavedData;
 import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
@@ -43,8 +37,8 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepDropAdap
     private GridView attackingStepsList;
     private GridView usersStepsGridViews;
 
-    private TextView defendingAverageText;
-    private TextView attackingAverageText;
+    private TextView defendingTotalText;
+    private TextView attackingTotalText;
     private TextView oppDefendingText;
     private TextView oppAttackingText;
     private Button defendingTactic;
@@ -61,6 +55,12 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepDropAdap
     List<Integer> stepList;
 
     int daysBetween;
+    int opponentDefence;
+    int opponentAttack;
+    int userDefence;
+    int userAttack;
+
+    Fixture f;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -71,8 +71,8 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepDropAdap
         defendingStepsList = matchSetupView.findViewById(R.id.matchSetupDefendingList);
         attackingStepsList = matchSetupView.findViewById(R.id.matchSetupAttackingList);
         usersStepsGridViews = matchSetupView.findViewById(R.id.matchSetupUserStepsGrid);
-        defendingAverageText = matchSetupView.findViewById(R.id.matchSetupDefendingAverage);
-        attackingAverageText = matchSetupView.findViewById(R.id.matchSetupAttackingAverage);
+        defendingTotalText = matchSetupView.findViewById(R.id.matchSetupDefendingAverage);
+        attackingTotalText = matchSetupView.findViewById(R.id.matchSetupAttackingAverage);
         oppDefendingText = matchSetupView.findViewById(R.id.matchSetupOpponentDefending);
         oppAttackingText = matchSetupView.findViewById(R.id.matchSetupOpponentAttacking);
         defendingTactic = matchSetupView.findViewById(R.id.matchSetupDefendButton);
@@ -97,7 +97,7 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepDropAdap
             item.setDraggable(false);
             myAttackingItems.add(item);
         }
-        Fixture f = CareerSavedData.getInstance().getNextFixtureForTeam(CareerSettings.getInstance().getTeamID());
+        f = CareerSavedData.getInstance().getNextFixtureForTeam(CareerSettings.getInstance().getTeamID());
         Date startDate = DateHelper.addDays(f.getDate(), daysBetween * -1);
         Date endDate = DateHelper.addDays(f.getDate(), -1);
 
@@ -123,12 +123,15 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepDropAdap
         usersStepsGridViews.setAdapter(userAdapter);
         usersStepsGridViews.setNumColumns(4);
 
-        defendingAverageText.setText(String.valueOf(0));
-        attackingAverageText.setText(String.valueOf(0));
-        defendingAverageText.setTextColor(getResources().getColor(R.color.colorRed));
-        attackingAverageText.setTextColor(getResources().getColor(R.color.colorRed));
-        oppDefendingText.setText(StringHelper.getNumberWithCommas(AppSettings.getInstance().getStepTarget()));
-        oppAttackingText.setText(StringHelper.getNumberWithCommas(AppSettings.getInstance().getStepTarget()));
+        int stepTarget = AppSettings.getInstance().getStepTarget();
+        defendingTotalText.setText(String.valueOf(0));
+        attackingTotalText.setText(String.valueOf(0));
+        defendingTotalText.setTextColor(getResources().getColor(R.color.colorRed));
+        attackingTotalText.setTextColor(getResources().getColor(R.color.colorRed));
+        opponentDefence = stepTarget * (daysBetween / 2);
+        opponentAttack = stepTarget * (daysBetween / 2);;
+        oppDefendingText.setText(StringHelper.getNumberWithCommas(stepTarget));
+        oppAttackingText.setText(StringHelper.getNumberWithCommas(stepTarget));
 
         defendingTactic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -154,46 +157,17 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepDropAdap
                 applyTactic(TacticOptions.EVEN);
             }
         });
+        playMatch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                playMatch();
+            }
+        });
 
         builder.setView(matchSetupView);
         return builder.create();
     }
 
-    @Override
-    public void itemDropped() {
-        int defensiveNumber = 0;
-        int defensiveSteps = 0;
-        for (int i = 0; i < defendingStepsList.getChildCount(); i++) {
-            ConstraintLayout layout = (ConstraintLayout) defendingStepsList.getChildAt(i);
-            Button view = (Button) layout.getChildAt(0);
-            if (!view.getText().equals("")) {
-                defensiveNumber++;
-                defensiveSteps += Integer.parseInt(StringHelper.removeCommaFromString(view.getText().toString()));
-            }
-        }
-        int attackingNumber = 0;
-        int attackingSteps = 0;
-        for (int i = 0; i < attackingStepsList.getChildCount(); i++) {
-            ConstraintLayout layout = (ConstraintLayout)  attackingStepsList.getChildAt(i);
-            Button view = (Button) layout.getChildAt(0);
-            if (!view.getText().equals("")) {
-                attackingNumber++;
-                attackingSteps += Integer.parseInt(StringHelper.removeCommaFromString(view.getText().toString()));
-            }
-        }
-
-        int defensiveAverageNumber = defensiveSteps > 0 ? defensiveSteps / defensiveNumber : 0;
-        int attackingAverageNumber = attackingSteps > 0 ? attackingSteps / attackingNumber : 0;
-        if (defensiveNumber + attackingNumber == daysBetween) { playMatch.setVisibility(View.VISIBLE); }
-        else { playMatch.setVisibility(View.GONE); }
-        defendingAverageText.setText(StringHelper.getNumberWithCommas(defensiveAverageNumber));
-        if (defensiveAverageNumber >= AppSettings.getInstance().getStepTarget()) { defendingAverageText.setTextColor(getResources().getColor(R.color.colorAccent)); }
-        else { defendingAverageText.setTextColor(getResources().getColor(R.color.colorRed)); }
-
-        attackingAverageText.setText(StringHelper.getNumberWithCommas(attackingAverageNumber));
-        if (attackingAverageNumber >= AppSettings.getInstance().getStepTarget()) { attackingAverageText.setTextColor(getResources().getColor(R.color.colorAccent)); }
-        else { attackingAverageText.setTextColor(getResources().getColor(R.color.colorRed)); }
-    }
 
     void applyTactic(int tactic) {
 
@@ -295,6 +269,43 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepDropAdap
         itemDropped();
     }
 
+    @Override
+    public void itemDropped() {
+        userAttack = 0;
+        userDefence = 0;
+        int defensiveNumber = 0;
+        for (int i = 0; i < defendingStepsList.getChildCount(); i++) {
+            ConstraintLayout layout = (ConstraintLayout) defendingStepsList.getChildAt(i);
+            Button view = (Button) layout.getChildAt(0);
+            if (!view.getText().equals("")) {
+                defensiveNumber++;
+                userDefence += Integer.parseInt(StringHelper.removeCommaFromString(view.getText().toString()));
+            }
+        }
+        int attackingNumber = 0;
+        for (int i = 0; i < attackingStepsList.getChildCount(); i++) {
+            ConstraintLayout layout = (ConstraintLayout)  attackingStepsList.getChildAt(i);
+            Button view = (Button) layout.getChildAt(0);
+            if (!view.getText().equals("")) {
+                attackingNumber++;
+                userAttack += Integer.parseInt(StringHelper.removeCommaFromString(view.getText().toString()));
+            }
+        }
+
+        int userDefenceAverage = userDefence / (daysBetween / 2);
+        int userAttackAverage = userAttack / (daysBetween / 2);
+
+        if (defensiveNumber + attackingNumber == daysBetween) { playMatch.setVisibility(View.VISIBLE); }
+        else { playMatch.setVisibility(View.GONE); }
+
+        defendingTotalText.setText(StringHelper.getNumberWithCommas(userDefenceAverage));
+        if (userDefenceAverage >= AppSettings.getInstance().getStepTarget()) { defendingTotalText.setTextColor(getResources().getColor(R.color.colorAccent)); }
+        else { defendingTotalText.setTextColor(getResources().getColor(R.color.colorRed)); }
+
+        attackingTotalText.setText(StringHelper.getNumberWithCommas(userAttackAverage));
+        if (userAttackAverage >= AppSettings.getInstance().getStepTarget()) { attackingTotalText.setTextColor(getResources().getColor(R.color.colorAccent)); }
+        else { attackingTotalText.setTextColor(getResources().getColor(R.color.colorRed)); }
+    }
 
     void animateViewsMoving(final ConstraintLayout newParent, final Button stepButton) {
 
@@ -306,5 +317,12 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepDropAdap
 
     void moveViews(ConstraintLayout newParent, Button stepItem) {
         newParent.addView(stepItem);
+    }
+
+    void playMatch() {
+
+        MatchEngine.playTeamModeMatch(userDefence, userAttack, opponentDefence, opponentAttack, f);
+
+        dismiss();
     }
 }
