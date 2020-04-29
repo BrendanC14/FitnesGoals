@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/stepReviewCard"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginStart="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <com.google.android.material.card.MaterialCardView
+    android:id="@+id/tmMainMenuStepDisplayCard"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/progress_card_height"
+    app:cardElevation="20dp"
+    app:cardPreventCornerOverlap="true"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_menu"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/stepReviewLeft"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.FitnessGoals.Button.TextButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/stepReviewDate"
+                app:layout_constraintBottom_toBottomOf="@id/stepReviewDate"
+                android:text="@string/step_review_left">
+
+            </Button>
+
+            <TextView
+                android:id="@+id/stepReviewDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.FitnessGoals.NormalText"
+                android:text="@string/step_review_yesterday"
+                android:maxLines="1"
+                app:layout_constraintStart_toEndOf="@+id/stepReviewLeft"
+                app:layout_constraintEnd_toStartOf="@+id/stepReviewRight"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginTop="8dp">
+
+            </TextView>
+
+            <Button
+                android:id="@+id/stepReviewRight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Widget.FitnessGoals.Button.TextButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/stepReviewDate"
+                app:layout_constraintBottom_toBottomOf="@id/stepReviewDate"
+                android:text="@string/step_review_right">
+
+            </Button>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/stepReviewGoldFootball"
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                app:layout_constraintTop_toTopOf="@+id/stepReviewProgressBar"
+                app:layout_constraintBottom_toBottomOf="@+id/stepReviewProgressBar"
+                app:layout_constraintStart_toStartOf="@+id/stepReviewProgressBar"
+                app:layout_constraintEnd_toEndOf="@+id/stepReviewProgressBar"
+                android:visibility="visible"
+                app:srcCompat="@drawable/goldfootball" />
+
+
+            <ProgressBar
+                android:id="@+id/stepReviewProgressBar"
+                style="?android:progressBarStyleHorizontal"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:progress="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:progressDrawable="@drawable/circular_progress_bar" />
+
+            <TextView
+                android:id="@+id/stepReviewSteps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/stepReviewProgressBar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                style="@style/TextAppearance.FitnessGoals.WhiteTitle">
+
+            </TextView>
+            <TextView
+                android:id="@+id/stepReviewNotEnoughData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.FitnessGoals.NormalText"
+                android:text="@string/tm_main_menu_not_enough_date_for_progress"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone">
+            </TextView>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

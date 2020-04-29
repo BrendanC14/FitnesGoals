@@ -2,15 +2,19 @@ package com.cutlerdevelopment.fitnessgoals.ViewItems;
 
 import android.widget.ScrollView;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.MatchResult;
+
 public class ResultItem {
 
-    public String date;
-    public String homePosition;
-    public String homeTeam;
-    public String homeScore;
-    public String awayScore;
-    public String awayTeam;
-    public String awayPosition;
+    private String date;
+    private String homePosition;
+    private String homeTeam;
+    private String homeScore;
+    private String awayScore;
+    private String awayTeam;
+    private String awayPosition;
+
+    private int result;
 
     public String getDate() { return date; }
     public void setDate(String date) { this.date = date; }
@@ -32,4 +36,7 @@ public class ResultItem {
 
     public String getAwayPosition() { return awayPosition; }
     public void setAwayPosition(String awayPosition) { this.awayPosition = awayPosition; }
+
+    public int getResult() { return result; }
+    public void setResult(int result) { this.result = result; }
 }

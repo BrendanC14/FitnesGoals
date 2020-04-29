@@ -12,7 +12,6 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 
-import com.cutlerdevelopment.fitnessgoals.Constants.GameModes;
 import com.cutlerdevelopment.fitnessgoals.Constants.StepModes;
 import com.cutlerdevelopment.fitnessgoals.Constants.TacticOptions;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
@@ -26,15 +25,15 @@ import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
 import com.cutlerdevelopment.fitnessgoals.Settings.UserActivity;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
-import com.cutlerdevelopment.fitnessgoals.ViewAdapters.MatchSetupStepDropAdapter;
-import com.cutlerdevelopment.fitnessgoals.ViewItems.MatchSetupDropItem;
+import com.cutlerdevelopment.fitnessgoals.ViewAdapters.MatchSetupStepAdapter;
+import com.cutlerdevelopment.fitnessgoals.ViewItems.MatchSetupItem;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-public class MatchSetup extends DialogFragment implements MatchSetupStepDropAdapter.MatchSetupInterface {
+public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.MatchSetupInterface {
 
     private GridView defendingStepsList;
     private GridView attackingStepsList;
@@ -51,9 +50,9 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepDropAdap
     private Button playMatch;
 
 
-    MatchSetupStepDropAdapter defensiveAdapter;
-    MatchSetupStepDropAdapter attackingAdapter;
-    MatchSetupStepDropAdapter userAdapter;
+    MatchSetupStepAdapter defensiveAdapter;
+    MatchSetupStepAdapter attackingAdapter;
+    MatchSetupStepAdapter userAdapter;
 
     List<Integer> stepList;
 
@@ -88,16 +87,16 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepDropAdap
 
         stepList = new ArrayList<>();
         daysBetween = CareerSettings.getInstance().getDaysBetween();
-        final ArrayList<MatchSetupDropItem> myDefensiveItems = new ArrayList<>();
+        final ArrayList<MatchSetupItem> myDefensiveItems = new ArrayList<>();
         for (int i = 0; i < daysBetween / 2; i++) {
-            MatchSetupDropItem item = new MatchSetupDropItem();
+            MatchSetupItem item = new MatchSetupItem();
             item.setSteps("");
             item.setDraggable(false);
             myDefensiveItems.add(item);
         }
-        final ArrayList<MatchSetupDropItem> myAttackingItems = new ArrayList<>();
+        final ArrayList<MatchSetupItem> myAttackingItems = new ArrayList<>();
         for (int i = 0; i < daysBetween / 2; i++) {
-            MatchSetupDropItem item = new MatchSetupDropItem();
+            MatchSetupItem item = new MatchSetupItem();
             item.setSteps("");
             item.setDraggable(false);
             myAttackingItems.add(item);
@@ -106,25 +105,25 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepDropAdap
         Date startDate = DateHelper.addDays(f.getDate(), daysBetween * -1);
         Date endDate = DateHelper.addDays(f.getDate(), -1);
 
-        final  ArrayList<MatchSetupDropItem> userItems = new ArrayList<>();
+        final  ArrayList<MatchSetupItem> userItems = new ArrayList<>();
         List<UserActivity> allActivity = AppSavedData.getInstance().getActivityOnAllDates(startDate, endDate);
         for (UserActivity activity : allActivity) {
-            MatchSetupDropItem item = new MatchSetupDropItem();
+            MatchSetupItem item = new MatchSetupItem();
             item.setSteps(StringHelper.getNumberWithCommas(activity.getSteps()));
             userItems.add(item);
             item.setDraggable(true);
             stepList.add(activity.getSteps());
         }
 
-        defensiveAdapter = new MatchSetupStepDropAdapter(getActivity().getApplicationContext(), myDefensiveItems, this);
+        defensiveAdapter = new MatchSetupStepAdapter(getActivity().getApplicationContext(), myDefensiveItems, this);
         defendingStepsList.setAdapter(defensiveAdapter);
         defendingStepsList.setNumColumns(2);
 
-        attackingAdapter = new MatchSetupStepDropAdapter(getActivity().getApplicationContext(), myAttackingItems, this);
+        attackingAdapter = new MatchSetupStepAdapter(getActivity().getApplicationContext(), myAttackingItems, this);
         attackingStepsList.setAdapter(attackingAdapter);
         attackingStepsList.setNumColumns(2);
 
-        userAdapter = new MatchSetupStepDropAdapter(getActivity().getApplicationContext(), userItems, this);
+        userAdapter = new MatchSetupStepAdapter(getActivity().getApplicationContext(), userItems, this);
         usersStepsGridViews.setAdapter(userAdapter);
         usersStepsGridViews.setNumColumns(4);
 

@@ -1,6 +1,6 @@
 package com.cutlerdevelopment.fitnessgoals.ViewItems;
 
-public class MatchSetupDropItem {
+public class MatchSetupItem {
 
     private String steps;
     public String getSteps() { return steps; }

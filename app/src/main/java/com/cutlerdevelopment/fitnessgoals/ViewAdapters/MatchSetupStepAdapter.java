@@ -13,17 +13,15 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.DialogFragment;
 
-import com.cutlerdevelopment.fitnessgoals.DIalogFragments.MatchSetup;
 import com.cutlerdevelopment.fitnessgoals.R;
-import com.cutlerdevelopment.fitnessgoals.ViewItems.MatchSetupDropItem;
+import com.cutlerdevelopment.fitnessgoals.ViewItems.MatchSetupItem;
 
 import java.util.ArrayList;
 
-public class MatchSetupStepDropAdapter extends BaseAdapter implements View.OnDragListener, View.OnLongClickListener {
+public class MatchSetupStepAdapter extends BaseAdapter implements View.OnDragListener, View.OnLongClickListener {
 
-    private ArrayList<MatchSetupDropItem> singleRow;
+    private ArrayList<MatchSetupItem> singleRow;
     private LayoutInflater thisInflater;
     private Context context;
     private View newView;
@@ -35,7 +33,7 @@ public class MatchSetupStepDropAdapter extends BaseAdapter implements View.OnDra
 
     MatchSetupInterface listener;
 
-    public MatchSetupStepDropAdapter(Context context, ArrayList<MatchSetupDropItem> aRow, MatchSetupInterface listener) {
+    public MatchSetupStepAdapter(Context context, ArrayList<MatchSetupItem> aRow, MatchSetupInterface listener) {
         this.singleRow = aRow;
         this.context = context;
         this.listener = listener;
@@ -60,12 +58,12 @@ public class MatchSetupStepDropAdapter extends BaseAdapter implements View.OnDra
     public View getView(int i, View convertView, ViewGroup parent) {
         newView = convertView;
         if (newView == null) {
-            newView = thisInflater.inflate(R.layout.match_setup_step_drop_item, parent, false);
+            newView = thisInflater.inflate(R.layout.match_setup_step_item, parent, false);
         }
 
         TextView stepsText = newView.findViewById(R.id.matchSetupItemButton);
 
-        final MatchSetupDropItem currentItem = (MatchSetupDropItem) getItem(i);
+        final MatchSetupItem currentItem = (MatchSetupItem) getItem(i);
 
         stepsText.setTag(String.valueOf(i));
         stepsText.setOnDragListener(this);

@@ -9,10 +9,13 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.MatchResult;
 import com.cutlerdevelopment.fitnessgoals.R;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.ResultItem;
 
 import java.util.ArrayList;
+
+import static androidx.core.content.ContextCompat.getColor;
 
 public class ResultItemRowAdapter extends BaseAdapter {
 
@@ -50,6 +53,7 @@ public class ResultItemRowAdapter extends BaseAdapter {
             convertView = thisInflater.inflate(R.layout.result_item, parent, false);
         }
 
+        LinearLayout background = convertView.findViewById(R.id.fullTableBackground);
         TextView date = convertView.findViewById(R.id.resultItemDate);
         TextView homePosition = convertView.findViewById(R.id.resultItemHomePos);
         TextView homeTeam = convertView.findViewById(R.id.resultItemHomeTeam);
@@ -75,6 +79,11 @@ public class ResultItemRowAdapter extends BaseAdapter {
             date.setText(currentItem.getDate());
             date.setTypeface(date.getTypeface(), Typeface.BOLD);
         }
+
+        if(currentItem.getResult() == MatchResult.WIN) { background.setBackgroundColor(getColor(context, R.color.colorAccent)); }
+        else if(currentItem.getResult() == MatchResult.LOSE) { background.setBackgroundColor(getColor(context, R.color.colorRed)); }
+        else if(currentItem.getResult() == MatchResult.DRAW) { background.setBackgroundColor(getColor(context, R.color.colorGold)); }
+        else {background.setBackgroundColor(getColor(context, R.color.colorPrimaryDark)); }
 
         return convertView;
 

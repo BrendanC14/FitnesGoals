@@ -100,6 +100,9 @@ public class AppSavedData {
     public UserActivity getLastAddedActivity() {
         return db.userActivityDao().selectLastAddedActivity();
     }
+    public UserActivity getFirstAddedActivity() {
+        return db.userActivityDao().selectFirstAddedActivity();
+    }
 
 
     private static AppDatabase db;
@@ -132,6 +135,8 @@ public class AppSavedData {
         UserActivity selectUserActivityWithDate(Date date, Date date2);
         @Query("SELECT * FROM UserActivity ORDER BY date DESC LIMIT 1")
         UserActivity selectLastAddedActivity();
+        @Query("SELECT * FROM UserActivity ORDER BY date ASC LIMIT 1")
+        UserActivity selectFirstAddedActivity();
         @Query("SELECT * FROM UserActivity WHERE date BETWEEN :date1 AND :date2")
         UserActivity[] selectUserActivityBetweenDates(Date date1, Date date2);
     }

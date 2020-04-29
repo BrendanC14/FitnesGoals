@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginStart="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/leagueTableCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/colorBackground"
+        app:cardElevation="20dp"
+        app:cardPreventCornerOverlap="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/leagueTableCardHeaderLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/leagueTableCardUp"
+                    android:layout_width="wrap_content"
+                    style="@style/Widget.FitnessGoals.Button.TextButton"
+                    android:layout_height="wrap_content"
+                    android:text="@string/step_review_left"
+                    app:layout_constraintBottom_toBottomOf="@+id/leagueTableCardHeader"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/leagueTableCardHeader">
+
+                </Button>
+
+                <TextView
+                    android:id="@+id/leagueTableCardHeader"
+                    style="@style/TextAppearance.FitnessGoals.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingTop="8dp"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:text="@string/league_table_header"
+                    app:layout_constraintStart_toEndOf="@+id/leagueTableCardUp"
+                    app:layout_constraintEnd_toStartOf="@+id/leagueTableCardDown"
+                    app:layout_constraintTop_toTopOf="@+id/leagueTableCardUp"
+                    app:layout_constraintBottom_toBottomOf="@+id/leagueTableCardUp" />
+
+                <Button
+                    android:id="@+id/leagueTableCardDown"
+                    android:layout_width="wrap_content"
+                    style="@style/Widget.FitnessGoals.Button.TextButton"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/step_review_right"
+                    app:layout_constraintBottom_toBottomOf="@+id/leagueTableCardHeader"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/leagueTableCardHeader">
+
+                </Button>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <LinearLayout
+                android:id="@+id/leagueTableCardBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/leagueTableCardHeaderLayout">
+
+                <TextView
+                    android:id="@+id/leagueTableCardRowPosition"
+                    android:layout_width="25dp"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:text="@string/league_table_position_column"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/leagueTableCardRowTeam"
+                    android:layout_width="115dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/league_table_team_column"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/leagueTableCardRowGamesPlayed"
+                    android:layout_width="25dp"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:text="@string/league_table_games_played_column"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/leagueTableCardRowWins"
+                    android:layout_width="25dp"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:text="@string/league_table_wins_column"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/leagueTableCardRowDraws"
+                    android:layout_width="25dp"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:text="@string/league_table_draws_column"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/leagueTableCardRowLosses"
+                    android:layout_width="25dp"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:text="@string/league_table_losses_column"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/leagueTableCardRowScored"
+                    android:layout_width="25dp"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:text="@string/league_table_scored_column"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/leagueTableCardRowConceded"
+                    android:layout_width="25dp"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:text="@string/league_table_conceded_column"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/leagueTableCardRowGoalDifference"
+                    android:layout_width="25dp"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:text="@string/league_table_goal_difference_column"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/leagueTableCardRowPoints"
+                    android:layout_width="25dp"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:text="@string/league_table_points_column"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <ListView
+                android:id="@+id/leagueTableCardList"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:nestedScrollingEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/leagueTableCardBackground"
+                tools:targetApi="lollipop">
+
+            </ListView>
+
+
+                <Button
+                    android:id="@+id/leagueTableCardExpandCollapseButton"
+                    style="@style/Widget.FitnessGoals.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_gravity="end"
+                    android:text="@string/expand_league_table"
+                    android:textColor="@color/colorWhite" />
+
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

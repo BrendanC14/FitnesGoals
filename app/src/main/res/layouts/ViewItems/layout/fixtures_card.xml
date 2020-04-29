@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginStart="8dp"
+    android:layout_marginLeft="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginRight="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/fixturesCard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/colorBackground"
+        app:cardElevation="20dp"
+        app:cardPreventCornerOverlap="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/fixturesCardHeaderLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/fixturesCardLeagueLeft"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.FitnessGoals.Button.TextButton"
+                    android:text="@string/step_review_left"
+                    app:layout_constraintBottom_toBottomOf="@+id/fixturesCardHeader"
+                    app:layout_constraintStart_toStartOf="parent"
+                     app:layout_constraintTop_toTopOf="@+id/fixturesCardHeader">
+
+                </Button>
+
+                <TextView
+                    android:id="@+id/fixturesCardHeader"
+                    style="@style/TextAppearance.FitnessGoals.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:maxLines="1"
+                    android:paddingTop="8dp"
+                    android:gravity="center"
+                    android:text="@string/tm_main_menu_switch_to_my_fixtures"
+                    app:layout_constraintStart_toEndOf="@+id/fixturesCardLeagueLeft"
+                    app:layout_constraintEnd_toStartOf="@+id/fixturesCardLeagueRight"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <Button
+                    android:id="@+id/fixturesCardLeagueRight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.FitnessGoals.Button.TextButton"
+                    android:text="@string/step_review_right"
+                    app:layout_constraintBottom_toBottomOf="@+id/fixturesCardHeader"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/fixturesCardHeader">
+
+                </Button>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+            <ListView
+                android:id="@+id/fixturesCardList"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:nestedScrollingEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fixturesCardFixtureHeaderLayout"
+                tools:targetApi="lollipop">
+
+            </ListView>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/fixturesCardSwitchButton"
+                    style="@style/Widget.FitnessGoals.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="@string/tm_main_menu_switch_to_my_fixtures"
+                    android:background="@drawable/uparrow"
+                    android:layout_gravity="center">
+
+                </Button>
+
+                <Button
+                    android:id="@+id/fixturesCardExpandCollapseButton"
+                    style="@style/Widget.FitnessGoals.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_gravity="end"
+                    android:text="@string/expand_league_table"
+                    android:textColor="@color/colorWhite"
+                    app:layout_constraintStart_toEndOf="@+id/fixturesCardSwitchButton"
+                    app:layout_constraintBottom_toBottomOf="@+id/fixturesCardSwitchButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/fixturesCardSwitchButton" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

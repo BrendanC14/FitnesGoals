@@ -139,10 +139,10 @@
     <string name="tm_main_menu_switch_to_my_results"><u>My Results</u></string>
     <string name="tm_main_menu_james_description1">
         Hey how\'s it going.
-        \nThis is your main menu. The first card is the league table which can be expanded. Teams with a light green background are in a promotion place. Teams with a red background are in a relegation place.
+        \nThis is your main menu. The first card is your step progress against your current targets.
     </string>
     <string name="tm_main_menu_james_description2">
-        The second is your progress. The filters along the top can be customised in your career settings. Numbers on the left of the progress circle are steps, numbers on the right are how many days you reached your target. This is based on your current target.
+        The second is the league table which can be expanded. Teams with a light green background are in a promotion place. Teams with a red background are in a relegation place.
     </string>
     <string name="tm_main_menu_james_description3">
         The next card is your next, un-played fixture. Hitting Play Match will open up your tactics before getting a result.
@@ -150,6 +150,15 @@
     <string name="tm_main_menu_james_description4">
         Finally, you have 2 cards for your fixtures and results, which can also be amended to show the fixtures/results in the leagues.
     </string>
+
+    <string name="step_review_left">&lt;</string>
+    <string name="step_review_yesterday">Yesterday</string>
+    <string name="step_review_right">\></string>
+
+    <string name="my_fixtures_mode">My Fixtures</string>
+    <string name="league_fixtures_mode">%1s Fixtures</string>
+    <string name="my_results_mode">My Results</string>
+    <string name="league_results_mode">%1s Results</string>
 
     <string name="match_setup_title">Match Setup</string>
     <string name="match_setup_defending_header"><u>Defending</u></string>
