@@ -12,9 +12,12 @@ import android.widget.TextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.GameModes;
+import com.cutlerdevelopment.fitnessgoals.Constants.StepModes;
 import com.cutlerdevelopment.fitnessgoals.Constants.TacticOptions;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
 import com.cutlerdevelopment.fitnessgoals.Models.MatchEngine;
+import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.R;
 import com.cutlerdevelopment.fitnessgoals.SavedData.AppSavedData;
 import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
@@ -57,6 +60,8 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepDropAdap
     int daysBetween;
     int opponentDefence;
     int opponentAttack;
+    int opponentDefAve;
+    int opponentAttAve;
     int userDefence;
     int userAttack;
 
@@ -128,10 +133,21 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepDropAdap
         attackingTotalText.setText(String.valueOf(0));
         defendingTotalText.setTextColor(getResources().getColor(R.color.colorRed));
         attackingTotalText.setTextColor(getResources().getColor(R.color.colorRed));
-        opponentDefence = stepTarget * (daysBetween / 2);
-        opponentAttack = stepTarget * (daysBetween / 2);;
-        oppDefendingText.setText(StringHelper.getNumberWithCommas(stepTarget));
-        oppAttackingText.setText(StringHelper.getNumberWithCommas(stepTarget));
+        int numInEach = daysBetween / 2;
+        if (AppSettings.getInstance().getStepMode() == StepModes.TARGETED_MODE) {
+            opponentDefence = stepTarget * numInEach;
+            opponentAttack = stepTarget * numInEach;
+            opponentDefAve = opponentAttAve = stepTarget;
+        }
+        else {
+            Team opponent = f.getOpponent(CareerSettings.getInstance().getTeamID());
+            opponentDefAve = opponent.getAverageDefendingSteps();
+            opponentAttAve = opponent.getAverageAttackingSteps();
+            opponentDefence = opponentDefAve * numInEach;
+            opponentAttack = opponentAttAve * numInEach;
+        }
+        oppDefendingText.setText(StringHelper.getNumberWithCommas(opponentDefAve));
+        oppAttackingText.setText(StringHelper.getNumberWithCommas(opponentAttAve));
 
         defendingTactic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -299,11 +315,11 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepDropAdap
         else { playMatch.setVisibility(View.GONE); }
 
         defendingTotalText.setText(StringHelper.getNumberWithCommas(userDefenceAverage));
-        if (userDefenceAverage >= AppSettings.getInstance().getStepTarget()) { defendingTotalText.setTextColor(getResources().getColor(R.color.colorAccent)); }
+        if (userDefenceAverage >= opponentDefAve) { defendingTotalText.setTextColor(getResources().getColor(R.color.colorAccent)); }
         else { defendingTotalText.setTextColor(getResources().getColor(R.color.colorRed)); }
 
         attackingTotalText.setText(StringHelper.getNumberWithCommas(userAttackAverage));
-        if (userAttackAverage >= AppSettings.getInstance().getStepTarget()) { attackingTotalText.setTextColor(getResources().getColor(R.color.colorAccent)); }
+        if (userAttackAverage >= opponentAttAve) { attackingTotalText.setTextColor(getResources().getColor(R.color.colorAccent)); }
         else { attackingTotalText.setTextColor(getResources().getColor(R.color.colorRed)); }
     }
 

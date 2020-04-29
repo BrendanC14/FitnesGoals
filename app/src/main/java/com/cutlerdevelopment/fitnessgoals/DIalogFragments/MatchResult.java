@@ -17,6 +17,7 @@ import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
 import com.cutlerdevelopment.fitnessgoals.R;
 import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
 import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
+import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.ResultItemRowAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.ResultItem;
 
@@ -105,11 +106,16 @@ public class MatchResult extends DialogFragment {
 
         for (Fixture f : CareerSavedData.getInstance().getWeeksResultsFromLeague(fixtureDate, leagueToDisplay)) {
             ResultItem item = new ResultItem();
+            item.setDate("");
             item.setHomeTeam(CareerSavedData.getInstance().getTeamFromID(f.getHomeTeamID()).getName());
             item.setHomeScore(String.valueOf(f.getHomeScore()));
             item.setAwayScore(String.valueOf(f.getAwayScore()));
             item.setAwayTeam(CareerSavedData.getInstance().getTeamFromID(f.getAwayTeamID()).getName());
 
+            int homePos = Leagues.getPositionInLeague(f.getHomeTeamID(), f.getLeague());
+            int awayPos = Leagues.getPositionInLeague(f.getAwayTeamID(), f.getLeague());
+            item.setHomePosition(StringHelper.getNumberWithDateSuffix(homePos));
+            item.setAwayPosition(StringHelper.getNumberWithDateSuffix(awayPos));
 
             resultItems.add(item);
         }

@@ -116,7 +116,7 @@ public class CareerSettings {
 
     public void startNewSeason() {
         season++;
-        startDate = DateHelper.addDays(new Date(), -60);
+        startDate = DateHelper.addDays(new Date(), (daysBetween * 46) * -1);
         CareerSavedData.getInstance().saveObject(this);
         createFixtures();
     }

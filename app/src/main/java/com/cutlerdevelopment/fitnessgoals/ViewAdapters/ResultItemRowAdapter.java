@@ -1,6 +1,7 @@
 package com.cutlerdevelopment.fitnessgoals.ViewAdapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,17 +50,31 @@ public class ResultItemRowAdapter extends BaseAdapter {
             convertView = thisInflater.inflate(R.layout.result_item, parent, false);
         }
 
+        TextView date = convertView.findViewById(R.id.resultItemDate);
+        TextView homePosition = convertView.findViewById(R.id.resultItemHomePos);
         TextView homeTeam = convertView.findViewById(R.id.resultItemHomeTeam);
         TextView homeScore = convertView.findViewById(R.id.resultItemHomeScore);
         TextView awayScore = convertView.findViewById(R.id.resultItemAwayScore);
         TextView awayTeam = convertView.findViewById(R.id.resultItemAwayTeam);
+        TextView awayPosition = convertView.findViewById(R.id.resultItemAwayPos);
 
         final ResultItem currentItem = (ResultItem) getItem(i);
 
+        homePosition.setText(currentItem.getHomePosition());
         homeTeam.setText(currentItem.getHomeTeam());
         homeScore.setText(currentItem.getHomeScore());
         awayScore.setText(currentItem.getAwayScore());
         awayTeam.setText(currentItem.getAwayTeam());
+        awayPosition.setText(currentItem.getAwayPosition());
+
+        if (currentItem.getDate().equals("")) {
+            date.setVisibility(View.GONE);
+        }
+        else {
+            date.setVisibility(View.VISIBLE);
+            date.setText(currentItem.getDate());
+            date.setTypeface(date.getTypeface(), Typeface.BOLD);
+        }
 
         return convertView;
 

@@ -227,16 +227,12 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                     moveSpeechBubbleUp(targetModeLayout);
                     break;
                 case TutorialSteps.FIRST_MENU_TARGET_MODE_STEP_2:
-                    if (stepMode == StepModes.TARGETED_MODE) {
                         populateStepTargetSpinner();
                         showMenu(stepTargetLayout);
                         readyToProgress = false;
                         speechBubbleText.setText(getString(R.string.first_menu_step_target_question));
                         pushSpeechBubbleToRight(stepTargetLayout);
-                    }
-                    else {
 
-                    }
                     break;
                 case TutorialSteps.FIRST_MENU_DAYS_BETWEEN_INTRO:
                     speechBubbleText.setText(getString(R.string.first_menu_days_between_intro));
@@ -803,7 +799,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
      * @param view needed for onClick
      */
     public void selectScaledMode(View view) {
-        stepMode = StepModes.TARGETED_MODE;
+        stepMode = StepModes.SCALED_MODE;
         hideMenu(targetModeLayout);
         speechBubbleText.setText(getString(R.string.first_menu_scaled_mode_selected));
         moveSpeechBubbleUp(jamesImage);
@@ -866,6 +862,15 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                     String.valueOf(daysBetween),
                     StringHelper.getNumberWithCommas(stepTarget),
                     FitnessApps.getFitnessAppName(AppSettings.getInstance().getFitnessApp())));
+        }
+        else if (gameMode == GameModes.TEAM_MODE && stepMode == StepModes.SCALED_MODE) {
+            speechBubbleText.setText(getString(
+                    R.string.first_menu_team_scaled_final_conf,
+                    teamPlayerName,
+                    Leagues.getLeagueName(Leagues.BOTTOM_LEAGUE),
+                    String.valueOf(daysBetween),
+                    FitnessApps.getFitnessAppName(AppSettings.getInstance().getFitnessApp())
+            ));
         }
 
         readyButton.setVisibility(View.VISIBLE);

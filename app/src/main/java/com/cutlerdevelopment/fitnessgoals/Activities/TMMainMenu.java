@@ -12,11 +12,9 @@ import android.animation.ValueAnimator;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Telephony;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.textclassifier.TextClassificationManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,7 +25,6 @@ import android.widget.TextView;
 import com.cutlerdevelopment.fitnessgoals.Constants.FilterOptions;
 import com.cutlerdevelopment.fitnessgoals.Constants.Leagues;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
-import com.cutlerdevelopment.fitnessgoals.Constants.Words;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.MatchResult;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.MatchSetup;
 import com.cutlerdevelopment.fitnessgoals.Integrations.IntegrationConnectionHandler;
@@ -43,10 +40,13 @@ import com.cutlerdevelopment.fitnessgoals.Settings.UserActivity;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.FullTableRowAdapter;
+import com.cutlerdevelopment.fitnessgoals.ViewAdapters.ResultItemRowAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.FullTableRow;
+import com.cutlerdevelopment.fitnessgoals.ViewItems.ResultItem;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -63,13 +63,12 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
     Button jamesPreviousButton;
     ConstraintLayout backgroundLayout;
 
-    CardView teamHeaderBackground;
     TextView teamNameText;
     TextView leagueNameText;
     ListView leagueTableHolder;
-    Button expandCollapseButton;
-    ImageButton upLeagueButton;
-    ImageButton downLeagueButton;
+    Button leagueExpandCollapseButton;
+    ImageButton leagueUpLeagueButton;
+    ImageButton leagueDownLeagueButton;
     FullTableRowAdapter adapter;
 
     CardView progressCard;
@@ -87,6 +86,23 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
     TextView nextFixtureDateText;
     TextView nextFixtureOpponentText;
     Button playMatchButton;
+
+    Button fixtureViewModeButton;
+    TextView fixtureLeagueNameText;
+    ListView fixtureTableHolder;
+    Button fixtureExpandCollapseButton;
+    ImageButton fixtureUpLeagueButton;
+    ImageButton fixtureDownLeagueButton;
+    ResultItemRowAdapter fixtureAdapter;
+
+    Button resultViewModeButton;
+    TextView resultLeagueNameText;
+    ListView resultTableHolder;
+    Button resultExpandCollapseButton;
+    ImageButton resultUpLeagueButton;
+    ImageButton resultDownLeagueButton;
+    ResultItemRowAdapter resultAdapter;
+
     CardView footer;
 
     ImageButton phoneButton;
@@ -94,12 +110,17 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
     Team usersTeam;
     int teamsPosition;
     int usersLeague;
-    int leagueToDisplay;
+    int leagueTableToDisplay;
+    int fixtureLeagueToDisplay;
+    int resultLeagueToDisplay;
     int tutorialStep = 1;
 
     boolean leagueCollapsed;
+    boolean fixtureCollapsed;
+    boolean resultCollapsed;
     boolean animatingGoldenFootball;
-
+    boolean myFixtureMode;
+    boolean myResultMode;
 
 
 
@@ -116,13 +137,12 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
         jamesPreviousButton = findViewById(R.id.tmMainMenuSpeechBubblePrevious);
 
         speechBubbleButton = findViewById(R.id.tmMainMenuSpeechBubbleButton);
-        teamHeaderBackground = findViewById(R.id.tmMainMenuheader);
         teamNameText = findViewById(R.id.tmMainMenuTeamName);
         leagueTableHolder = findViewById(R.id.tmMainMenuTableItemList);
-        expandCollapseButton = findViewById(R.id.tmMainMenuExpandCollapseButton);
+        leagueExpandCollapseButton = findViewById(R.id.tmMainMenuExpandCollapseButton);
         leagueNameText = findViewById(R.id.tmMainMenuLeagueHeader);
-        upLeagueButton = findViewById(R.id.tmMainMenuLeagueUp);
-        downLeagueButton = findViewById(R.id.tmMainMenuLeagueDown);
+        leagueUpLeagueButton = findViewById(R.id.tmMainMenuLeagueUp);
+        leagueDownLeagueButton = findViewById(R.id.tmMainMenuLeagueDown);
         progressCard = findViewById(R.id.tmMainMenuStepDisplayCard);
         tabLayout = findViewById(R.id.tmMainMenuStepTabs);
         stepProgress = findViewById(R.id.tmMainMenuStepProgress);
@@ -137,6 +157,21 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
         nextFixtureDateText = findViewById(R.id.tmMainMenuNextMatchDate);
         nextFixtureOpponentText = findViewById(R.id.tmMainMenuNextMatchOpponent);
         playMatchButton = findViewById(R.id.tmMainMenuPlayMatchButton);
+
+        fixtureViewModeButton = findViewById(R.id.tmMainMenuFixturesSwitchButton);
+        fixtureLeagueNameText = findViewById(R.id.tmMainMenuFixtureeader);
+        fixtureTableHolder = findViewById(R.id.tmMainMenuFixtureItemList);
+        fixtureExpandCollapseButton = findViewById(R.id.tmMainMenuFixtureExpandCollapseButton);
+        fixtureUpLeagueButton = findViewById(R.id.tmMainMenuFixtureLeagueUp);
+        fixtureDownLeagueButton = findViewById(R.id.tmMainMenuFixtureLeagueDown);
+
+        resultViewModeButton = findViewById(R.id.tmMainMenuResultSwitchButton);
+        resultLeagueNameText = findViewById(R.id.tmMainMenuResultsHeader);
+        resultTableHolder = findViewById(R.id.tmMainMenuResultItemList);
+        resultExpandCollapseButton = findViewById(R.id.tmMainMenuResultExpandCollapseButton);
+        resultUpLeagueButton = findViewById(R.id.tmMainMenuResultsLeagueUp);
+        resultDownLeagueButton = findViewById(R.id.tmMainMenuResultLeagueDown);
+
         footer = findViewById(R.id.tmMainMenuFooter);
         phoneButton = findViewById(R.id.tmMainMenuPhoneButton);
 
@@ -161,16 +196,55 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
         leagueCollapsed = false;
 
         teamNameText.setText(usersTeam.getName());
-        leagueNameText.setText(Leagues.getLeagueName(leagueToDisplay));
-        teamHeaderBackground.setBackgroundColor(Color.parseColor(usersTeam.getColour()));
-        footer.setBackgroundColor(Color.parseColor(usersTeam.getColour()));
-        leagueToDisplay = usersTeam.getLeague();
-        teamsPosition = Leagues.getPositionInLeague(usersTeam.getID(), leagueToDisplay);
+        leagueNameText.setText(Leagues.getLeagueName(leagueTableToDisplay));
+        backgroundLayout.setBackgroundColor(Color.parseColor(usersTeam.getColour()));
+        leagueTableToDisplay = usersLeague;
+        fixtureLeagueToDisplay = usersLeague;
+        resultLeagueToDisplay = usersLeague;
+        teamsPosition = Leagues.getPositionInLeague(usersTeam.getID(), leagueTableToDisplay);
 
-        expandCollapseButton.setOnClickListener(new View.OnClickListener() {
+        leagueExpandCollapseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 animateLeagueTable();
+            }
+        });
+        fixtureExpandCollapseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                animateFixtures();
+            }
+        });
+        resultExpandCollapseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                animateResults();
+            }
+        });
+        fixtureViewModeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myFixtureMode = !myFixtureMode;
+                if (myFixtureMode) {
+                    fixtureViewModeButton.setText(getString(R.string.tm_main_menu_switch_to_league));
+                }
+                else {
+                    fixtureViewModeButton.setText(getString(R.string.tm_main_menu_switch_to_my_fixtures));
+                }
+                fillFixtureDisplay();
+            }
+        });
+        resultViewModeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myResultMode = !myResultMode;
+                if (myResultMode) {
+                    resultViewModeButton.setText(getString(R.string.tm_main_menu_switch_to_league));
+                }
+                else {
+                    resultViewModeButton.setText(getString(R.string.tm_main_menu_switch_to_my_results));
+                }
+                fillResultDisplay();
             }
         });
         List<Integer> choices = CareerSettings.getInstance().getFilterChoices();
@@ -193,8 +267,13 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
                 }
 
                 fillLeagueTableDisplay();
+                fillFixtureDisplay();
+                fillResultDisplay();
                 checkLeagueButtonValidity();
+                checkFixtureLeagueButtonValidity();
                 animateLeagueTable();
+                animateFixtures();
+                animateResults();
                 takeFootballOut();
             }
         });
@@ -208,7 +287,7 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
         final ArrayList<FullTableRow> leagueTableItems = new ArrayList<>();
 
 
-        List<Team> allTeamsInLeague = Leagues.getLeagueList(leagueToDisplay);
+        List<Team> allTeamsInLeague = Leagues.getLeagueList(leagueTableToDisplay);
         for (Team team : allTeamsInLeague) {
             FullTableRow item = new FullTableRow();
             item.setPosition(String.valueOf(Leagues.getPositionInLeague(team.getID(), team.getLeague())));
@@ -234,6 +313,79 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
         leagueTableHolder.setAdapter(adapter);
     }
 
+    void fillFixtureDisplay() {
+        final ArrayList<ResultItem> fixtureItems = new ArrayList<>();
+
+        List<Fixture> fixtures;
+
+        if (myFixtureMode) {
+            fixtures = CareerSavedData.getInstance().getAllUpcomingFixturesForTeam(usersTeam.getID());
+            fixtureLeagueNameText.setText("My Fixtures");
+        }
+        else {
+            Fixture nextFixture = CareerSavedData.getInstance().getNextFixtureForTeam(usersTeam.getID());
+            fixtures = CareerSavedData.getInstance().getWeeksFixtureFromLeague(nextFixture.getDate(), fixtureLeagueToDisplay);
+            fixtureLeagueNameText.setText(Leagues.getLeagueName(fixtureLeagueToDisplay) + " Fixtures");
+        }
+
+        if (fixtures.size() >= Numbers.TM_MAIN_MENU_SMALL_FIXTURES_TABLE_ROW_NUMBER) { fixtureExpandCollapseButton.setVisibility(VISIBLE); }
+        else { fixtureExpandCollapseButton.setVisibility(GONE); }
+        Collections.sort(fixtures);
+        for (Fixture f : fixtures) {
+            ResultItem item = new ResultItem();
+            item.setDate(DateHelper.formatDateToString(f.getDate()));
+            int homePos = Leagues.getPositionInLeague(f.getHomeTeamID(), f.getLeague());
+            int awayPos = Leagues.getPositionInLeague(f.getAwayTeamID(), f.getLeague());
+            item.setHomePosition(StringHelper.getNumberWithDateSuffix(homePos));
+            item.setAwayPosition(StringHelper.getNumberWithDateSuffix(awayPos));
+            item.setHomeTeam(CareerSavedData.getInstance().getTeamFromID(f.getHomeTeamID()).getName());
+            item.setAwayTeam(CareerSavedData.getInstance().getTeamFromID(f.getAwayTeamID()).getName());
+            item.setHomeScore("");
+            item.setAwayScore("");
+            fixtureItems.add(item);
+        }
+        fixtureAdapter = new ResultItemRowAdapter(this, fixtureItems);
+        fixtureTableHolder.setAdapter(fixtureAdapter);
+    }
+
+    void fillResultDisplay() {
+        final ArrayList<ResultItem> resultItems = new ArrayList<>();
+
+        List<Fixture> results;
+
+        if (myResultMode) {
+            results = CareerSavedData.getInstance().getAllResultsForTeam(usersTeam.getID());
+            resultLeagueNameText.setText("My Results");
+        }
+        else {
+            Fixture lastResult = CareerSavedData.getInstance().getLastResultForTeam(usersTeam.getID());
+            if (lastResult == null) {
+                return;
+            }
+            results = CareerSavedData.getInstance().getWeeksResultsFromLeague(lastResult.getDate(), resultLeagueToDisplay);
+            resultLeagueNameText.setText(Leagues.getLeagueName(resultLeagueToDisplay) + " Results");
+        }
+
+        if (results.size() >= Numbers.TM_MAIN_MENU_SMALL_FIXTURES_TABLE_ROW_NUMBER) { resultExpandCollapseButton.setVisibility(VISIBLE); }
+        else { resultExpandCollapseButton.setVisibility(GONE); }
+        Collections.sort(results);
+        for (Fixture f : results) {
+            ResultItem item = new ResultItem();
+            item.setDate(DateHelper.formatDateToString(f.getDate()));
+            int homePos = Leagues.getPositionInLeague(f.getHomeTeamID(), f.getLeague());
+            int awayPos = Leagues.getPositionInLeague(f.getAwayTeamID(), f.getLeague());
+            item.setHomePosition(StringHelper.getNumberWithDateSuffix(homePos));
+            item.setAwayPosition(StringHelper.getNumberWithDateSuffix(awayPos));
+            item.setHomeTeam(CareerSavedData.getInstance().getTeamFromID(f.getHomeTeamID()).getName());
+            item.setAwayTeam(CareerSavedData.getInstance().getTeamFromID(f.getAwayTeamID()).getName());
+            item.setHomeScore(String.valueOf(f.getHomeScore()));
+            item.setAwayScore(String.valueOf(f.getAwayScore()));
+            resultItems.add(item);
+        }
+        resultAdapter = new ResultItemRowAdapter(this, resultItems);
+        resultTableHolder.setAdapter(resultAdapter);
+    }
+
     public void animateLeagueTable() {
 
         int newTableHeight = 0;
@@ -244,18 +396,18 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
         int newTabHeight = 0;
         if (leagueCollapsed) {
             newTableHeight = rowHeight * Numbers.TM_MAIN_MENU_BIG_TABLE_ROW_NUMBER;
-            expandCollapseButton.setText(getString(R.string.collapse_league_table));
+            leagueExpandCollapseButton.setText(getString(R.string.collapse_league_table));
             newProgressCardHeight -= tabHeight;
         }
         else {
             newTableHeight = rowHeight * Numbers.TM_MAIN_MENU_SMALL_TABLE_ROW_NUMBER;
-            expandCollapseButton.setText(getString(R.string.expand_league_table));
+            leagueExpandCollapseButton.setText(getString(R.string.expand_league_table));
             newTabHeight = tabHeight;
         }
 
         updateLeagueTable(newTableHeight);
-        updateProgressCard(newProgressCardHeight);
-        updateProgressTabs(newTabHeight);
+        //updateProgressCard(newProgressCardHeight);
+        //updateProgressTabs(newTabHeight);
     }
 
     void updateLeagueTable(int newTableHeight) {
@@ -277,7 +429,7 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
             public void onAnimationStart(Animator animator) { }
             @Override
             public void onAnimationEnd(Animator animator) {
-                if (leagueCollapsed && leagueToDisplay == usersLeague) {
+                if (leagueCollapsed && leagueTableToDisplay == usersLeague) {
                     leagueTableHolder.smoothScrollToPosition(teamsPosition + 1);
                 }
             }
@@ -286,10 +438,69 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
             @Override
             public void onAnimationRepeat(Animator animator) { }
         });
+        leagueCollapsed = !leagueCollapsed;
         expandLeagueTable.setDuration(Numbers.TM_MAIN_MENU_EXPAND_TABLE_ANIM_DURATION);
         expandLeagueTable.start();
     }
 
+    void animateFixtures() {
+        int newTableHeight = 0;
+        int rowHeight = (int) getResources().getDimension(R.dimen.full_table_row_height) + fixtureTableHolder.getDividerHeight();
+
+        if (fixtureCollapsed) {
+            newTableHeight = rowHeight * Numbers.TM_MAIN_MENU_BIG_FIXTURES_TABLE_ROW_NUMBER;
+            fixtureExpandCollapseButton.setText(getString(R.string.collapse_league_table));
+        }
+        else {
+            newTableHeight = rowHeight * Numbers.TM_MAIN_MENU_SMALL_FIXTURES_TABLE_ROW_NUMBER;
+            fixtureExpandCollapseButton.setText(getString(R.string.expand_league_table));
+        }
+        ValueAnimator expandLeagueTable = ValueAnimator.ofInt(
+                fixtureTableHolder.getMeasuredHeight(),
+                newTableHeight);
+        expandLeagueTable.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int val = (Integer) valueAnimator.getAnimatedValue();
+                ViewGroup.LayoutParams layoutParams = fixtureTableHolder.getLayoutParams();
+                layoutParams.height = val;
+                fixtureTableHolder.setLayoutParams(layoutParams);
+            }
+        });
+        fixtureCollapsed = !fixtureCollapsed;
+        expandLeagueTable.setDuration(Numbers.TM_MAIN_MENU_EXPAND_TABLE_ANIM_DURATION);
+        expandLeagueTable.start();
+    }
+
+    void animateResults() {
+        int newTableHeight = 0;
+        int rowHeight = (int) getResources().getDimension(R.dimen.full_table_row_height) + resultTableHolder.getDividerHeight();
+
+        if (resultCollapsed) {
+            newTableHeight = rowHeight * Numbers.TM_MAIN_MENU_BIG_FIXTURES_TABLE_ROW_NUMBER;
+            resultExpandCollapseButton.setText(getString(R.string.collapse_league_table));
+        }
+        else {
+            newTableHeight = rowHeight * Numbers.TM_MAIN_MENU_SMALL_FIXTURES_TABLE_ROW_NUMBER;
+            resultExpandCollapseButton.setText(getString(R.string.expand_league_table));
+        }
+        ValueAnimator expandLeagueTable = ValueAnimator.ofInt(
+                resultTableHolder.getMeasuredHeight(),
+                newTableHeight);
+        expandLeagueTable.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int val = (Integer) valueAnimator.getAnimatedValue();
+                ViewGroup.LayoutParams layoutParams = resultTableHolder.getLayoutParams();
+                layoutParams.height = val;
+                resultTableHolder.setLayoutParams(layoutParams);
+            }
+        });
+        resultCollapsed = !resultCollapsed;
+        expandLeagueTable.setDuration(Numbers.TM_MAIN_MENU_EXPAND_TABLE_ANIM_DURATION);
+        expandLeagueTable.start();
+    }
+/*
     void updateProgressCard(int newProgressCardHeight) {
         ValueAnimator resizeProgressCard = ValueAnimator.ofInt(
                 progressCard.getHeight(),
@@ -325,7 +536,7 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
         hideProgressTabs.setDuration(Numbers.TM_MAIN_MENU_EXPAND_TABLE_ANIM_DURATION);
         hideProgressTabs.start();
         leagueCollapsed = !leagueCollapsed;
-    }
+    }*/
 
     void addNextFixture() {
 
@@ -333,7 +544,10 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
         Fixture f = CareerSavedData.getInstance().getNextFixtureForTeam(teamID);
         if (f != null) {
             nextFixtureDateText.setText(DateHelper.formatDateToString(f.getDate()));
-            nextFixtureOpponentText.setText(getString(R.string.tm_main_menu_opponent, f.getOpponent(teamID).getName()));
+            int opponentID;
+            if (f.getHomeTeamID() == teamID) { opponentID = f.getAwayTeamID(); }
+            else { opponentID = f.getHomeTeamID(); }
+            nextFixtureOpponentText.setText(getString(R.string.tm_main_menu_opponent, f.getOpponent(teamID).getName(), StringHelper.getNumberWithDateSuffix(Leagues.getPositionInLeague(opponentID, f.getLeague()))));
             if (f.getDate().before(new Date())) {
                 playMatchButton.setVisibility(VISIBLE);
             } else {
@@ -344,34 +558,93 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
         }
     }
 
-    public void upALeague(View view) {
-        leagueToDisplay--;
-        leagueNameText.setText(Leagues.getLeagueName(leagueToDisplay));
+    public void upALeagueTable(View view) {
+        leagueTableToDisplay--;
+        leagueNameText.setText(Leagues.getLeagueName(leagueTableToDisplay));
         fillLeagueTableDisplay();
         checkLeagueButtonValidity();
 
     }
-    public void downALeague(View view) {
-        leagueToDisplay++;
-        leagueNameText.setText(Leagues.getLeagueName(leagueToDisplay));
+    public void downALeagueTable(View view) {
+        leagueTableToDisplay++;
+        leagueNameText.setText(Leagues.getLeagueName(leagueTableToDisplay));
         fillLeagueTableDisplay();
         checkLeagueButtonValidity();
     }
 
     public void checkLeagueButtonValidity() {
-        if (leagueToDisplay == Leagues.TOP_LEAGUE) {
-            upLeagueButton.setEnabled(false);
+        if (leagueTableToDisplay == Leagues.TOP_LEAGUE) {
+            leagueUpLeagueButton.setEnabled(false);
         }
         else {
-            upLeagueButton.setEnabled(true);
+            leagueUpLeagueButton.setEnabled(true);
         }
 
-        if (leagueToDisplay == Leagues.BOTTOM_LEAGUE) {
-            downLeagueButton.setEnabled(false);
+        if (leagueTableToDisplay == Leagues.BOTTOM_LEAGUE) {
+            leagueDownLeagueButton.setEnabled(false);
         }
         else {
-            downLeagueButton.setEnabled(true);
+            leagueDownLeagueButton.setEnabled(true);
         }
+    }
+
+    public void upAFixtureLeague(View view) {
+        fixtureLeagueToDisplay--;
+        fillFixtureDisplay();
+        checkFixtureLeagueButtonValidity();
+
+    }
+    public void downAFixtureLeague(View view) {
+        fixtureLeagueToDisplay++;
+        fillFixtureDisplay();
+        checkFixtureLeagueButtonValidity();
+
+    }
+
+    void checkFixtureLeagueButtonValidity() {
+        if (fixtureLeagueToDisplay == Leagues.TOP_LEAGUE) {
+            fixtureUpLeagueButton.setEnabled(false);
+        }
+        else {
+            fixtureUpLeagueButton.setEnabled(true);
+        }
+
+        if (fixtureLeagueToDisplay == Leagues.BOTTOM_LEAGUE) {
+            fixtureDownLeagueButton.setEnabled(false);
+        }
+        else {
+            fixtureDownLeagueButton.setEnabled(true);
+        }
+
+    }
+    public void upAResultLeague(View view) {
+        resultLeagueToDisplay--;
+        fillResultDisplay();
+        checkResultLeagueButtonValidity();
+
+    }
+    public void downAResultLeague(View view) {
+        resultLeagueToDisplay++;
+        fillResultDisplay();
+        checkResultLeagueButtonValidity();
+
+    }
+
+    void checkResultLeagueButtonValidity() {
+        if (resultLeagueToDisplay == Leagues.TOP_LEAGUE) {
+            resultUpLeagueButton.setEnabled(false);
+        }
+        else {
+            resultUpLeagueButton.setEnabled(true);
+        }
+
+        if (resultLeagueToDisplay == Leagues.BOTTOM_LEAGUE) {
+            resultDownLeagueButton.setEnabled(false);
+        }
+        else {
+            resultDownLeagueButton.setEnabled(true);
+        }
+
     }
 
     void refreshStepCircle(int filterOption) {
@@ -529,7 +802,7 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
                 stepProgress.setProgress(val);
                 stepProgressAchieved.setText(StringHelper.getNumberWithCommas(val));
                 if (val > stepProgress.getMax()) {
-                    stepProgressAchieved.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    stepProgressAchieved.setTextColor(getResources().getColor(R.color.colorAccent));
                     if (!animatingGoldenFootball) {
                         enlargeFootball();
                         animatingGoldenFootball = true;
@@ -552,7 +825,7 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
                 int val = (Integer) valueAnimator.getAnimatedValue();
                 daysAchievedText.setText(StringHelper.getNumberWithCommas(val));
                 if (val >= Integer.parseInt(numDaysText.getText().toString())) {
-                    daysAchievedText.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    daysAchievedText.setTextColor(getResources().getColor(R.color.colorAccent));
                 }
             }
         });
@@ -594,6 +867,9 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
     public void gotStepMap() {
         refreshStepCircle(0);
     }
+
+
+
 
     public void callJames(View view) {
         animateJamesIntroduction();
@@ -651,6 +927,9 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
         }
         else if (tutorialStep == 3) {
             speechBubbleText.setText(getString(R.string.tm_main_menu_james_description3));
+        }
+        else if (tutorialStep == 4) {
+            speechBubbleText.setText(getString(R.string.tm_main_menu_james_description4));
             jamesNextButton.setVisibility(GONE);
         }
 
@@ -665,6 +944,9 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
         }
         else if (tutorialStep == 2) {
             speechBubbleText.setText(getString(R.string.tm_main_menu_james_description2));
+        }
+        else if (tutorialStep == 3) {
+            speechBubbleText.setText(getString(R.string.tm_main_menu_james_description3));
         }
     }
 
@@ -684,8 +966,10 @@ public class TMMainMenu extends AppCompatActivity implements IntegrationConnecti
     public void matchesPlayed() {
 
         fillLeagueTableDisplay();
+        fillFixtureDisplay();
+        fillResultDisplay();
         addNextFixture();
-        teamsPosition = Leagues.getPositionInLeague(usersTeam.getID(), leagueToDisplay);
+        teamsPosition = Leagues.getPositionInLeague(usersTeam.getID(), leagueTableToDisplay);
         leagueTableHolder.smoothScrollToPosition(teamsPosition + 1);
 
         DialogFragment careerDialog = new MatchResult();

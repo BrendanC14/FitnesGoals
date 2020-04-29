@@ -14,7 +14,9 @@ public class Numbers {
     public static final long FIRST_MENU_MARGIN_PADDING = 32;
     public static final float SPEECH_BUBBLE_PADDING_OFFSET = 114;
     public static final int TM_MAIN_MENU_SMALL_TABLE_ROW_NUMBER = 5;
-    public static final int TM_MAIN_MENU_BIG_TABLE_ROW_NUMBER = 20;
+    public static final int TM_MAIN_MENU_SMALL_FIXTURES_TABLE_ROW_NUMBER = 5;
+    public static final int TM_MAIN_MENU_BIG_FIXTURES_TABLE_ROW_NUMBER = 15;
+    public static final int TM_MAIN_MENU_BIG_TABLE_ROW_NUMBER = 15;
     public static final long TM_MAIN_MENU_EXPAND_TABLE_ANIM_DURATION = 1000;
     public static final int TM_MAIN_MENU_STEP_PROGRESS_ANIM_DURATION = 2000;
     public static final long TM_MAIN_MENU_GOLDEN_FOOTBALL_ANIM_DURATION = 1500;

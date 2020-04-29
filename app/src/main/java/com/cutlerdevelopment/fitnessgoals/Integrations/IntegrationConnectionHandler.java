@@ -93,10 +93,9 @@ public class IntegrationConnectionHandler implements GoogleFitAPI.GoogleFitListe
             int daysBetween = DateHelper.getDaysBetween(endDate, startDate);
             HashMap<Date, Integer> map = new HashMap<>();
             for (int i = 0; i <= daysBetween; i++) {
-                int target = AppSettings.getInstance().getStepTarget();
                 new UserActivity(
                         DateHelper.addDays(startDate, i),
-                        r.nextInt((target + 2000) - (target - 2000)) + target - 2000
+                        r.nextInt((10000) - (6000)) + 6000
                 );
                 if (tmListener != null) { tmListener.gotStepMap(); }
             }

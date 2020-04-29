@@ -5,14 +5,15 @@
     android:id="@+id/tmMainMenuBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+    android:background="@color/colorAccent"
     tools:context=".Activities.TMMainMenu">
+
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/tmMainMenuheader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        app:cardBackgroundColor="@color/colorAccent"
         app:cardElevation="25dp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,22 +21,20 @@
         app:layout_constraintTop_toTopOf="parent">
 
 
-            <TextView
-                android:id="@+id/tmMainMenuTeamName"
-                style="@style/TextAppearance.FitnessGoals.WhiteTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tmMainMenuTeamName"
+            style="@style/TextAppearance.FitnessGoals.WhiteTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </com.google.android.material.card.MaterialCardView>
-
-
 
 
 <LinearLayout
@@ -45,12 +44,22 @@
     app:layout_constraintBottom_toTopOf="@+id/tmMainMenuFooter"
     android:orientation="vertical">
 
-    <Space
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
-    </Space>
-    <com.google.android.material.card.MaterialCardView
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+             <Space
+                 android:layout_width="1dp"
+                android:layout_height="0dp"
+                 android:layout_weight="1" >
+             </Space>
+              <com.google.android.material.card.MaterialCardView
         android:id="@+id/tmMainMenuLeagueTableCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -59,7 +68,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        app:cardBackgroundColor="@color/colorPrimary"
+        app:cardBackgroundColor="@color/colorBackground"
         app:cardElevation="20dp"
         app:cardPreventCornerOverlap="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -85,7 +94,7 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/uparrow"
-                    android:onClick="upALeague"
+                    android:onClick="upALeagueTable"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -118,7 +127,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:background="@drawable/downarrow"
-                    android:onClick="downALeague"
+                    android:onClick="downALeagueTable"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -243,9 +252,11 @@
                 android:id="@+id/tmMainMenuTableItemList"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+                android:nestedScrollingEnabled="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fullTableBackground">
+                app:layout_constraintTop_toBottomOf="@+id/fullTableBackground"
+                tools:targetApi="lollipop">
 
             </ListView>
 
@@ -273,13 +284,13 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <Space
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
-    </Space>
+             <Space
+                   android:layout_width="1dp"
+                  android:layout_height="0dp"
+                  android:layout_weight="1" >
+              </Space>
 
-    <com.google.android.material.card.MaterialCardView
+              <com.google.android.material.card.MaterialCardView
         android:id="@+id/tmMainMenuStepDisplayCard"
         android:layout_width="match_parent"
         android:layout_height="@dimen/progress_card_height"
@@ -288,7 +299,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        app:cardBackgroundColor="@color/colorAccent"
+        app:cardBackgroundColor="@color/colorBackground"
         app:cardElevation="20dp"
         app:cardPreventCornerOverlap="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -455,24 +466,24 @@
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
-    <Space
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
-    </Space>
+              <Space
+                 android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" >
+              </Space>
 
-    <com.google.android.material.card.MaterialCardView
+              <com.google.android.material.card.MaterialCardView
         android:id="@+id/tmMainMenuNextMatchCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/tmMainMenuFooter"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        app:cardElevation="0dp"
-        app:cardBackgroundColor="@color/colorPrimary">
+        android:layout_marginRight="8dp"
+        app:cardElevation="20dp"
+        app:cardBackgroundColor="@color/colorBackground">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -528,18 +539,298 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <Space
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
-    </Space>
+             <Space
+                   android:layout_width="1dp"
+                   android:layout_height="0dp"
+                   android:layout_weight="1" >
+             </Space>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tmMainMenuFixturesCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:cardBackgroundColor="@color/colorBackground"
+                app:cardElevation="20dp"
+                app:cardPreventCornerOverlap="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tmMainMenuheader">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/tmMainMenuFixtureHeaderLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:id="@+id/tmMainMenuFixtureLeagueUp"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:background="@drawable/uparrow"
+                            android:onClick="upAFixtureLeague"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                        </ImageButton>
+
+                        <TextView
+                            android:id="@+id/tmMainMenuFixtureeader"
+                            style="@style/TextAppearance.FitnessGoals.Title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="40dp"
+                            android:layout_marginLeft="40dp"
+                            android:layout_marginRight="40dp"
+                            android:layout_marginEnd="40dp"
+                            android:layout_gravity="center"
+                            android:paddingTop="8dp"
+                            android:gravity="center"
+                            android:text="@string/tm_main_menu_switch_to_my_fixtures"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/tmMainMenuFixtureLeagueUp"
+                            app:layout_constraintBottom_toBottomOf="@+id/tmMainMenuFixtureLeagueUp" />
+
+                        <ImageButton
+                            android:id="@+id/tmMainMenuFixtureLeagueDown"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:background="@drawable/downarrow"
+                            android:onClick="downAFixtureLeague"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                        </ImageButton>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+                    <ListView
+                        android:id="@+id/tmMainMenuFixtureItemList"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:nestedScrollingEnabled="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tmMainMenuFixtureHeaderLayout"
+                        tools:targetApi="lollipop">
+
+                    </ListView>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <Button
+                            android:id="@+id/tmMainMenuFixturesSwitchButton"
+                            style="@style/Widget.FitnessGoals.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:text="@string/tm_main_menu_switch_to_my_fixtures"
+                            android:background="@drawable/uparrow"
+                            android:layout_gravity="center">
+
+                        </Button>
+
+                        <Button
+                            android:id="@+id/tmMainMenuFixtureExpandCollapseButton"
+                            style="@style/Widget.FitnessGoals.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_gravity="end"
+                            android:text="@string/expand_league_table"
+                            android:textColor="@color/colorWhite"
+                            app:layout_constraintStart_toEndOf="@+id/tmMainMenuFixturesSwitchButton"
+                            app:layout_constraintBottom_toBottomOf="@+id/tmMainMenuFixturesSwitchButton"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/tmMainMenuFixturesSwitchButton" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <Space
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" >
+            </Space>
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/tmMainMenuResultsCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                app:cardBackgroundColor="@color/colorBackground"
+                app:cardElevation="20dp"
+                app:cardPreventCornerOverlap="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tmMainMenuheader">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/tmMainMenuResultHeaderLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:id="@+id/tmMainMenuResultsLeagueUp"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:background="@drawable/uparrow"
+                            android:onClick="upAResultLeague"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                        </ImageButton>
+
+                        <TextView
+                            android:id="@+id/tmMainMenuResultsHeader"
+                            style="@style/TextAppearance.FitnessGoals.Title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="40dp"
+                            android:layout_marginLeft="40dp"
+                            android:layout_marginRight="40dp"
+                            android:layout_marginEnd="40dp"
+                            android:layout_gravity="center"
+                            android:paddingTop="8dp"
+                            android:gravity="center"
+                            android:text="@string/tm_main_menu_switch_to_my_results"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/tmMainMenuResultsLeagueUp"
+                            app:layout_constraintBottom_toBottomOf="@+id/tmMainMenuResultsLeagueUp" />
+
+                        <ImageButton
+                            android:id="@+id/tmMainMenuResultLeagueDown"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:background="@drawable/downarrow"
+                            android:onClick="downAResultLeague"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                        </ImageButton>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+                    <ListView
+                        android:id="@+id/tmMainMenuResultItemList"
+                        android:layout_marginTop="8dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:nestedScrollingEnabled="true"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tmMainMenuFixtureHeaderLayout"
+                        tools:targetApi="lollipop">
+
+                    </ListView>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <Button
+                            android:id="@+id/tmMainMenuResultSwitchButton"
+                            style="@style/Widget.FitnessGoals.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:layout_marginTop="8dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:text="@string/tm_main_menu_switch_to_my_fixtures"
+                            android:background="@drawable/uparrow"
+                            android:layout_gravity="center">
+
+                        </Button>
+
+                        <Button
+                            android:id="@+id/tmMainMenuResultExpandCollapseButton"
+                            style="@style/Widget.FitnessGoals.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginRight="16dp"
+                            android:layout_gravity="end"
+                            android:text="@string/expand_league_table"
+                            android:textColor="@color/colorWhite"
+                            app:layout_constraintStart_toEndOf="@+id/tmMainMenuResultSwitchButton"
+                            app:layout_constraintBottom_toBottomOf="@+id/tmMainMenuResultSwitchButton"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/tmMainMenuResultSwitchButton" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <Space
+                android:layout_width="1dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" >
+            </Space>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/tmMainMenuFooter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/colorAccent"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

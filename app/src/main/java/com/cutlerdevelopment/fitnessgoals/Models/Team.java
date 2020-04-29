@@ -19,7 +19,7 @@ public class Team {
         this.colour = colour;
         this.league = league;
 
-        this.maxNumberOfSteps = 16000 - (60 * position);
+        this.maxNumberOfSteps = 13000 - (60 * position);
 
         this.minNumberOfSteps = maxNumberOfSteps - Numbers.DIFFERENCE_BETWEEN_TEAM_MIN_MAX;
 
@@ -79,17 +79,27 @@ public class Team {
     private int totalAttackingSteps;
     public int getTotalAttackingSteps() { return totalAttackingSteps; }
     public void setTotalAttackingSteps(int totalAttackingSteps) { this.totalAttackingSteps = totalAttackingSteps; }
-    public void changeAverageAttackingSteps(int averageAttackingSteps) {
+    public void changeAttackingSteps(int averageAttackingSteps) {
         this.totalAttackingSteps = averageAttackingSteps;
         CareerSavedData.getInstance().updateObject(this);
+    }
+    public int getAverageAttackingSteps() {
+        int games = getGamesPlayed();
+        if (games > 0) { return totalAttackingSteps / getGamesPlayed(); }
+        return (maxNumberOfSteps + minNumberOfSteps) / 2;
     }
 
     private int totalDefendingSteps;
     public int getTotalDefendingSteps() { return totalDefendingSteps; }
     public void setTotalDefendingSteps(int totalDefendingSteps) { this.totalDefendingSteps = totalDefendingSteps; }
-    public void changeAverageDefendingSteps(int averageDefendingSteps) {
+    public void changeDefendingSteps(int averageDefendingSteps) {
         this.totalDefendingSteps = averageDefendingSteps;
         CareerSavedData.getInstance().updateObject(this);
+    }
+    public int getAverageDefendingSteps() {
+        int games = getGamesPlayed();
+        if (games > 0) { return totalDefendingSteps / getGamesPlayed(); }
+        return (maxNumberOfSteps + minNumberOfSteps) / 2;
     }
 
     private int minNumberOfSteps;

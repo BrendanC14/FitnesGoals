@@ -2,13 +2,32 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/fullTableBackground"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/full_table_row_height"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:gravity="center">
 
     <TextView
+        android:id="@+id/resultItemDate"
+        android:layout_width="75dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/league_table_team_column"
+        android:textColor="@color/colorWhite"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/resultItemHomePos"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/colorWhite"
+        android:textSize="12sp">
+
+    </TextView>
+
+    <TextView
         android:id="@+id/resultItemHomeTeam"
-        android:layout_width="115dp"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/league_table_team_column"
@@ -44,12 +63,21 @@
 
     <TextView
         android:id="@+id/resultItemAwayTeam"
-        android:layout_width="115dp"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/league_table_team_column"
         android:textColor="@color/colorWhite"
         android:textSize="12sp" />
+    <TextView
+        android:id="@+id/resultItemAwayPos"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/colorWhite"
+        android:textSize="12sp">
+
+    </TextView>
 
 
 </LinearLayout>
