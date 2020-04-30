@@ -11,8 +11,11 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -101,59 +104,52 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
         teamNameText.setTextColor(Color.parseColor(usersTeam.getSecondaryColour()));
         header.setBackgroundColor(Color.parseColor(usersTeam.getPrimaryColour()));
         footer.setBackgroundColor(Color.parseColor(usersTeam.getPrimaryColour()));
-        layoutParent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    layoutParent.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                } else {
-                    layoutParent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                }
 
-                AnimatorSet fullSet = new AnimatorSet();
+        getLayoutInflater().inflate(R.layout.step_review_card, layoutParent);
+        stepReviewCard = layoutParent.getChildAt(0);
+        stepReviewCardController = new StepReviewCardController(stepReviewCard, c);
 
-                getLayoutInflater().inflate(R.layout.step_review_card, layoutParent);
-                stepReviewCard = layoutParent.getChildAt(0);
-                stepReviewCardController = new StepReviewCardController(stepReviewCard, c);
+        getLayoutInflater().inflate(R.layout.next_match_card, layoutParent);
+        nextMatchCard = layoutParent.getChildAt(1);
+        nextMatchCardController = new NextMatchCardController(nextMatchCard, c);
 
-                getLayoutInflater().inflate(R.layout.next_match_card, layoutParent);
-                nextMatchCard = layoutParent.getChildAt(1);
-                nextMatchCardController = new NextMatchCardController(nextMatchCard, c);
+        getLayoutInflater().inflate(R.layout.league_table_card, layoutParent);
+        leagueTableCard = layoutParent.getChildAt(2);
+        leagueTableCardController = new LeagueTableCardController(leagueTableCard, c);
 
-                getLayoutInflater().inflate(R.layout.league_table_card, layoutParent);
-                leagueTableCard = layoutParent.getChildAt(2);
-                leagueTableCardController = new LeagueTableCardController(leagueTableCard, c);
+        getLayoutInflater().inflate(R.layout.fixtures_card, layoutParent);
+        fixturesCard = layoutParent.getChildAt(3);
+        fixturesCardController = new FixturesCardController(fixturesCard, c, usersLeague);
 
-                getLayoutInflater().inflate(R.layout.fixtures_card, layoutParent);
-                fixturesCard = layoutParent.getChildAt(3);
-                fixturesCardController = new FixturesCardController(fixturesCard, c, usersLeague);
+        getLayoutInflater().inflate(R.layout.results_card, layoutParent);
+        resultsCard = layoutParent.getChildAt(4);
+        resultsCardController = new ResultsCardController(resultsCard, c, usersLeague);
 
-                getLayoutInflater().inflate(R.layout.results_card, layoutParent);
-                resultsCard = layoutParent.getChildAt(4);
-                resultsCardController = new ResultsCardController(resultsCard, c, usersLeague);
+        Animation slideInRight = AnimationUtils.loadAnimation(c,
+                R.anim.slide_in_right);
+        slideInRight.setDuration(Numbers.TM_MAIN_MENU_CARD_INTRO_DURATION);
+        Animation slideInTop = AnimationUtils.loadAnimation(c,
+                R.anim.slide_in_top);
+        slideInTop.setDuration(Numbers.TM_MAIN_MENU_CARD_INTRO_DURATION);
+        Animation slideInBottom = AnimationUtils.loadAnimation(c,
+                R.anim.slide_in_bottom);
+        slideInBottom.setDuration(Numbers.TM_MAIN_MENU_CARD_INTRO_DURATION);
+        Animation slideInLeft = AnimationUtils.loadAnimation(c,
+                R.anim.slide_in_left);
+        slideInLeft.setDuration(Numbers.TM_MAIN_MENU_CARD_INTRO_DURATION);
 
-                stepReviewCard.setX(backgroundLayout.getWidth());
-                nextMatchCard.setX(backgroundLayout.getWidth());
-                leagueTableCard.setX(backgroundLayout.getWidth());
-                fixturesCard.setX(backgroundLayout.getWidth());
-                resultsCard.setX(backgroundLayout.getWidth());
 
-                fullSet.playSequentially(
-                        animateCard(stepReviewCard, teamNameText),
-                        animateCard(nextMatchCard, stepReviewCard),
-                        animateCard(leagueTableCard, nextMatchCard),
-                        animateCard(fixturesCard, leagueTableCard),
-                        animateCard(resultsCard, fixturesCard));
+        stepReviewCard.startAnimation(slideInTop);
+        nextMatchCard.startAnimation(slideInRight);
+        leagueTableCard.startAnimation(slideInBottom);
+        fixturesCard.startAnimation(slideInLeft);
+        resultsCard.startAnimation(slideInBottom);
 
-                fullSet.start();
-
-            }
-        });
 
     }
 
     AnimatorSet animateCard(View cardToMove, View beneathLayout) {
-        float xPosition = 8.0f;
+        float xPosition = (float) (backgroundLayout.getWidth() - cardToMove.getWidth()) / 2;
         float yPosition = beneathLayout.getY() + 8.0f;
 
         AnimatorSet animatorSet = new AnimatorSet();

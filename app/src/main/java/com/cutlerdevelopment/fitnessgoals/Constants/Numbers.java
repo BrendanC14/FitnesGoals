@@ -20,6 +20,7 @@ public class Numbers {
     public static final long TM_MAIN_MENU_EXPAND_TABLE_ANIM_DURATION = 1000;
     public static final int TM_MAIN_MENU_STEP_PROGRESS_ANIM_DURATION = 1000;
     public static final long TM_MAIN_MENU_GOLDEN_FOOTBALL_ANIM_DURATION = 1000;
+    public static final long TM_MAIN_MENU_CARD_INTRO_DURATION = 2000;
     public static final long MATCH_SETUP_TACTIC_MOVE_SPEED = 1000;
 
     //Team

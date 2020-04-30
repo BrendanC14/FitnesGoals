@@ -81,8 +81,8 @@ public class FitbitAPI {
         customTabsIntent = new CustomTabsIntent.Builder(mCustomTabsSession)
                 .setToolbarColor(ContextCompat.getColor(activity, R.color.colorPrimary))
                 .setShowTitle(true)
-                .setStartAnimations(activity, R.anim.slide_in_right, R.anim.slide_out_left)
-                .setExitAnimations(activity, R.anim.slide_out_left, R.anim.slide_in_right)
+                .setStartAnimations(activity, R.anim.slide_in_right, R.anim.slide_in_left)
+                .setExitAnimations(activity, R.anim.slide_in_left, R.anim.slide_in_right)
                 .build();
 
         String url = "https://www.fitbit.com/oauth2/authorize?" +
