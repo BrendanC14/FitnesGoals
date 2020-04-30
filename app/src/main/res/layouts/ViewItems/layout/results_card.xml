@@ -102,7 +102,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    android:text="@string/tm_main_menu_switch_to_my_fixtures"
+                    android:text="@string/tm_main_menu_switch_to_my_results"
                     android:background="@drawable/uparrow"
                     android:layout_gravity="center">
 

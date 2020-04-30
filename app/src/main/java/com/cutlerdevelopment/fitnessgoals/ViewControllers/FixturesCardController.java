@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.Constants.Leagues;
 import com.cutlerdevelopment.fitnessgoals.Constants.MatchResult;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
@@ -20,6 +21,7 @@ import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.ResultItemRowAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.ResultItem;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,6 +34,7 @@ public class FixturesCardController {
 
     private Context c;
 
+    private MaterialCardView cardView;
     private Button viewModeButton;
     private TextView leagueNameText;
     private ListView fixtureTableHolder;
@@ -47,6 +50,7 @@ public class FixturesCardController {
 
     public FixturesCardController(View card, Context context, int usersLeague) {
         c = context;
+        cardView = card.findViewById(R.id.fixturesCard);
         viewModeButton = card.findViewById(R.id.fixturesCardSwitchButton);
         leagueNameText = card.findViewById(R.id.fixturesCardHeader);
         fixtureTableHolder = card.findViewById(R.id.fixturesCardList);
@@ -68,7 +72,7 @@ public class FixturesCardController {
             public void onClick(View view) {
                 myFixtureMode = !myFixtureMode;
                 if (myFixtureMode) {
-                    viewModeButton.setText(R.string.tm_main_menu_switch_to_league);
+                    viewModeButton.setText(R.string.tm_main_menu_switch_to_league_results);
                     upLeagueButton.setVisibility(View.INVISIBLE);
                     downLeagueButton.setVisibility(View.INVISIBLE);
                 }
@@ -91,6 +95,15 @@ public class FixturesCardController {
                 downAFixtureLeague();
             }
         });
+
+        int primaryColour = Colours.getUsersPrimaryColour();
+        int secondaryColour = Colours.getUsersSecondaryColour();
+        cardView.setBackgroundColor(primaryColour);
+        upLeagueButton.setTextColor(secondaryColour);
+        downLeagueButton.setTextColor(secondaryColour);
+        leagueNameText.setTextColor(secondaryColour);
+        fixtureExpandCollapseButton.setTextColor(secondaryColour);
+        viewModeButton.setTextColor(secondaryColour);
 
         fillFixtureDisplay();
         checkFixtureLeagueButtonValidity();

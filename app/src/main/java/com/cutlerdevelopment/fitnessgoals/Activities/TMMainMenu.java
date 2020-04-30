@@ -5,49 +5,34 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 
-import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.cutlerdevelopment.fitnessgoals.Constants.Leagues;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.MatchResult;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.MatchSetup;
-import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
 import com.cutlerdevelopment.fitnessgoals.Models.MatchEngine;
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.R;
 import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
 import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
-import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
-import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
-import com.cutlerdevelopment.fitnessgoals.ViewAdapters.FullTableRowAdapter;
-import com.cutlerdevelopment.fitnessgoals.ViewAdapters.ResultItemRowAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewControllers.FixturesCardController;
 import com.cutlerdevelopment.fitnessgoals.ViewControllers.LeagueTableCardController;
 import com.cutlerdevelopment.fitnessgoals.ViewControllers.NextMatchCardController;
 import com.cutlerdevelopment.fitnessgoals.ViewControllers.ResultsCardController;
-import com.cutlerdevelopment.fitnessgoals.ViewItems.FullTableRow;
-import com.cutlerdevelopment.fitnessgoals.ViewItems.ResultItem;
 import com.cutlerdevelopment.fitnessgoals.ViewControllers.StepReviewCardController;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import com.google.android.material.card.MaterialCardView;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -55,10 +40,15 @@ import static android.view.View.VISIBLE;
 public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEngineListener {
 
     LinearLayout layoutParent;
+    View stepReviewCard;
     StepReviewCardController stepReviewCardController;
+    View leagueTableCard;
     LeagueTableCardController leagueTableCardController;
+    View nextMatchCard;
     NextMatchCardController nextMatchCardController;
+    View fixturesCard;
     FixturesCardController fixturesCardController;
+    View resultsCard;
     ResultsCardController resultsCardController;
 
 
@@ -70,9 +60,12 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
     Button jamesPreviousButton;
     ConstraintLayout backgroundLayout;
 
+    MaterialCardView header;
     TextView teamNameText;
     CardView footer;
     ImageButton phoneButton;
+
+    Context c;
 
     Team usersTeam;
     int usersLeague;
@@ -93,6 +86,7 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
         jamesNextButton = findViewById(R.id.tmMainMenuSpeechBubbleNext);
         jamesPreviousButton = findViewById(R.id.tmMainMenuSpeechBubblePrevious);
         speechBubbleButton = findViewById(R.id.tmMainMenuSpeechBubbleButton);
+        header = findViewById(R.id.tmMainMenuheader);
         teamNameText = findViewById(R.id.tmMainMenuTeamName);
         footer = findViewById(R.id.tmMainMenuFooter);
         phoneButton = findViewById(R.id.tmMainMenuPhoneButton);
@@ -102,24 +96,81 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
         usersTeam = CareerSavedData.getInstance().getTeamFromID(CareerSettings.getInstance().getTeamID());
         usersLeague = usersTeam.getLeague();
 
+        c = this;
         teamNameText.setText(usersTeam.getName());
-        backgroundLayout.setBackgroundColor(Color.parseColor(usersTeam.getColour()));
+        teamNameText.setTextColor(Color.parseColor(usersTeam.getSecondaryColour()));
+        header.setBackgroundColor(Color.parseColor(usersTeam.getPrimaryColour()));
+        footer.setBackgroundColor(Color.parseColor(usersTeam.getPrimaryColour()));
+        layoutParent.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    layoutParent.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                } else {
+                    layoutParent.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                }
 
-        getLayoutInflater().inflate(R.layout.step_review_card, layoutParent);
-        View stepReviewCard = layoutParent.getChildAt(0);
-        stepReviewCardController = new StepReviewCardController(stepReviewCard, this);
+                AnimatorSet fullSet = new AnimatorSet();
 
-        View nextMatchCard = getLayoutInflater().inflate(R.layout.next_match_card, layoutParent);
-        nextMatchCardController = new NextMatchCardController(nextMatchCard, this);
+                getLayoutInflater().inflate(R.layout.step_review_card, layoutParent);
+                stepReviewCard = layoutParent.getChildAt(0);
+                stepReviewCardController = new StepReviewCardController(stepReviewCard, c);
 
-        View leagueTableCard = getLayoutInflater().inflate(R.layout.league_table_card, layoutParent);
-        leagueTableCardController = new LeagueTableCardController(leagueTableCard, this);
+                getLayoutInflater().inflate(R.layout.next_match_card, layoutParent);
+                nextMatchCard = layoutParent.getChildAt(1);
+                nextMatchCardController = new NextMatchCardController(nextMatchCard, c);
 
-        View fixturesCard = getLayoutInflater().inflate(R.layout.fixtures_card, layoutParent);
-        fixturesCardController = new FixturesCardController(fixturesCard, this, usersLeague);
+                getLayoutInflater().inflate(R.layout.league_table_card, layoutParent);
+                leagueTableCard = layoutParent.getChildAt(2);
+                leagueTableCardController = new LeagueTableCardController(leagueTableCard, c);
 
-        View resultsCard = getLayoutInflater().inflate(R.layout.results_card, layoutParent);
-        resultsCardController = new ResultsCardController(resultsCard, this, usersLeague);
+                getLayoutInflater().inflate(R.layout.fixtures_card, layoutParent);
+                fixturesCard = layoutParent.getChildAt(3);
+                fixturesCardController = new FixturesCardController(fixturesCard, c, usersLeague);
+
+                getLayoutInflater().inflate(R.layout.results_card, layoutParent);
+                resultsCard = layoutParent.getChildAt(4);
+                resultsCardController = new ResultsCardController(resultsCard, c, usersLeague);
+
+                stepReviewCard.setX(backgroundLayout.getWidth());
+                nextMatchCard.setX(backgroundLayout.getWidth());
+                leagueTableCard.setX(backgroundLayout.getWidth());
+                fixturesCard.setX(backgroundLayout.getWidth());
+                resultsCard.setX(backgroundLayout.getWidth());
+
+                fullSet.playSequentially(
+                        animateCard(stepReviewCard, teamNameText),
+                        animateCard(nextMatchCard, stepReviewCard),
+                        animateCard(leagueTableCard, nextMatchCard),
+                        animateCard(fixturesCard, leagueTableCard),
+                        animateCard(resultsCard, fixturesCard));
+
+                fullSet.start();
+
+            }
+        });
+
+    }
+
+    AnimatorSet animateCard(View cardToMove, View beneathLayout) {
+        float xPosition = 8.0f;
+        float yPosition = beneathLayout.getY() + 8.0f;
+
+        AnimatorSet animatorSet = new AnimatorSet();
+        animatorSet.playTogether(
+                ObjectAnimator.ofFloat(
+                        cardToMove,
+                        "x",
+                        xPosition)
+                        .setDuration(1000),
+                ObjectAnimator.ofFloat(
+                        cardToMove,
+                        "x",
+                        yPosition)
+                        .setDuration(1000)
+        );
+        return animatorSet;
+
     }
 
     public void callJames(View view) {

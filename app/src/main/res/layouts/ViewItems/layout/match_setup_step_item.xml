@@ -15,7 +15,6 @@
         android:gravity="center"
         android:paddingStart="8dp"
         android:textColor="@color/colorWhite"
-        android:background="@drawable/rounded_step_item"
         android:paddingLeft="8dp"
         android:paddingEnd="8dp"
         android:paddingRight="8dp"

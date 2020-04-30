@@ -2,6 +2,7 @@ package com.cutlerdevelopment.fitnessgoals.Integrations.GoogleIntegrations;
 
 import androidx.annotation.NonNull;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -46,6 +47,7 @@ public class GoogleFirestoreConnector {
                                 new Team(
                                         doc.getString("Name"),
                                         doc.getString("PrimaryColour"),
+                                        Colours.WHITE_TEAM_COLOUR,
                                         doc.getLong("League").intValue(),
                                         doc.getLong("Position").intValue());
                             }

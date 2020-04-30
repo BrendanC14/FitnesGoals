@@ -7,6 +7,7 @@
     android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/matchSetupLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/rounded_menu"
@@ -49,6 +50,12 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:layout_marginTop="8dp"
+                    android:verticalSpacing="8dp"
+                    android:horizontalSpacing="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
                     app:layout_constraintTop_toBottomOf="@+id/matchSetupDefendingHeader"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"/>
@@ -71,6 +78,7 @@
                     android:id="@+id/matchSetupDefendingAverage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textStyle="bold"
                     android:layout_marginTop="8dp"
                     style="@style/TextAppearance.FitnessGoals.NormalText"
                     app:layout_constraintStart_toStartOf="parent"
@@ -108,7 +116,13 @@
                     android:id="@+id/matchSetupAttackingList"
                     android:layout_width="match_parent"
                     android:gravity="center"
+                    android:verticalSpacing="8dp"
+                    android:horizontalSpacing="8dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@+id/matchSetupAttackingHeader"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -130,6 +144,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:textStyle="bold"
                     style="@style/TextAppearance.FitnessGoals.NormalText"
                     app:layout_constraintTop_toBottomOf="@id/matchSetupAttackingList"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -234,8 +249,13 @@
                 android:id="@+id/matchSetupUserStepsGrid"
                 android:layout_width="match_parent"
                 android:layout_marginTop="8dp"
+                android:verticalSpacing="8dp"
                 android:horizontalSpacing="8dp"
                 android:gravity="center"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_height="wrap_content">
 
             </GridView>

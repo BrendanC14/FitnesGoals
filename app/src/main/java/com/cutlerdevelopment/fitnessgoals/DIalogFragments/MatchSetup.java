@@ -7,11 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.Constants.StepModes;
 import com.cutlerdevelopment.fitnessgoals.Constants.TacticOptions;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
@@ -27,6 +29,7 @@ import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.MatchSetupStepAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.MatchSetupItem;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +37,15 @@ import java.util.Date;
 import java.util.List;
 
 public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.MatchSetupInterface {
+
+    private LinearLayout cardView;
+
+    private TextView titleText;
+    private TextView defendingHeader;
+    private TextView attackingHeader;
+    private TextView yourStepsText;
+    private TextView opponentDefendingHeader;
+    private TextView opponentAttackingHeader;
 
     private GridView defendingStepsList;
     private GridView attackingStepsList;
@@ -43,6 +55,7 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
     private TextView attackingTotalText;
     private TextView oppDefendingText;
     private TextView oppAttackingText;
+
     private Button defendingTactic;
     private Button attackingTactic;
     private Button randomTactic;
@@ -72,6 +85,13 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View matchSetupView = inflater.inflate(R.layout.match_setup, null);
 
+        titleText = matchSetupView.findViewById(R.id.matchSetupTitle);
+        defendingHeader = matchSetupView.findViewById(R.id.matchSetupDefendingHeader);
+        attackingHeader = matchSetupView.findViewById(R.id.matchSetupAttackingHeader);
+        yourStepsText = matchSetupView.findViewById(R.id.matchSetupUserStepsHeader);
+        cardView = matchSetupView.findViewById(R.id.matchSetupLayout);
+        opponentDefendingHeader = matchSetupView.findViewById(R.id.matchSetupOpponentDefendingHeader);
+        opponentAttackingHeader = matchSetupView.findViewById(R.id.matchSetupOpponentAttackingHeader);
         defendingStepsList = matchSetupView.findViewById(R.id.matchSetupDefendingList);
         attackingStepsList = matchSetupView.findViewById(R.id.matchSetupAttackingList);
         usersStepsGridViews = matchSetupView.findViewById(R.id.matchSetupUserStepsGrid);
@@ -179,6 +199,28 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
             }
         });
 
+        int primaryColour = Colours.getUsersPrimaryColour();
+        int secondaryColour = Colours.getUsersSecondaryColour();
+        cardView.setBackgroundColor(primaryColour);
+        titleText.setTextColor(secondaryColour);
+        defendingHeader.setTextColor(secondaryColour);
+        attackingHeader.setTextColor(secondaryColour);
+        oppDefendingText.setTextColor(secondaryColour);
+        oppAttackingText.setTextColor(secondaryColour);
+        opponentDefendingHeader.setTextColor(secondaryColour);
+        opponentAttackingHeader.setTextColor(secondaryColour);
+        yourStepsText.setTextColor(secondaryColour);
+        defendingTactic.setBackgroundColor(secondaryColour);
+        defendingTactic.setTextColor(primaryColour);
+        attackingTactic.setBackgroundColor(secondaryColour);
+        attackingTactic.setTextColor(primaryColour);
+        evenTactic.setBackgroundColor(secondaryColour);
+        evenTactic.setTextColor(primaryColour);
+        randomTactic.setBackgroundColor(secondaryColour);
+        randomTactic.setTextColor(primaryColour);
+        playMatch.setBackgroundColor(secondaryColour);
+        playMatch.setTextColor(primaryColour);
+
         builder.setView(matchSetupView);
         return builder.create();
     }
@@ -191,6 +233,9 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
 
         Collections.sort(stepList);
         int numDays = stepList.size();
+        if (numDays == 0) {
+            return;
+        }
 
         if (tactic == TacticOptions.EVEN) {
             for (int i = 0; i < numDays; i += 2) {

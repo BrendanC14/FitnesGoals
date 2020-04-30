@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.R;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.MatchSetupItem;
 
@@ -72,6 +73,9 @@ public class MatchSetupStepAdapter extends BaseAdapter implements View.OnDragLis
         stepsText.setText(currentItem.getSteps());
 
         parent.setOnDragListener(this);
+
+        stepsText.setBackgroundColor(Colours.getUsersSecondaryColour());
+        stepsText.setTextColor(Colours.getUsersPrimaryColour());
 
         return newView;
 

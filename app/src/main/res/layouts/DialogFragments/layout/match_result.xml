@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <LinearLayout
+        android:id="@+id/matchResultLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/rounded_menu"
@@ -63,25 +64,24 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageButton
+            <Button
                 android:id="@+id/matchResultsLeagueUp"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/uparrow"
+                android:layout_width="wrap_content"
+                style="@style/Widget.FitnessGoals.Button.TextButton"
+                android:layout_height="wrap_content"
+                android:text="@string/step_review_left"
                 android:onClick="upALeagueTable"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-            </ImageButton>
+            </Button>
+
 
             <TextView
                 android:id="@+id/matchResultsLeagueHeader"
                 style="@style/TextAppearance.FitnessGoals.Title"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginLeft="16dp"
@@ -89,27 +89,26 @@
                 android:layout_marginEnd="16dp"
                 android:layout_gravity="center"
                 android:paddingTop="8dp"
+                android:maxLines="1"
                 android:gravity="center"
                 android:text="@string/league_table_header"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/matchResultsLeagueUp"
+                app:layout_constraintEnd_toStartOf="@+id/matchResultsLeagueDown"
+                app:layout_constraintTop_toTopOf="@+id/matchResultsLeagueDown"
+                app:layout_constraintBottom_toBottomOf="@+id/matchResultsLeagueDown" />
 
-            <ImageButton
+            <Button
                 android:id="@+id/matchResultsLeagueDown"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:background="@drawable/downarrow"
-                android:onClick="downALeagueTable"
+                android:layout_width="wrap_content"
+                style="@style/Widget.FitnessGoals.Button.TextButton"
+                android:layout_height="wrap_content"
+                android:text="@string/step_review_left"
+                android:onClick="upALeagueTable"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-            </ImageButton>
+            </Button>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <ListView

@@ -7,16 +7,18 @@ import androidx.room.PrimaryKey;
 import com.cutlerdevelopment.fitnessgoals.Constants.MatchResult;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
+import com.cutlerdevelopment.fitnessgoals.Settings.AppSettings;
 import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
 
 @Entity
 public class Team {
 
     @Ignore
-    public Team(String name, String colour, int league, int position) {
+    public Team(String name, String primaryColour, String secondaryColour, int league, int position) {
         this.ID = CareerSavedData.getInstance().getNumRowsFromTeamTable() + 1;
         this.name = name;
-        this.colour = colour;
+        this.primaryColour = primaryColour;
+        this.secondaryColour = secondaryColour;
         this.league = league;
 
         this.maxNumberOfSteps = 13000 - (60 * position);
@@ -47,13 +49,20 @@ public class Team {
         CareerSavedData.getInstance().updateObject(this);
     }
 
-    private String colour;
-    public String getColour() { return colour;}
-    public void setColour(String newColour) { colour = newColour; }
-    public void changeColour(String newColour) {
-        colour = newColour;
+    private String primaryColour;
+    public String getPrimaryColour() { return primaryColour;}
+    public void setPrimaryColour(String newColour) { primaryColour = newColour; }
+    public void changePrimaryColour(String newColour) {
+        primaryColour = newColour;
         CareerSavedData.getInstance().updateObject(this);
+    }
 
+    private String secondaryColour;
+    public String getSecondaryColour() { return secondaryColour; }
+    public void setSecondaryColour(String secondaryColour) { this.secondaryColour = secondaryColour; }
+    public void changeSecondaryColour(String secondaryColour) {
+        this.secondaryColour = secondaryColour;
+        CareerSavedData.getInstance().updateObject(this);
     }
 
     private int league;
@@ -85,7 +94,7 @@ public class Team {
     }
     public int getAverageAttackingSteps() {
         int games = getGamesPlayed();
-        if (games > 0) { return totalAttackingSteps / getGamesPlayed(); }
+        if (games > 0) { return totalAttackingSteps / (games * (CareerSettings.getInstance().getDaysBetween() / 2)); }
         return (maxNumberOfSteps + minNumberOfSteps) / 2;
     }
 
@@ -98,7 +107,7 @@ public class Team {
     }
     public int getAverageDefendingSteps() {
         int games = getGamesPlayed();
-        if (games > 0) { return totalDefendingSteps / getGamesPlayed(); }
+        if (games > 0) { return totalDefendingSteps / (games * (CareerSettings.getInstance().getDaysBetween() / 2)); }
         return (maxNumberOfSteps + minNumberOfSteps) / 2;
     }
 

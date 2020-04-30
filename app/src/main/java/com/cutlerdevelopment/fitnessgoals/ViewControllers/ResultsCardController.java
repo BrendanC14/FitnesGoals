@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.Constants.Leagues;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
@@ -19,6 +20,7 @@ import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.ResultItemRowAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.ResultItem;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +32,7 @@ import static android.view.View.VISIBLE;
 public class ResultsCardController {
 
     private Context c;
+    MaterialCardView cardView;
     private Button viewModeButton;
     private  TextView leagueNameText;
     private ListView resultTableHolder;
@@ -47,6 +50,7 @@ public class ResultsCardController {
     public ResultsCardController(View card, Context context, int usersLeague) {
         c = context;
 
+        cardView = card.findViewById(R.id.resultsCardResultsCard);
         viewModeButton = card.findViewById(R.id.resultsCardSwitchButton);
         leagueNameText = card.findViewById(R.id.resultsCardHeader);
         resultTableHolder = card.findViewById(R.id.resultsCardList);
@@ -66,7 +70,7 @@ public class ResultsCardController {
             public void onClick(View view) {
                 myResultMode = !myResultMode;
                 if (myResultMode) {
-                    viewModeButton.setText(R.string.tm_main_menu_switch_to_league);
+                    viewModeButton.setText(R.string.tm_main_menu_switch_to_league_results);
                     upLeagueButton.setVisibility(View.INVISIBLE);
                     downLeagueButton.setVisibility(View.INVISIBLE);
                 }
@@ -91,6 +95,16 @@ public class ResultsCardController {
         });
         usersTeam = CareerSavedData.getInstance().getTeamFromID(CareerSettings.getInstance().getTeamID());
         leagueToDisplay = usersLeague;
+
+        int primaryColour = Colours.getUsersPrimaryColour();
+        int secondaryColour = Colours.getUsersSecondaryColour();
+        cardView.setBackgroundColor(primaryColour);
+        viewModeButton.setTextColor(secondaryColour);
+        leagueNameText.setTextColor(secondaryColour);
+        resultExpandCollapseButton.setTextColor(secondaryColour);
+        upLeagueButton.setTextColor(secondaryColour);
+        downLeagueButton.setTextColor(secondaryColour);
+
         fillResultDisplay();
         animateResults();
         checkResultLeagueButtonValidity();
@@ -107,12 +121,12 @@ public class ResultsCardController {
             Collections.reverse(results);
         }
         else {
+            leagueNameText.setText(c.getString(R.string.league_results_mode, Leagues.getLeagueName(leagueToDisplay)));
             Fixture lastResult = CareerSavedData.getInstance().getLastResultForTeam(usersTeam.getID());
             if (lastResult == null) {
                 return;
             }
             results = CareerSavedData.getInstance().getWeeksResultsFromLeague(lastResult.getDate(), leagueToDisplay);
-            leagueNameText.setText(c.getString(R.string.league_results_mode, Leagues.getLeagueName(leagueToDisplay)));
             Collections.sort(results);
         }
 

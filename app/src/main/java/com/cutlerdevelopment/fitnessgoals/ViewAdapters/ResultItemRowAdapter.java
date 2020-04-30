@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.Constants.MatchResult;
 import com.cutlerdevelopment.fitnessgoals.R;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.ResultItem;
@@ -61,6 +62,7 @@ public class ResultItemRowAdapter extends BaseAdapter {
         TextView awayScore = convertView.findViewById(R.id.resultItemAwayScore);
         TextView awayTeam = convertView.findViewById(R.id.resultItemAwayTeam);
         TextView awayPosition = convertView.findViewById(R.id.resultItemAwayPos);
+        TextView vsText = convertView.findViewById(R.id.resultItemVs);
 
         final ResultItem currentItem = (ResultItem) getItem(i);
 
@@ -80,10 +82,52 @@ public class ResultItemRowAdapter extends BaseAdapter {
             date.setTypeface(date.getTypeface(), Typeface.BOLD);
         }
 
-        if(currentItem.getResult() == MatchResult.WIN) { background.setBackgroundColor(getColor(context, R.color.colorAccent)); }
-        else if(currentItem.getResult() == MatchResult.LOSE) { background.setBackgroundColor(getColor(context, R.color.colorRed)); }
-        else if(currentItem.getResult() == MatchResult.DRAW) { background.setBackgroundColor(getColor(context, R.color.colorGold)); }
-        else {background.setBackgroundColor(getColor(context, R.color.colorPrimaryDark)); }
+        if(currentItem.getResult() == MatchResult.WIN) {
+            background.setBackgroundColor(getColor(context, R.color.colorAccent));
+            date.setTextColor(getColor(context, R.color.colorWhite));
+            homePosition.setTextColor(getColor(context, R.color.colorWhite));
+            homeTeam.setTextColor(getColor(context, R.color.colorWhite));
+            homeScore.setTextColor(getColor(context, R.color.colorWhite));
+            awayScore.setTextColor(getColor(context, R.color.colorWhite));
+            awayTeam.setTextColor(getColor(context, R.color.colorWhite));
+            awayPosition.setTextColor(getColor(context, R.color.colorWhite));
+            vsText.setTextColor(getColor(context, R.color.colorWhite));
+        }
+        else if(currentItem.getResult() == MatchResult.LOSE) {
+            background.setBackgroundColor(getColor(context, R.color.colorRed));
+            date.setTextColor(getColor(context, R.color.colorWhite));
+            homePosition.setTextColor(getColor(context, R.color.colorWhite));
+            homeTeam.setTextColor(getColor(context, R.color.colorWhite));
+            homeScore.setTextColor(getColor(context, R.color.colorWhite));
+            awayScore.setTextColor(getColor(context, R.color.colorWhite));
+            awayTeam.setTextColor(getColor(context, R.color.colorWhite));
+            awayPosition.setTextColor(getColor(context, R.color.colorWhite));
+            vsText.setTextColor(getColor(context, R.color.colorWhite));
+        }
+        else if(currentItem.getResult() == MatchResult.DRAW) {
+            background.setBackgroundColor(getColor(context, R.color.colorGold));
+            date.setTextColor(getColor(context, R.color.colorWhite));
+            homePosition.setTextColor(getColor(context, R.color.colorWhite));
+            homeTeam.setTextColor(getColor(context, R.color.colorWhite));
+            homeScore.setTextColor(getColor(context, R.color.colorWhite));
+            awayScore.setTextColor(getColor(context, R.color.colorWhite));
+            awayTeam.setTextColor(getColor(context, R.color.colorWhite));
+            awayPosition.setTextColor(getColor(context, R.color.colorWhite));
+            vsText.setTextColor(getColor(context, R.color.colorWhite));
+        }
+        else {
+            int primaryColour = Colours.getUsersPrimaryColour();
+            int secondaryColour = Colours.getUsersSecondaryColour();
+            background.setBackgroundColor(primaryColour);
+            date.setTextColor(secondaryColour);
+            homePosition.setTextColor(secondaryColour);
+            homeTeam.setTextColor(secondaryColour);
+            homeScore.setTextColor(secondaryColour);
+            awayScore.setTextColor(secondaryColour);
+            awayTeam.setTextColor(secondaryColour);
+            awayPosition.setTextColor(secondaryColour);
+            vsText.setTextColor(secondaryColour);
+        }
 
         return convertView;
 

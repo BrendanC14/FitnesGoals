@@ -7,11 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.Constants.Leagues;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
 import com.cutlerdevelopment.fitnessgoals.R;
@@ -20,6 +22,7 @@ import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
 import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.ResultItemRowAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.ResultItem;
+import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,14 +30,16 @@ import java.util.List;
 
 public class MatchResult extends DialogFragment {
 
+    private LinearLayout layout;
+    private TextView header;
     private TextView homeTeamText;
     private TextView homeTeamScore;
     private TextView awayTeamText;
     private TextView awayTeamScore;
     private TextView leagueNameText;
 
-    private ImageButton upALeagueButton;
-    private ImageButton downALeagueButton;
+    private Button upALeagueButton;
+    private Button downALeagueButton;
     private Button doneButton;
 
     private ListView otherResultsList;
@@ -51,8 +56,8 @@ public class MatchResult extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View resultView = inflater.inflate(R.layout.match_result, null);
 
-
-
+        layout = resultView.findViewById(R.id.matchResultLayout);
+        header = resultView.findViewById(R.id.matchResultsTitle);
         homeTeamText = resultView.findViewById(R.id.matchResultsHomeTeam);
         homeTeamScore = resultView.findViewById(R.id.matchResultsHomeScore);
         awayTeamText = resultView.findViewById(R.id.matchResultsAwayTeam);
@@ -96,6 +101,22 @@ public class MatchResult extends DialogFragment {
                 donePressed();
             }
         });
+
+        int primaryColour = Colours.getUsersPrimaryColour();
+        int secondaryColour = Colours.getUsersSecondaryColour();
+
+        layout.setBackgroundColor(primaryColour);
+        header.setTextColor(secondaryColour);
+        homeTeamText.setTextColor(secondaryColour);
+        homeTeamScore.setTextColor(secondaryColour);
+        awayTeamScore.setTextColor(secondaryColour);
+        awayTeamText.setTextColor(secondaryColour);
+        upALeagueButton.setTextColor(secondaryColour);
+        downALeagueButton.setTextColor(secondaryColour);
+        leagueNameText.setTextColor(secondaryColour);
+        doneButton.setBackgroundColor(secondaryColour);
+        doneButton.setTextColor(primaryColour);
+
         builder.setView(resultView);
         return builder.create();
     }

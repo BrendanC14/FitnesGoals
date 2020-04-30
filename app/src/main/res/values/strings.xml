@@ -134,7 +134,8 @@
     <string name="tm_main_menu_next_match_title">Next Match</string>
     <string name="tm_main_menu_opponent">vs %1s (%2s)</string>
     <string name="tm_main_menu_play_match_button_text">Play Match</string>
-    <string name="tm_main_menu_switch_to_league"><u>League Fixtures</u></string>
+    <string name="tm_main_menu_switch_to_league_fixtures"><u>League Fixtures</u></string>
+    <string name="tm_main_menu_switch_to_league_results"><u>League Results</u></string>
     <string name="tm_main_menu_switch_to_my_fixtures"><u>My Fixtures</u></string>
     <string name="tm_main_menu_switch_to_my_results"><u>My Results</u></string>
     <string name="tm_main_menu_james_description1">

@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
+import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.R;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.FullTableRow;
 import com.google.type.Color;
@@ -79,35 +81,51 @@ public class FullTableRowAdapter extends BaseAdapter {
         goalDifferenceField.setText(currentItem.getGoalDifference());
         pointsField.setText(currentItem.getPoints());
 
-        /*if (currentItem.isBoldTeam()) {
-            teamPosField.setTypeface(teamPosField.getTypeface(), Typeface.BOLD);
-            teamNameField.setTypeface(teamNameField.getTypeface(), Typeface.BOLD);
-            gamesPlayedField.setTypeface(gamesPlayedField.getTypeface(), Typeface.BOLD);
-            gamesWonField.setTypeface(gamesWonField.getTypeface(), Typeface.BOLD);
-            gamesDrawnField.setTypeface(gamesDrawnField.getTypeface(), Typeface.BOLD);
-            gamesLostField.setTypeface(gamesLostField.getTypeface(), Typeface.BOLD);
-            goalsScoredField.setTypeface(goalsScoredField.getTypeface(), Typeface.BOLD);
-            goalsConcededField.setTypeface(goalsConcededField.getTypeface(), Typeface.BOLD);
-            goalDifferenceField.setTypeface(goalDifferenceField.getTypeface(), Typeface.BOLD);
-            pointsField.setTypeface(pointsField.getTypeface(), Typeface.BOLD);
-        } else {
-            teamPosField.setTypeface(teamPosField.getTypeface(), Typeface.NORMAL);
-            teamNameField.setTypeface(teamNameField.getTypeface(), Typeface.NORMAL);
-            gamesPlayedField.setTypeface(gamesPlayedField.getTypeface(), Typeface.NORMAL);
-            gamesWonField.setTypeface(gamesWonField.getTypeface(), Typeface.NORMAL);
-            gamesDrawnField.setTypeface(gamesDrawnField.getTypeface(), Typeface.NORMAL);
-            gamesLostField.setTypeface(gamesLostField.getTypeface(), Typeface.NORMAL);
-            goalsScoredField.setTypeface(goalsScoredField.getTypeface(), Typeface.NORMAL);
-            goalsConcededField.setTypeface(goalsConcededField.getTypeface(), Typeface.NORMAL);
-            goalDifferenceField.setTypeface(goalDifferenceField.getTypeface(), Typeface.NORMAL);
-            pointsField.setTypeface(pointsField.getTypeface(), Typeface.NORMAL);
-        }*/
-
-        if(currentItem.isPromotionPlace()) { background.setBackgroundColor(getColor(context, R.color.colorAccent)); }
-        else if(currentItem.isRelegationPlace()) { background.setBackgroundColor(getColor(context, R.color.colorRed)); }
-        else {background.setBackgroundColor(getColor(context, R.color.colorPrimaryDark)); }
+        int primaryColour = Colours.getUsersPrimaryColour();
+        int secondaryColour = Colours.getUsersSecondaryColour();
+        background.setBackgroundColor(secondaryColour);
+        if(currentItem.isPromotionPlace()) {
+            background.setBackgroundColor(getColor(context, R.color.colorAccent));
+            teamPosField.setTextColor(getColor(context, R.color.colorWhite));
+            teamNameField.setTextColor(getColor(context, R.color.colorWhite));
+            gamesPlayedField.setTextColor(getColor(context, R.color.colorWhite));
+            gamesWonField.setTextColor(getColor(context, R.color.colorWhite));
+            gamesDrawnField.setTextColor(getColor(context, R.color.colorWhite));
+            gamesLostField.setTextColor(getColor(context, R.color.colorWhite));
+            goalsScoredField.setTextColor(getColor(context, R.color.colorWhite));
+            goalsConcededField.setTextColor(getColor(context, R.color.colorWhite));
+            goalDifferenceField.setTextColor(getColor(context, R.color.colorWhite));
+            pointsField.setTextColor(getColor(context, R.color.colorWhite));
+        }
+        else if(currentItem.isRelegationPlace()) {
+            background.setBackgroundColor(getColor(context, R.color.colorRed));
+            teamPosField.setTextColor(getColor(context, R.color.colorWhite));
+            teamNameField.setTextColor(getColor(context, R.color.colorWhite));
+            gamesPlayedField.setTextColor(getColor(context, R.color.colorWhite));
+            gamesWonField.setTextColor(getColor(context, R.color.colorWhite));
+            gamesDrawnField.setTextColor(getColor(context, R.color.colorWhite));
+            gamesLostField.setTextColor(getColor(context, R.color.colorWhite));
+            goalsScoredField.setTextColor(getColor(context, R.color.colorWhite));
+            goalsConcededField.setTextColor(getColor(context, R.color.colorWhite));
+            goalDifferenceField.setTextColor(getColor(context, R.color.colorWhite));
+            pointsField.setTextColor(getColor(context, R.color.colorWhite));
+        }
+        else {
+            background.setBackgroundColor(primaryColour);
+            teamPosField.setTextColor(secondaryColour);
+            teamNameField.setTextColor(secondaryColour);
+            gamesPlayedField.setTextColor(secondaryColour);
+            gamesWonField.setTextColor(secondaryColour);
+            gamesDrawnField.setTextColor(secondaryColour);
+            gamesLostField.setTextColor(secondaryColour);
+            goalsScoredField.setTextColor(secondaryColour);
+            goalsConcededField.setTextColor(secondaryColour);
+            goalDifferenceField.setTextColor(secondaryColour);
+            pointsField.setTextColor(secondaryColour);
+        }
 
         return convertView;
 
     }
+
 }

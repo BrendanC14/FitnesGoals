@@ -5,6 +5,8 @@ import android.animation.ValueAnimator;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,15 +16,20 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.Integrations.IntegrationConnectionHandler;
+import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.R;
 import com.cutlerdevelopment.fitnessgoals.SavedData.AppSavedData;
 import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
 import com.cutlerdevelopment.fitnessgoals.Settings.AppSettings;
 import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
+import com.cutlerdevelopment.fitnessgoals.Settings.UserActivity;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
+import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.Date;
 
@@ -33,6 +40,7 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
 
     private Context c;
 
+    private MaterialCardView cardView;
     private  Button leftDateButton;
     private  TextView dateText;
     private  Button rightDateButton;
@@ -50,6 +58,7 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
 
     public StepReviewCardController(View card, Context context) {
         c = context;
+        cardView = card.findViewById(R.id.stepReviewCard);
         leftDateButton = card.findViewById(R.id.stepReviewLeft);
         dateText = card.findViewById(R.id.stepReviewDate);
         rightDateButton = card.findViewById(R.id.stepReviewRight);
@@ -76,12 +85,26 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
                 forwardADay();
             }
         });
+
+        int primaryColour = Colours.getUsersPrimaryColour();
+        int secondaryColour = Colours.getUsersSecondaryColour();
+        cardView.setBackgroundColor(primaryColour);
+        leftDateButton.setTextColor(secondaryColour);
+        dateText.setTextColor(secondaryColour);
+        rightDateButton.setTextColor(secondaryColour);
+        notEnoughDataText.setTextColor(secondaryColour);
+        stepsText.setTextColor(secondaryColour);
+        progressBar.getProgressDrawable().setColorFilter(
+                secondaryColour, PorterDuff.Mode.SRC_IN
+        );
     }
 
     private void refreshStepCircle() {
         AppSavedData savedData = AppSavedData.getInstance();
         if (savedData.getActivityOnDate(dateChosen) == null) {
             displayNotEnoughDataMessage();
+            leftDateButton.setVisibility(View.INVISIBLE);
+            rightDateButton.setVisibility(View.INVISIBLE);
             return;
         }
         progressBar.setVisibility(VISIBLE);
@@ -100,7 +123,6 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
     private void backADay() {
         dateChosen = DateHelper.addDays(dateChosen, -1);
         dateText.setText(DateHelper.formatDateToString(dateChosen));
-        stepsText.setTextColor(c.getResources().getColor(R.color.colorWhite));
         animateProgressCircle.cancel();
         refreshStepCircle();
         takeFootballOut();
@@ -112,7 +134,6 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
         dateChosen = DateHelper.addDays(dateChosen, 1);
         if (dateChosen.equals(yesterday)) { dateText.setText(R.string.step_review_yesterday); }
         else { dateText.setText(DateHelper.formatDateToString(dateChosen)); }
-        stepsText.setTextColor(c.getResources().getColor(R.color.colorWhite));
         animateProgressCircle.cancel();
         refreshStepCircle();
         takeFootballOut();
@@ -123,7 +144,10 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
 
     private void checkDayButtonValidity() {
 
-        Date firstDate = DateHelper.cleanDate(AppSavedData.getInstance().getFirstAddedActivity().getDate());
+        UserActivity firstActivity = AppSavedData.getInstance().getFirstAddedActivity();
+        if (firstActivity == null) { return; }
+
+        Date firstDate = firstActivity.getDate();
         Date yesterday = DateHelper.addDays(new Date(), - 1);
         if (dateChosen.equals(firstDate)) { leftDateButton.setVisibility(View.INVISIBLE); }
         else { leftDateButton.setVisibility(VISIBLE); }
@@ -151,7 +175,6 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
                 progressBar.setProgress(val);
                 stepsText.setText(StringHelper.getNumberWithCommas(val));
                 if (progressBar.getMax() > 0 && val > progressBar.getMax()) {
-                    stepsText.setTextColor(c.getResources().getColor(R.color.colorAccent));
                     if (!animatingGoldenFootball) {
                         enlargeFootball();
                         animatingGoldenFootball = true;

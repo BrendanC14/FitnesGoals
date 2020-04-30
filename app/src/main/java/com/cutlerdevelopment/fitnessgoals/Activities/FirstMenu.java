@@ -11,9 +11,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -154,8 +156,20 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
             finish();
         }
         else {
-            IntegrationConnectionHandler.getInstance().setSetupListener(this);
-            IntegrationConnectionHandler.getInstance().getTeamsForNewGame();
+
+            backgroundLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        backgroundLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    } else {
+                        backgroundLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    }
+
+                    animateJamesIntroduction();
+
+                }
+            });
         }
 
     }
@@ -166,14 +180,8 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
     @Override
     public void teamsRetrieved() {
 
-        /*gameMode = GameModes.TEAM_MODE;
-        stepMode = StepModes.TARGETED_MODE;
-        stepTarget = 6000;
-        daysBetween = 6;
-        teamPlayerName = "Poole FC";
-        teamColour = "#ff0000";
-        newGame();*/
-        animateJamesIntroduction();
+        SetupGameAsync game = new SetupGameAsync();
+        game.execute(this);
     }
     /**
      * nextStep is called whenever the User presses anywhere on the screen.
@@ -886,8 +894,8 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
             return;
         }
         stillLoading = true;
-        SetupGameAsync game = new SetupGameAsync();
-        game.execute(this);
+        IntegrationConnectionHandler.getInstance().setSetupListener(this);
+        IntegrationConnectionHandler.getInstance().getTeamsForNewGame();
     }
 
     /**
@@ -920,7 +928,8 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         int randomTeam = r.nextInt(league4Teams.size());
         Team teamToReplace = league4Teams.get(randomTeam);
         teamToReplace.changeName(teamPlayerName);
-        teamToReplace.changeColour(teamColour);
+        teamToReplace.changePrimaryColour(teamColour);
+        teamToReplace.changeSecondaryColour(Colours.getSecondaryColour(teamColour));
         CareerSettings.getInstance().changeTeamID(teamToReplace.getID());
     }
 
@@ -951,6 +960,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         @Override
         protected Intent doInBackground(Context... contexts) {
             publishProgress(getString(R.string.first_menu_ready_to_go));
+
             newGame();
             return new Intent(contexts[0], TMMainMenu.class);
         }
