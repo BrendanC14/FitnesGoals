@@ -17,19 +17,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/matchSetupTitle"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/matchSetupTopLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/match_setup_title"
-            style="@style/TextAppearance.FitnessGoals.WhiteTitle"
-            android:layout_marginTop="8dp">
+            android:layout_height="wrap_content">
 
-        </TextView>
+            <TextView
+                android:id="@+id/matchSetupTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/match_setup_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                style="@style/TextAppearance.FitnessGoals.WhiteTitle"
+                android:layout_marginTop="8dp">
+
+            </TextView>
+            <Button
+                android:id="@+id/matchSetupCloseButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/matchSetupTitle"
+                app:layout_constraintBottom_toBottomOf="@+id/matchSetupTitle"
+                style="@style/Widget.FitnessGoals.Button.TextButton"
+                android:text="@string/close_text">
+
+            </Button>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
 
@@ -163,7 +185,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/matchSetupTargetLayout"
             android:layout_width="match_parent"
-            android:layout_marginTop="8dp"
             android:layout_height="wrap_content">
 
             <TextView
@@ -232,7 +253,7 @@
         <LinearLayout
             android:id="@+id/matchSetupUserStepsLayout"
             android:layout_width="match_parent"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -270,7 +291,6 @@
                 android:id="@+id/matchSetupDefendButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:maxLines="1"
                 style="@style/Widget.FitnessGoals.Button"
                 android:text="@string/match_setup_defending_tactic"

@@ -1,9 +1,10 @@
 package com.cutlerdevelopment.fitnessgoals.Models;
 
 import com.cutlerdevelopment.fitnessgoals.Constants.Leagues;
+import com.cutlerdevelopment.fitnessgoals.Constants.MatchResult;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
-import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
-import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
+import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
+import com.cutlerdevelopment.fitnessgoals.Data.GameData;
 
 import java.util.Date;
 import java.util.Random;
@@ -24,7 +25,7 @@ public class MatchEngine {
         int userGoals = getTeamModeGoals(userAttack, oppDefence);
         int oppGoals = getTeamModeGoals(oppAttack, userDefence);
 
-        int userID = CareerSettings.getInstance().getTeamID();
+        int userID = GameData.getInstance().getTeamID();
         if (f.getHomeTeamID() == userID) {
             f.updateScores(userGoals, oppGoals, userAttack, userDefence, oppAttack, oppDefence);
         }
@@ -32,19 +33,25 @@ public class MatchEngine {
             f.updateScores(oppGoals, userGoals, oppAttack, oppDefence, userAttack, userDefence);
         }
 
+        int usersResult;
+        if (userGoals > oppGoals) { usersResult = MatchResult.WIN; }
+        else if (userGoals == oppGoals) { usersResult = MatchResult.DRAW; }
+        else { usersResult = MatchResult.LOSE; }
+
+        GameData.getInstance().addGamesPlayed(usersResult, userGoals);
         playOtherGames(f.getDate());
 
     }
 
     static int getTeamModeGoals(int attackingTeam, int defendingTeam) {
         int goalThreshold = Numbers.TM_GOAL;
-        int divider = CareerSettings.getInstance().getDaysBetween() / 2;
+        int divider = GameData.getInstance().getDaysBetween() / 2;
         return Math.max((int) ((goalThreshold + ((attackingTeam - defendingTeam) / divider)) / goalThreshold), 0);
 
     }
 
     static void playOtherGames(Date date) {
-        CareerSavedData savedData = CareerSavedData.getInstance();
+        GameDBHandler savedData = GameDBHandler.getInstance();
 
         for (int league = Leagues.TOP_LEAGUE; league <= Leagues.BOTTOM_LEAGUE; league++) {
             for (Fixture f : savedData.getWeeksFixtureFromLeague(date, league)) {
@@ -71,7 +78,7 @@ public class MatchEngine {
 
     static int getRandomAISteps(Team team) {
         int steps = 0;
-        for (int i = 0; i < CareerSettings.getInstance().getDaysBetween() / 2; i++) {
+        for (int i = 0; i < GameData.getInstance().getDaysBetween() / 2; i++) {
             Random r = new Random();
             int max = team.getMaxNumberOfSteps();
             int min = team.getMinNumberOfSteps();

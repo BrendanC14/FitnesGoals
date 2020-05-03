@@ -9,11 +9,9 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -23,13 +21,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
+import com.cutlerdevelopment.fitnessgoals.DIalogFragments.AllBadgesMenu;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.MatchResult;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.MatchSetup;
+import com.cutlerdevelopment.fitnessgoals.DIalogFragments.SingleBadgeMenu;
+import com.cutlerdevelopment.fitnessgoals.Models.Badge;
 import com.cutlerdevelopment.fitnessgoals.Models.MatchEngine;
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.R;
-import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
-import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
+import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
+import com.cutlerdevelopment.fitnessgoals.Data.GameData;
 import com.cutlerdevelopment.fitnessgoals.ViewControllers.FixturesCardController;
 import com.cutlerdevelopment.fitnessgoals.ViewControllers.LeagueTableCardController;
 import com.cutlerdevelopment.fitnessgoals.ViewControllers.NextMatchCardController;
@@ -40,7 +41,7 @@ import com.google.android.material.card.MaterialCardView;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEngineListener {
+public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEngineListener, GameData.BadgeListener {
 
     LinearLayout layoutParent;
     View stepReviewCard;
@@ -96,14 +97,14 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
 
         layoutParent = findViewById(R.id.tmMainMenuLinearLayoutScroll);
 
-        usersTeam = CareerSavedData.getInstance().getTeamFromID(CareerSettings.getInstance().getTeamID());
+        usersTeam = GameDBHandler.getInstance().getTeamFromID(GameData.getInstance().getTeamID());
         usersLeague = usersTeam.getLeague();
 
         c = this;
         teamNameText.setText(usersTeam.getName());
         teamNameText.setTextColor(Color.parseColor(usersTeam.getSecondaryColour()));
-        header.setBackgroundColor(Color.parseColor(usersTeam.getPrimaryColour()));
-        footer.setBackgroundColor(Color.parseColor(usersTeam.getPrimaryColour()));
+        //header.setBackgroundColor(Color.parseColor(usersTeam.getPrimaryColour()));
+        //footer.setBackgroundColor(Color.parseColor(usersTeam.getPrimaryColour()));
 
         getLayoutInflater().inflate(R.layout.step_review_card, layoutParent);
         stepReviewCard = layoutParent.getChildAt(0);
@@ -145,28 +146,10 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
         fixturesCard.startAnimation(slideInLeft);
         resultsCard.startAnimation(slideInBottom);
 
+        GameData.getInstance().setListener(this);
 
-    }
-
-    AnimatorSet animateCard(View cardToMove, View beneathLayout) {
-        float xPosition = (float) (backgroundLayout.getWidth() - cardToMove.getWidth()) / 2;
-        float yPosition = beneathLayout.getY() + 8.0f;
-
-        AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.playTogether(
-                ObjectAnimator.ofFloat(
-                        cardToMove,
-                        "x",
-                        xPosition)
-                        .setDuration(1000),
-                ObjectAnimator.ofFloat(
-                        cardToMove,
-                        "x",
-                        yPosition)
-                        .setDuration(1000)
-        );
-        return animatorSet;
-
+        RefreshActivityAsync refreshActivityAsync = new RefreshActivityAsync();
+        refreshActivityAsync.execute();
     }
 
     public void callJames(View view) {
@@ -273,4 +256,31 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
 
     }
 
+    @Override
+    public void badgeUnlocked(Badge badgeUnlocked) {
+        DialogFragment badgeDialog = new SingleBadgeMenu();
+        Bundle args = new Bundle();
+        args.putString("badgeName", badgeUnlocked.getName());
+        args.putString("badgeDesc", badgeUnlocked.getDescription());
+        args.putBoolean("newBadge", true);
+        badgeDialog.setArguments(args);
+        badgeDialog.show(getSupportFragmentManager(), "SingleBadgeMenu");
+    }
+
+    public void openAllBadges(View view) {
+        DialogFragment allBadgesDialog = new AllBadgesMenu();
+        allBadgesDialog.show(getSupportFragmentManager(), "AllBadgesMenu");
+
+    }
+
+    private class RefreshActivityAsync extends AsyncTask<Void, Void, Void> {
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            GameData.getInstance().refreshPlayerActivity();
+            return null;
+        }
+    }
 }
+

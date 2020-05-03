@@ -6,16 +6,13 @@ import android.content.Context;
 import com.cutlerdevelopment.fitnessgoals.Constants.FitnessApps;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitAPI;
-import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitStrings;
 import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitStringsSavedData;
 import com.cutlerdevelopment.fitnessgoals.Integrations.GoogleIntegrations.GoogleFirestoreConnector;
 import com.cutlerdevelopment.fitnessgoals.Integrations.GoogleIntegrations.GoogleFitAPI;
-import com.cutlerdevelopment.fitnessgoals.Settings.AppSettings;
-import com.cutlerdevelopment.fitnessgoals.Settings.UserActivity;
+import com.cutlerdevelopment.fitnessgoals.Data.AppData;
+import com.cutlerdevelopment.fitnessgoals.Data.UserActivity;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
-import com.google.android.gms.fitness.Fitness;
 
-import java.security.KeyPair;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +50,7 @@ public class IntegrationConnectionHandler implements GoogleFitAPI.GoogleFitListe
 
     public void initialiseFitnessAppConnection(Activity activity, Context context) {
 
-        int chosenApp = AppSettings.getInstance().getFitnessApp();
+        int chosenApp = AppData.getInstance().getFitnessApp();
         if (chosenApp == FitnessApps.GOOGLE_FIT) {
             GoogleFitAPI.createGoogleFitAPIInstance(context);
         }
@@ -66,7 +63,7 @@ public class IntegrationConnectionHandler implements GoogleFitAPI.GoogleFitListe
     }
 
     public void getAverageStepsFrom(Date startDate, Date endDate) {
-        int chosenApp = AppSettings.getInstance().getFitnessApp();
+        int chosenApp = AppData.getInstance().getFitnessApp();
         if (chosenApp == FitnessApps.MOCKED) {
             setupListener.getAverageSteps(Numbers.MOCKED_AVERAGE_STEPS);
         }
@@ -87,7 +84,7 @@ public class IntegrationConnectionHandler implements GoogleFitAPI.GoogleFitListe
 
     public void refreshStepActivity(Date startDate, Date endDate) {
 
-        int chosenApp = AppSettings.getInstance().getFitnessApp();
+        int chosenApp = AppData.getInstance().getFitnessApp();
         if (chosenApp == FitnessApps.MOCKED) {
             Random r = new Random();
             int daysBetween = DateHelper.getDaysBetween(endDate, startDate);

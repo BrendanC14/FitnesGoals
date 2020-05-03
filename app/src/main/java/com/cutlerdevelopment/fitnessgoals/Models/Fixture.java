@@ -5,8 +5,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.cutlerdevelopment.fitnessgoals.Constants.MatchResult;
-import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
-import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
+import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
 
 import java.util.Date;
 
@@ -26,7 +25,7 @@ public class Fixture implements Comparable<Fixture> {
         this.homeScore = -1;
         this.awayScore = -1;
 
-        CareerSavedData.getInstance().saveObject(this);
+        GameDBHandler.getInstance().saveObject(this);
     }
 
     /**
@@ -42,7 +41,7 @@ public class Fixture implements Comparable<Fixture> {
     public void setID(int id) { this.ID = id; }
     public void changeID(int id) {
         this.ID = id;
-        CareerSavedData.getInstance().updateObject(this);
+        GameDBHandler.getInstance().updateObject(this);
     }
 
     private int homeTeamID;
@@ -50,7 +49,7 @@ public class Fixture implements Comparable<Fixture> {
     public void setHomeTeamID(int id) { this.homeTeamID = id; }
     public void changeHomeTeamID(int id) {
         this.homeTeamID = id;
-        CareerSavedData.getInstance().updateObject(this);
+        GameDBHandler.getInstance().updateObject(this);
     }
 
     private int awayTeamID;
@@ -58,7 +57,7 @@ public class Fixture implements Comparable<Fixture> {
     public void setAwayTeamID(int id) { this.awayTeamID = id; }
     public void changeAwayTeamID(int id) {
         this.awayTeamID = id;
-        CareerSavedData.getInstance().updateObject(this);
+        GameDBHandler.getInstance().updateObject(this);
     }
 
     private int stepTarget;
@@ -66,7 +65,7 @@ public class Fixture implements Comparable<Fixture> {
     public void setStepTarget(int target) { this.stepTarget = target; }
     public void changeStepTarget(int target) {
         this.stepTarget = target;
-        CareerSavedData.getInstance().updateObject(this);
+        GameDBHandler.getInstance().updateObject(this);
     }
 
     private int homeScore;
@@ -82,8 +81,8 @@ public class Fixture implements Comparable<Fixture> {
         this.homeScore = homeScore;
         this.awayScore = awayScore;
 
-        Team homeTeam = CareerSavedData.getInstance().getTeamFromID(homeTeamID);
-        Team awayTeam = CareerSavedData.getInstance().getTeamFromID(awayTeamID);
+        Team homeTeam = GameDBHandler.getInstance().getTeamFromID(homeTeamID);
+        Team awayTeam = GameDBHandler.getInstance().getTeamFromID(awayTeamID);
 
         homeTeam.playMatch(getMatchResultForTeam(homeTeamID), homeScore, awayScore, homeAttack, homeDefence);
         awayTeam.playMatch(getMatchResultForTeam(awayTeamID), awayScore, homeScore, awayAttack, awayDefence);
@@ -93,7 +92,7 @@ public class Fixture implements Comparable<Fixture> {
         this.awayAttackingSteps = awayAttack;
         this.awayDefendingSteps = awayDefence;
 
-        CareerSavedData.getInstance().updateObject(this);
+        GameDBHandler.getInstance().updateObject(this);
     }
 
     private int homeAttackingSteps;
@@ -101,7 +100,7 @@ public class Fixture implements Comparable<Fixture> {
     public void setHomeAttackingSteps(int homeAttackingSteps) { this.homeAttackingSteps = homeAttackingSteps; }
     public void changeHomeAttackingSteps(int attackingSteps) {
         this.homeAttackingSteps = attackingSteps;
-        CareerSavedData.getInstance().updateObject(this);
+        GameDBHandler.getInstance().updateObject(this);
     }
 
     private int homeDefendingSteps;
@@ -109,7 +108,7 @@ public class Fixture implements Comparable<Fixture> {
     public void setHomeDefendingSteps(int homeDefendingSteps) { this.homeDefendingSteps = homeDefendingSteps; }
     public void changeHomeDefendingSteps(int homeDefendingSteps) {
         this.homeDefendingSteps = homeDefendingSteps;
-        CareerSavedData.getInstance().updateObject(this);
+        GameDBHandler.getInstance().updateObject(this);
     }
 
     private int awayAttackingSteps;
@@ -117,7 +116,7 @@ public class Fixture implements Comparable<Fixture> {
     public void setAwayAttackingSteps(int awayAttackingSteps) { this.awayAttackingSteps = awayAttackingSteps; }
     public void changeAwayAttackingSteps(int attackingSteps) {
         this.awayAttackingSteps = attackingSteps;
-        CareerSavedData.getInstance().updateObject(this);
+        GameDBHandler.getInstance().updateObject(this);
     }
 
     private int awayDefendingSteps;
@@ -125,7 +124,7 @@ public class Fixture implements Comparable<Fixture> {
     public void setAwayDefendingSteps(int awayDefendingSteps) { this.awayDefendingSteps = awayDefendingSteps; }
     public void changeAwayDefendingSteps(int awayDefendingSteps) {
         this.awayDefendingSteps = awayDefendingSteps;
-        CareerSavedData.getInstance().updateObject(this);
+        GameDBHandler.getInstance().updateObject(this);
     }
 
 
@@ -134,7 +133,7 @@ public class Fixture implements Comparable<Fixture> {
     public void setWeek(int week) {this.week = week; }
     public void changeWeek(int week) {
         this.week = week;
-        CareerSavedData.getInstance().updateObject(this);
+        GameDBHandler.getInstance().updateObject(this);
     }
 
     private Date date;
@@ -142,7 +141,7 @@ public class Fixture implements Comparable<Fixture> {
     public void setDate(Date date) { this.date = date; }
     public void updateDate(Date date) {
         this.date = date;
-        CareerSavedData.getInstance().updateObject(this);
+        GameDBHandler.getInstance().updateObject(this);
     }
 
     private int league;
@@ -150,7 +149,7 @@ public class Fixture implements Comparable<Fixture> {
     public void setLeague(int league) {this.league = league; }
     public void changeLeague(int league) {
         this.league = league;
-        CareerSavedData.getInstance().updateObject(this);
+        GameDBHandler.getInstance().updateObject(this);
     }
     public boolean isTeamInvolved(int ID) { return this.homeTeamID == ID || this.awayTeamID == ID; }
 
@@ -178,8 +177,8 @@ public class Fixture implements Comparable<Fixture> {
 
 
     public Team getOpponent(int teamID) {
-        if (teamID == homeTeamID) { return CareerSavedData.getInstance().getTeamFromID(awayTeamID); }
-        else { return CareerSavedData.getInstance().getTeamFromID(homeTeamID); }
+        if (teamID == homeTeamID) { return GameDBHandler.getInstance().getTeamFromID(awayTeamID); }
+        else { return GameDBHandler.getInstance().getTeamFromID(homeTeamID); }
     }
 
     @Override

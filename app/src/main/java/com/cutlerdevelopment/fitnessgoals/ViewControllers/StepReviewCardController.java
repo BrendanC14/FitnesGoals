@@ -1,14 +1,8 @@
 package com.cutlerdevelopment.fitnessgoals.ViewControllers;
 
-import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
-import android.content.ClipData;
-import android.content.ClipDescription;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -19,17 +13,13 @@ import android.widget.TextView;
 import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.Integrations.IntegrationConnectionHandler;
-import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.R;
-import com.cutlerdevelopment.fitnessgoals.SavedData.AppSavedData;
-import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
-import com.cutlerdevelopment.fitnessgoals.Settings.AppSettings;
-import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
-import com.cutlerdevelopment.fitnessgoals.Settings.UserActivity;
+import com.cutlerdevelopment.fitnessgoals.SavedData.AppDBHandler;
+import com.cutlerdevelopment.fitnessgoals.Data.AppData;
+import com.cutlerdevelopment.fitnessgoals.Data.UserActivity;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.google.android.material.card.MaterialCardView;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.Date;
 
@@ -100,7 +90,7 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
     }
 
     private void refreshStepCircle() {
-        AppSavedData savedData = AppSavedData.getInstance();
+        AppDBHandler savedData = AppDBHandler.getInstance();
         if (savedData.getActivityOnDate(dateChosen) == null) {
             displayNotEnoughDataMessage();
             leftDateButton.setVisibility(View.INVISIBLE);
@@ -115,7 +105,7 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
         progressBar.setProgress(0);
 
         int steps = savedData.getActivityOnDate(dateChosen).getSteps();
-        progressBar.setMax(AppSettings.getInstance().getStepTarget());
+        progressBar.setMax(AppData.getInstance().getStepTarget());
         updateProgressCircleAndSteps(steps);
 
     }
@@ -144,7 +134,7 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
 
     private void checkDayButtonValidity() {
 
-        UserActivity firstActivity = AppSavedData.getInstance().getFirstAddedActivity();
+        UserActivity firstActivity = AppDBHandler.getInstance().getFirstAddedActivity();
         if (firstActivity == null) { return; }
 
         Date firstDate = firstActivity.getDate();

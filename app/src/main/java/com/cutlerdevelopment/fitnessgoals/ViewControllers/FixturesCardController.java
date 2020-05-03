@@ -15,8 +15,8 @@ import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.R;
-import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
-import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
+import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
+import com.cutlerdevelopment.fitnessgoals.Data.GameData;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.ResultItemRowAdapter;
@@ -58,7 +58,7 @@ public class FixturesCardController {
         upLeagueButton = card.findViewById(R.id.fixturesCardLeagueLeft);
         downLeagueButton = card.findViewById(R.id.fixturesCardLeagueRight);
 
-        usersTeam = CareerSavedData.getInstance().getTeamFromID(CareerSettings.getInstance().getTeamID());
+        usersTeam = GameDBHandler.getInstance().getTeamFromID(GameData.getInstance().getTeamID());
 
         leagueToDisplay = usersLeague;
         fixtureExpandCollapseButton.setOnClickListener(new View.OnClickListener() {
@@ -118,12 +118,12 @@ public class FixturesCardController {
         List<Fixture> fixtures;
 
         if (myFixtureMode) {
-            fixtures = CareerSavedData.getInstance().getAllUpcomingFixturesForTeam(usersTeam.getID());
+            fixtures = GameDBHandler.getInstance().getAllUpcomingFixturesForTeam(usersTeam.getID());
             leagueNameText.setText(R.string.my_fixtures_mode);
         }
         else {
-            Fixture nextFixture = CareerSavedData.getInstance().getNextFixtureForTeam(usersTeam.getID());
-            fixtures = CareerSavedData.getInstance().getWeeksFixtureFromLeague(nextFixture.getDate(), leagueToDisplay);
+            Fixture nextFixture = GameDBHandler.getInstance().getNextFixtureForTeam(usersTeam.getID());
+            fixtures = GameDBHandler.getInstance().getWeeksFixtureFromLeague(nextFixture.getDate(), leagueToDisplay);
             leagueNameText.setText(c.getString(R.string.league_fixtures_mode, Leagues.getLeagueName(leagueToDisplay)));
         }
 
@@ -137,8 +137,8 @@ public class FixturesCardController {
             int awayPos = Leagues.getPositionInLeague(f.getAwayTeamID(), f.getLeague());
             item.setHomePosition(StringHelper.getNumberWithDateSuffix(homePos));
             item.setAwayPosition(StringHelper.getNumberWithDateSuffix(awayPos));
-            item.setHomeTeam(CareerSavedData.getInstance().getTeamFromID(f.getHomeTeamID()).getName());
-            item.setAwayTeam(CareerSavedData.getInstance().getTeamFromID(f.getAwayTeamID()).getName());
+            item.setHomeTeam(GameDBHandler.getInstance().getTeamFromID(f.getHomeTeamID()).getName());
+            item.setAwayTeam(GameDBHandler.getInstance().getTeamFromID(f.getAwayTeamID()).getName());
             item.setHomeScore("");
             item.setAwayScore("");
             if (!myFixtureMode && (f.getHomeTeamID() == usersTeam.getID() || f.getAwayTeamID() == usersTeam.getID())) {

@@ -10,12 +10,13 @@ import android.widget.TextView;
 
 import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.Constants.Leagues;
+import com.cutlerdevelopment.fitnessgoals.Constants.MatchResult;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.R;
-import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
-import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
+import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
+import com.cutlerdevelopment.fitnessgoals.Data.GameData;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.ResultItemRowAdapter;
@@ -93,7 +94,7 @@ public class ResultsCardController {
                 downAResultLeague();
             }
         });
-        usersTeam = CareerSavedData.getInstance().getTeamFromID(CareerSettings.getInstance().getTeamID());
+        usersTeam = GameDBHandler.getInstance().getTeamFromID(GameData.getInstance().getTeamID());
         leagueToDisplay = usersLeague;
 
         int primaryColour = Colours.getUsersPrimaryColour();
@@ -116,17 +117,17 @@ public class ResultsCardController {
         List<Fixture> results;
 
         if (myResultMode) {
-            results = CareerSavedData.getInstance().getAllResultsForTeam(usersTeam.getID());
+            results = GameDBHandler.getInstance().getAllResultsForTeam(usersTeam.getID());
             leagueNameText.setText(R.string.my_results_mode);
             Collections.reverse(results);
         }
         else {
             leagueNameText.setText(c.getString(R.string.league_results_mode, Leagues.getLeagueName(leagueToDisplay)));
-            Fixture lastResult = CareerSavedData.getInstance().getLastResultForTeam(usersTeam.getID());
+            Fixture lastResult = GameDBHandler.getInstance().getLastResultForTeam(usersTeam.getID());
             if (lastResult == null) {
                 return;
             }
-            results = CareerSavedData.getInstance().getWeeksResultsFromLeague(lastResult.getDate(), leagueToDisplay);
+            results = GameDBHandler.getInstance().getWeeksResultsFromLeague(lastResult.getDate(), leagueToDisplay);
             Collections.sort(results);
         }
 
@@ -139,12 +140,18 @@ public class ResultsCardController {
             int awayPos = Leagues.getPositionInLeague(f.getAwayTeamID(), f.getLeague());
             item.setHomePosition(StringHelper.getNumberWithDateSuffix(homePos));
             item.setAwayPosition(StringHelper.getNumberWithDateSuffix(awayPos));
-            item.setHomeTeam(CareerSavedData.getInstance().getTeamFromID(f.getHomeTeamID()).getName());
-            item.setAwayTeam(CareerSavedData.getInstance().getTeamFromID(f.getAwayTeamID()).getName());
+            item.setHomeTeam(GameDBHandler.getInstance().getTeamFromID(f.getHomeTeamID()).getName());
+            item.setAwayTeam(GameDBHandler.getInstance().getTeamFromID(f.getAwayTeamID()).getName());
             item.setHomeScore(String.valueOf(f.getHomeScore()));
             item.setAwayScore(String.valueOf(f.getAwayScore()));
             if (myResultMode) {
                 item.setResult(f.getMatchResultForTeam(usersTeam.getID()));
+            }
+            else {
+                if (f.getHomeTeamID() == usersTeam.getID() || f.getAwayTeamID() == usersTeam.getID()) {
+                    //Bit hacky, but sets the background to a brighter green so easier to see.
+                    item.setResult(MatchResult.WIN);
+                }
             }
             resultItems.add(item);
         }

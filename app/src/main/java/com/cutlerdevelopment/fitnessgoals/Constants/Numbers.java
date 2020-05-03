@@ -1,8 +1,16 @@
 package com.cutlerdevelopment.fitnessgoals.Constants;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Numbers {
 
     public static final int MOCKED_AVERAGE_STEPS = 6000;
+
+    public static final int NUM_STEP_BADGES = 19;
+    public static final int NUM_MATCH_BADGES = 22;
+    public static final int NUM_TARGET_BADGES = 8;
 
     //UI Numbers
     public static final long FIRST_MENU_JAMES_ANIM_DURATION = 1000;
@@ -35,4 +43,5 @@ public class Numbers {
     //Settings
     public static final int MAX_NUM_STEPS_TARGET = 20;
     public static final int MAX_NUM_DAYS_BETWEEN = 8;
+
 }

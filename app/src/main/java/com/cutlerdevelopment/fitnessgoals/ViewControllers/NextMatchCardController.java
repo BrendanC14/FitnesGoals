@@ -1,7 +1,6 @@
 package com.cutlerdevelopment.fitnessgoals.ViewControllers;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -9,10 +8,9 @@ import android.widget.TextView;
 import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.Constants.Leagues;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
-import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.R;
-import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
-import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
+import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
+import com.cutlerdevelopment.fitnessgoals.Data.GameData;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.google.android.material.card.MaterialCardView;
@@ -56,8 +54,8 @@ public class NextMatchCardController {
 
     public void addNextMatch() {
 
-        int teamID = CareerSettings.getInstance().getTeamID();
-        Fixture f = CareerSavedData.getInstance().getNextFixtureForTeam(teamID);
+        int teamID = GameData.getInstance().getTeamID();
+        Fixture f = GameDBHandler.getInstance().getNextFixtureForTeam(teamID);
 
         if (f == null) {
             playMatchButton.setVisibility(GONE);

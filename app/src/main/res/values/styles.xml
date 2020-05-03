@@ -113,7 +113,7 @@
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
         <item name="autoSizeTextType">uniform</item>
-        <item name="autoSizeMinTextSize">8sp</item>
+        <item name="autoSizeMinTextSize">6sp</item>
         <item name="autoSizeMaxTextSize">18sp</item>
         <item name="fontFamily">@font/cherry_cream_soda</item>
         <item name="android:textColor">@color/textColorPrimary</item>

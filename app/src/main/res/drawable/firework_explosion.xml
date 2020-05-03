@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/firework1" android:duration="50"/>
+    <item android:drawable="@drawable/firework2" android:duration="50"/>
+    <item android:drawable="@drawable/firework3" android:duration="50"/>
+    <item android:drawable="@drawable/firework4" android:duration="50"/>
+    <item android:drawable="@drawable/firework5" android:duration="50"/>
+    <item android:drawable="@drawable/firework6" android:duration="50"/>
+    <item android:drawable="@drawable/firework7" android:duration="50"/>
+    <item android:drawable="@drawable/firework8" android:duration="50"/>
+    <item android:drawable="@drawable/firework9" android:duration="50"/>
+    <item android:drawable="@drawable/firework10" android:duration="50"/>
+    <item android:drawable="@drawable/firework11" android:duration="50"/>
+    <item android:drawable="@drawable/firework12" android:duration="50"/>
+    <item android:drawable="@drawable/firework13" android:duration="50"/>
+    <item android:drawable="@drawable/firework14" android:duration="50"/>
+    <item android:drawable="@drawable/firework15" android:duration="50"/>
+    <item android:drawable="@drawable/firework16" android:duration="50"/>
+    <item android:drawable="@drawable/firework17" android:duration="50"/>
+    <item android:drawable="@drawable/firework18" android:duration="50"/>
+    <item android:drawable="@drawable/firework19" android:duration="50"/>
+    <item android:drawable="@drawable/firework20" android:duration="50"/>
+    <item android:drawable="@drawable/firework21" android:duration="50"/>
+    <item android:drawable="@drawable/firework22" android:duration="50"/>
+    <item android:drawable="@drawable/firework23" android:duration="50"/>
+    <item android:drawable="@drawable/firework24" android:duration="50"/>
+    <item android:drawable="@drawable/firework25" android:duration="50"/>
+    <item android:drawable="@drawable/firework26" android:duration="50"/>
+    <item android:drawable="@drawable/firework27" android:duration="50"/>
+</animation-list>

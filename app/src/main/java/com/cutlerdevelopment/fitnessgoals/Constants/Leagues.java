@@ -1,7 +1,7 @@
 package com.cutlerdevelopment.fitnessgoals.Constants;
 
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
-import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
+import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +34,7 @@ public class Leagues {
 
 
     public static List<Team> getLeagueList(int leagueID) {
-        List<Team> allTeams = CareerSavedData.getInstance().getAllTeamsInLeague(leagueID);
+        List<Team> allTeams = GameDBHandler.getInstance().getAllTeamsInLeague(leagueID);
 
         Collections.sort(allTeams, new Comparator<Team>() {
             @Override
@@ -82,7 +82,7 @@ public class Leagues {
         return (league == TOP_LEAGUE && pos >= 18) || (league > TOP_LEAGUE && league < BOTTOM_LEAGUE && pos >= 22);
     }
     public static int getNumTeamsInLeague(int league) {
-        return CareerSavedData.getInstance().getAllTeamsInLeague(league).size();
+        return GameDBHandler.getInstance().getAllTeamsInLeague(league).size();
     }
 
 

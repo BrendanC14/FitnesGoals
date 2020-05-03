@@ -20,16 +20,15 @@ import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
 import com.cutlerdevelopment.fitnessgoals.Models.MatchEngine;
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.R;
-import com.cutlerdevelopment.fitnessgoals.SavedData.AppSavedData;
-import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
-import com.cutlerdevelopment.fitnessgoals.Settings.AppSettings;
-import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
-import com.cutlerdevelopment.fitnessgoals.Settings.UserActivity;
+import com.cutlerdevelopment.fitnessgoals.SavedData.AppDBHandler;
+import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
+import com.cutlerdevelopment.fitnessgoals.Data.AppData;
+import com.cutlerdevelopment.fitnessgoals.Data.GameData;
+import com.cutlerdevelopment.fitnessgoals.Data.UserActivity;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.MatchSetupStepAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.MatchSetupItem;
-import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -104,9 +103,10 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
         randomTactic = matchSetupView.findViewById(R.id.matchSetupRandomButton);
         evenTactic = matchSetupView.findViewById(R.id.matchSetupEvenButton);
         playMatch = matchSetupView.findViewById(R.id.matchSetupPlayMatchButton);
+        Button closeButton = matchSetupView.findViewById(R.id.matchSetupCloseButton);
 
         stepList = new ArrayList<>();
-        daysBetween = CareerSettings.getInstance().getDaysBetween();
+        daysBetween = GameData.getInstance().getDaysBetween();
         final ArrayList<MatchSetupItem> myDefensiveItems = new ArrayList<>();
         for (int i = 0; i < daysBetween / 2; i++) {
             MatchSetupItem item = new MatchSetupItem();
@@ -121,12 +121,12 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
             item.setDraggable(false);
             myAttackingItems.add(item);
         }
-        f = CareerSavedData.getInstance().getNextFixtureForTeam(CareerSettings.getInstance().getTeamID());
+        f = GameDBHandler.getInstance().getNextFixtureForTeam(GameData.getInstance().getTeamID());
         Date startDate = DateHelper.addDays(f.getDate(), daysBetween * -1);
         Date endDate = DateHelper.addDays(f.getDate(), -1);
 
         final  ArrayList<MatchSetupItem> userItems = new ArrayList<>();
-        List<UserActivity> allActivity = AppSavedData.getInstance().getActivityOnAllDates(startDate, endDate);
+        List<UserActivity> allActivity = AppDBHandler.getInstance().getActivityOnAllDates(startDate, endDate);
         for (UserActivity activity : allActivity) {
             MatchSetupItem item = new MatchSetupItem();
             item.setSteps(StringHelper.getNumberWithCommas(activity.getSteps()));
@@ -147,19 +147,19 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
         usersStepsGridViews.setAdapter(userAdapter);
         usersStepsGridViews.setNumColumns(4);
 
-        int stepTarget = AppSettings.getInstance().getStepTarget();
+        int stepTarget = AppData.getInstance().getStepTarget();
         defendingTotalText.setText(String.valueOf(0));
         attackingTotalText.setText(String.valueOf(0));
         defendingTotalText.setTextColor(getResources().getColor(R.color.colorRed));
         attackingTotalText.setTextColor(getResources().getColor(R.color.colorRed));
         int numInEach = daysBetween / 2;
-        if (AppSettings.getInstance().getStepMode() == StepModes.TARGETED_MODE) {
+        if (AppData.getInstance().getStepMode() == StepModes.TARGETED_MODE) {
             opponentDefence = stepTarget * numInEach;
             opponentAttack = stepTarget * numInEach;
             opponentDefAve = opponentAttAve = stepTarget;
         }
         else {
-            Team opponent = f.getOpponent(CareerSettings.getInstance().getTeamID());
+            Team opponent = f.getOpponent(GameData.getInstance().getTeamID());
             opponentDefAve = opponent.getAverageDefendingSteps();
             opponentAttAve = opponent.getAverageAttackingSteps();
             opponentDefence = opponentDefAve * numInEach;
@@ -220,6 +220,13 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
         randomTactic.setTextColor(primaryColour);
         playMatch.setBackgroundColor(secondaryColour);
         playMatch.setTextColor(primaryColour);
+        closeButton.setTextColor(secondaryColour);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
 
         builder.setView(matchSetupView);
         return builder.create();
@@ -359,11 +366,11 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
         else { playMatch.setVisibility(View.GONE); }
 
         defendingTotalText.setText(StringHelper.getNumberWithCommas(userDefenceAverage));
-        if (userDefenceAverage >= opponentDefAve) { defendingTotalText.setTextColor(getResources().getColor(R.color.colorAccent)); }
+        if (userDefenceAverage >= opponentAttAve) { defendingTotalText.setTextColor(getResources().getColor(R.color.colorAccent)); }
         else { defendingTotalText.setTextColor(getResources().getColor(R.color.colorRed)); }
 
         attackingTotalText.setText(StringHelper.getNumberWithCommas(userAttackAverage));
-        if (userAttackAverage >= opponentAttAve) { attackingTotalText.setTextColor(getResources().getColor(R.color.colorAccent)); }
+        if (userAttackAverage >= opponentDefAve) { attackingTotalText.setTextColor(getResources().getColor(R.color.colorAccent)); }
         else { attackingTotalText.setTextColor(getResources().getColor(R.color.colorRed)); }
     }
 

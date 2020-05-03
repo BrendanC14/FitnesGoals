@@ -3,7 +3,6 @@ package com.cutlerdevelopment.fitnessgoals.ViewControllers;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,8 +15,8 @@ import com.cutlerdevelopment.fitnessgoals.Constants.Leagues;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.R;
-import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
-import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
+import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
+import com.cutlerdevelopment.fitnessgoals.Data.GameData;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.FullTableRowAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.FullTableRow;
 import com.google.android.material.card.MaterialCardView;
@@ -57,7 +56,7 @@ public class LeagueTableCardController {
         leagueTeableHeader = card.findViewById(R.id.leagueTableHeader);
         leagueNameText.setText(Leagues.getLeagueName(leagueToDisplay));
 
-        usersTeam = CareerSavedData.getInstance().getTeamFromID(CareerSettings.getInstance().getTeamID());
+        usersTeam = GameDBHandler.getInstance().getTeamFromID(GameData.getInstance().getTeamID());
         usersLeague = usersTeam.getLeague();
         leagueToDisplay = usersLeague;
         teamsPosition = Leagues.getPositionInLeague(usersTeam.getID(), leagueToDisplay);

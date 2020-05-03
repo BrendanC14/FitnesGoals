@@ -1,16 +1,20 @@
-package com.cutlerdevelopment.fitnessgoals.Settings;
+package com.cutlerdevelopment.fitnessgoals.Data;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.BadgeCategories;
 import com.cutlerdevelopment.fitnessgoals.Constants.Defaults;
 import com.cutlerdevelopment.fitnessgoals.Constants.FilterOptions;
 import com.cutlerdevelopment.fitnessgoals.Constants.Leagues;
+import com.cutlerdevelopment.fitnessgoals.Constants.MatchResult;
 import com.cutlerdevelopment.fitnessgoals.Integrations.IntegrationConnectionHandler;
+import com.cutlerdevelopment.fitnessgoals.Models.Badge;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
-import com.cutlerdevelopment.fitnessgoals.SavedData.AppSavedData;
-import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
+import com.cutlerdevelopment.fitnessgoals.SavedData.AppDBHandler;
+import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 
 import java.util.ArrayList;
@@ -19,26 +23,26 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-public class CareerSettings {
+public class GameData {
 
 
 
-    private static CareerSettings instance = null;
+    private static GameData instance = null;
 
-    public static CareerSettings getInstance() {
+    public static GameData getInstance() {
         if (instance != null) {
             return instance;
         }
-        return new CareerSettings();
+        return new GameData();
     }
 
-    public CareerSettings() {
+    public GameData() {
 
         instance = this;
 
     }
 
-    public void createNewCareerSettings(int daysBetween) {
+    public void createNewGameData(int daysBetween) {
         this.daysBetween = daysBetween;
 
         filterChoices = new ArrayList<>();
@@ -49,8 +53,14 @@ public class CareerSettings {
         this.pointsForDraw = Defaults.DEFAULT_POINTS_FOR_DRAW;
         this. pointsForLoss = Defaults.DEFAULT_POINTS_FOR_LOSS;
 
-        CareerSavedData.getInstance().saveObject(this);
+        GameDBHandler.getInstance().saveObject(this);
     }
+    public interface BadgeListener {
+        public void badgeUnlocked(Badge badgeUnlocked);
+    }
+    @Ignore
+    BadgeListener listener;
+    public void setListener(BadgeListener listener) { this.listener = listener; }
 
     @PrimaryKey
     private int teamID;
@@ -58,7 +68,7 @@ public class CareerSettings {
     public void setTeamID(int teamID) { this.teamID = teamID; }
     public void changeTeamID(int teamID) {
         this.teamID = teamID;
-        CareerSavedData.getInstance().saveObject(this);
+        GameDBHandler.getInstance().saveObject(this);
     }
 
     private List<Integer> filterChoices;
@@ -66,7 +76,7 @@ public class CareerSettings {
     public void setFilterChoices(List<Integer> filterChoices) { this.filterChoices = filterChoices; }
     public void updateFilterChoices(List<Integer> filterChoices) {
         this.filterChoices = filterChoices;
-        CareerSavedData.getInstance().updateObject(this);
+        GameDBHandler.getInstance().updateObject(this);
     }
 
     private int daysBetween;
@@ -74,7 +84,7 @@ public class CareerSettings {
     public void setDaysBetween(int daysBetween) { this.daysBetween = daysBetween; }
     public void changeDaysBetween(int daysBetween) {
         this.daysBetween = daysBetween;
-        CareerSavedData.getInstance().saveObject(this);
+        GameDBHandler.getInstance().saveObject(this);
     }
 
     private Date startDate;
@@ -82,19 +92,62 @@ public class CareerSettings {
     public void setStartDate(Date startDate) { this.startDate = startDate; }
     public void changeStartDate(Date startDate) {
         this.startDate = startDate;
-        CareerSavedData.getInstance().saveObject(this);
+        GameDBHandler.getInstance().saveObject(this);
     }
 
     private int season;
     public int getSeason() { return season; }
     public void setSeason(int season) { this.season = season; }
 
+    private int careerGamesPlayed;
+
+    public int getCareerGamesPlayed() {
+        return careerGamesPlayed;
+    }
+
+    public void setCareerGamesPlayed(int careerGamesPlayed) {
+        this.careerGamesPlayed = careerGamesPlayed;
+    }
+    public void addGamesPlayed(int matchResult, int goals) {
+        careerGamesPlayed++;
+        checkNextBadge(BadgeCategories.GAMES, careerGamesPlayed);
+        if (matchResult == MatchResult.WIN) { addCareerWin(); addUnbeatenRecord(); }
+        else if (matchResult == MatchResult.DRAW) { addUnbeatenRecord(); }
+        else { resetUnbeatenRecord(); }
+        if (goals > 0) { addCareerGoals(goals); }
+    }
+
+    private int careerWins;
+    public int getCareerWins() { return careerWins; }
+    public void setCareerWins(int careerWins) { this.careerWins = careerWins; }
+    public void addCareerWin() {
+        careerWins++;
+        checkNextBadge(BadgeCategories.WINS, careerWins);
+    }
+
+    private int currentUnbeatenRecord;
+    public int getCurrentUnbeatenRecord() { return currentUnbeatenRecord; }
+    public void setCurrentUnbeatenRecord(int currentUnbeatenRecord) { this.currentUnbeatenRecord = currentUnbeatenRecord; }
+    public void addUnbeatenRecord() {
+        currentUnbeatenRecord++;
+        checkNextBadge(BadgeCategories.UNBEATEN, currentUnbeatenRecord);
+    }
+    public void resetUnbeatenRecord() { this.currentUnbeatenRecord = 0; }
+
+    private int careerGoals;
+    public int getCareerGoals() { return careerGoals; }
+    public void setCareerGoals(int careerGoals) { this.careerGoals = careerGoals; }
+    public void addCareerGoals(int goals) {
+        this.careerGoals += goals;
+        checkNextBadge(BadgeCategories.GOALS, careerGoals);
+    }
+
     private int pointsForWin;
     public int getPointsForWin() { return  pointsForWin; }
     public void setPointsForWin(int pts) { this.pointsForWin = pts; }
     public void changePointsForWin(int pts) {
         this.pointsForWin = pts;
-        CareerSavedData.getInstance().updateObject(this);
+        GameDBHandler.getInstance().updateObject(this);
     }
 
     private int pointsForDraw;
@@ -102,7 +155,7 @@ public class CareerSettings {
     public void setPointsForDraw(int pts) { this.pointsForDraw = pts; }
     public void changePointsForDraw(int pts) {
         this.pointsForDraw = pts;
-        CareerSavedData.getInstance().updateObject(this);
+        GameDBHandler.getInstance().updateObject(this);
     }
 
     private int pointsForLoss;
@@ -110,14 +163,23 @@ public class CareerSettings {
     public void setPointsForLoss(int pts) { this.pointsForLoss = pts; }
     public void changePointsForLoss(int pts) {
         this.pointsForLoss = pts;
-        CareerSavedData.getInstance().updateObject(this);
+        GameDBHandler.getInstance().updateObject(this);
     }
 
+    void checkNextBadge(int badgeCategory, int numAchieved) {
+        Badge badgeToWin = AppDBHandler.getInstance().getNextLockedBadgeIn(badgeCategory);
+        if (badgeToWin != null) {
+            if (numAchieved >= badgeToWin.getTarget()) {
+                badgeToWin.unlockBadge();
+                listener.badgeUnlocked(badgeToWin);
+            }
+        }
+    }
 
     public void startNewSeason() {
         season++;
-        startDate = DateHelper.addDays(new Date(), (daysBetween * 46) * -1);
-        CareerSavedData.getInstance().saveObject(this);
+        startDate = DateHelper.addDays(new Date(), (daysBetween * 10) * -1);
+        GameDBHandler.getInstance().saveObject(this);
         createFixtures();
     }
 
@@ -125,7 +187,7 @@ public class CareerSettings {
     public void refreshPlayerActivity() {
         Date lastActivityDate = startDate;
 
-        UserActivity lastActivity = AppSavedData.getInstance().getLastAddedActivity();
+        UserActivity lastActivity = AppDBHandler.getInstance().getLastAddedActivity();
         if (lastActivity != null) {
             lastActivityDate = lastActivity.getDate();
         }
@@ -136,9 +198,12 @@ public class CareerSettings {
         }
     }
 
+
+
+
     void createFixtures() {
         for (int league = Leagues.TOP_LEAGUE; league <= Leagues.BOTTOM_LEAGUE; league++) {
-            List<Team> teamsInLeague = CareerSavedData.getInstance().getAllTeamsInLeague(league);
+            List<Team> teamsInLeague = GameDBHandler.getInstance().getAllTeamsInLeague(league);
             int numTeamsInLeague = teamsInLeague.size();
             List<Integer> availableWeeks = new ArrayList<>();
 
@@ -162,12 +227,12 @@ public class CareerSettings {
 
                     int homeTeam = teamsInLeague.get(home).getID();
                     int awayTeam = teamsInLeague.get(away).getID();
-                    int numDays = round * CareerSettings.getInstance().getDaysBetween() + 1;
+                    int numDays = round * GameData.getInstance().getDaysBetween() + 1;
                     Date matchDate = DateHelper.addDays(startDate, numDays);
-                    new Fixture(CareerSavedData.getInstance().getNumRowsFromFixtureTable(),
+                    new Fixture(GameDBHandler.getInstance().getNumRowsFromFixtureTable(),
                             homeTeam,
                             awayTeam,
-                            AppSettings.getInstance().getStepTarget(),
+                            AppData.getInstance().getStepTarget(),
                             round,
                             matchDate,
                             league);
@@ -194,12 +259,12 @@ public class CareerSettings {
 
                     int homeTeam = teamsInLeague.get(home).getID();
                     int awayTeam = teamsInLeague.get(away).getID();
-                    int numDays = round * CareerSettings.getInstance().getDaysBetween() + 1;
+                    int numDays = round * GameData.getInstance().getDaysBetween() + 1;
                     Date matchDate = DateHelper.addDays(startDate, numDays);
-                    new Fixture(CareerSavedData.getInstance().getNumRowsFromFixtureTable(),
+                    new Fixture(GameDBHandler.getInstance().getNumRowsFromFixtureTable(),
                             homeTeam,
                             awayTeam,
-                            AppSettings.getInstance().getStepTarget(),
+                            AppData.getInstance().getStepTarget(),
                             round,
                             matchDate,
                             league);

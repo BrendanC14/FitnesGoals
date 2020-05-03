@@ -15,6 +15,7 @@
     <string name="slash">/</string>
     <string name="play_match">Play Match</string>
     <string name="versus">vs</string>
+    <string name="close_text">X</string>
 
     <string name="team_mode">Team</string>
     <string name="player_mode">Player</string>
@@ -174,6 +175,16 @@
     <string name="match_setup_even_tactic">Even</string>
 
     <string name="match_results_title">Result</string>
+
+    <string name="all_badges_title">All Badges</string>
+    <string name="all_badges_achieved">%1s / %2s unlocked</string>
+    <string name="all_badges_locked_badge_name">\???</string>
+    <string name="new_badge_title">New Badge!</string>
+    <string name="new_badge_description">Congratulations! You\'ve just unlocked the following badge!</string>
+
+
+    <string name="badge_5k_name">5k</string>
+    <string name="badge_5k_description">5k</string>
     <string name="match_results_other_results">Other Results</string>
 
     <string name="content_description_james">Business man in a white shirt</string>

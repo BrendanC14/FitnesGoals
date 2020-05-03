@@ -1,19 +1,12 @@
 package com.cutlerdevelopment.fitnessgoals.Constants;
 
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
-import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
+import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
 
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Words {
 
@@ -42,10 +35,9 @@ public class Words {
             "Morgan", "Harvey");
 
 
-
     public static List<String> getAllTeamNames() {
         List<String> teamNames = new ArrayList<>();
-        for (Team t : CareerSavedData.getInstance().getAllTeams()) {
+        for (Team t : GameDBHandler.getInstance().getAllTeams()) {
             teamNames.add(t.getName());
         }
 

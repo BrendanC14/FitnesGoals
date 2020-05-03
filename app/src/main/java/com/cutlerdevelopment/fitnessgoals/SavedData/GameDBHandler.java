@@ -16,7 +16,7 @@ import androidx.room.Update;
 import com.cutlerdevelopment.fitnessgoals.Constants.Words;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
-import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
+import com.cutlerdevelopment.fitnessgoals.Data.GameData;
 import com.cutlerdevelopment.fitnessgoals.Utils.Converters;
 
 import java.util.Arrays;
@@ -24,30 +24,30 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-public class CareerSavedData {
+public class GameDBHandler {
 
-    public static void createCareerSavedData(Context c) { new CareerSavedData(c); }
-    private static CareerSavedData instance = null;
+    public static void createGameDBHandler(Context c) { new GameDBHandler(c); }
+    private static GameDBHandler instance = null;
 
 
-    public static CareerSavedData getInstance() {
+    public static GameDBHandler getInstance() {
         if (instance != null) {
             return  instance;
         }
         return null;
     }
 
-    private CareerSavedData(Context context) {
+    private GameDBHandler(Context context) {
         instance = this;
         //TODO: stop allowing Main Thread Queries and figure out a better way to load a game
         db = Room.databaseBuilder(context, AppDatabase.class, Words.CAREER_SETTINGS_SAVED_DATA_DB_NAME).allowMainThreadQueries().build();
 
     }
     private static AppDatabase db;
-    @Database(entities = {Team.class, Fixture.class, CareerSettings.class}, version = 1)
+    @Database(entities = {Team.class, Fixture.class, GameData.class}, version = 1)
     @TypeConverters({Converters.class})
     public static abstract class AppDatabase extends RoomDatabase {
-        public abstract SettingsDao settingsDao();
+        public abstract GameDataDao dataDao();
         public abstract TeamDao teamDao();
         public abstract FixtureDao fixtureDao();
     }
@@ -61,9 +61,9 @@ public class CareerSavedData {
             Fixture fix = (Fixture) obj;
             db.fixtureDao().insertFixtures(fix);
         }
-        else if (obj instanceof CareerSettings) {
-            CareerSettings settings = (CareerSettings) obj;
-            db.settingsDao().insertSettings(settings);
+        else if (obj instanceof GameData) {
+            GameData settings = (GameData) obj;
+            db.dataDao().insertSettings(settings);
         }
     }
 
@@ -76,15 +76,15 @@ public class CareerSavedData {
             Fixture fix = (Fixture) obj;
             db.fixtureDao().updateFixture(fix);
         }
-        else if (obj instanceof CareerSettings) {
-            CareerSettings settings = (CareerSettings) obj;
-            db.settingsDao().updateSettings(settings);
+        else if (obj instanceof GameData) {
+            GameData settings = (GameData) obj;
+            db.dataDao().updateSettings(settings);
         }
     }
 
 
-    public CareerSettings loadSettings() {
-        CareerSettings settings[] = db.settingsDao().selectAllData();
+    public GameData loadSettings() {
+        GameData settings[] = db.dataDao().selectAllData();
         if (settings.length >0) {
             return settings[0];
         }
@@ -130,17 +130,17 @@ public class CareerSavedData {
     }
 
     @Dao
-    public interface SettingsDao {
+    public interface GameDataDao {
 
         @Insert(onConflict = OnConflictStrategy.REPLACE)
-        void insertSettings(CareerSettings settings);
+        void insertSettings(GameData settings);
         @Update
-        void updateSettings(CareerSettings settings);
+        void updateSettings(GameData settings);
         @Delete
-        void deleteSettings(CareerSettings settings);
+        void deleteSettings(GameData settings);
 
-        @Query("SELECT * FROM CareerSettings")
-        CareerSettings[] selectAllData();
+        @Query("SELECT * FROM GameData")
+        GameData[] selectAllData();
 
     }
 

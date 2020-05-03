@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,16 +16,14 @@ import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.Constants.Leagues;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
 import com.cutlerdevelopment.fitnessgoals.R;
-import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
-import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
+import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
+import com.cutlerdevelopment.fitnessgoals.Data.GameData;
 import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.ResultItemRowAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.ResultItem;
-import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class MatchResult extends DialogFragment {
 
@@ -67,13 +64,14 @@ public class MatchResult extends DialogFragment {
         upALeagueButton = resultView.findViewById(R.id.matchResultsLeagueUp);
         downALeagueButton = resultView.findViewById(R.id.matchResultsLeagueDown);
         doneButton = resultView.findViewById(R.id.matchResultDoneButton);
+        Button closeButton = resultView.findViewById(R.id.matchResultCloseButton);
 
-        Fixture userResult = CareerSavedData.getInstance().getLastResultForTeam(CareerSettings.getInstance().getTeamID());
+        Fixture userResult = GameDBHandler.getInstance().getLastResultForTeam(GameData.getInstance().getTeamID());
         fixtureDate = userResult.getDate();
-        homeTeamText.setText(CareerSavedData.getInstance().getTeamFromID(userResult.getHomeTeamID()).getName());
+        homeTeamText.setText(GameDBHandler.getInstance().getTeamFromID(userResult.getHomeTeamID()).getName());
         homeTeamScore.setText(String.valueOf(userResult.getHomeScore()));
         awayTeamScore.setText(String.valueOf(userResult.getAwayScore()));
-        awayTeamText.setText(CareerSavedData.getInstance().getTeamFromID(userResult.getAwayTeamID()).getName());
+        awayTeamText.setText(GameDBHandler.getInstance().getTeamFromID(userResult.getAwayTeamID()).getName());
 
         leagueToDisplay = userResult.getLeague();
         leagueNameText.setText(Leagues.getLeagueName(leagueToDisplay));
@@ -116,6 +114,13 @@ public class MatchResult extends DialogFragment {
         leagueNameText.setTextColor(secondaryColour);
         doneButton.setBackgroundColor(secondaryColour);
         doneButton.setTextColor(primaryColour);
+        closeButton.setTextColor(secondaryColour);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
 
         builder.setView(resultView);
         return builder.create();
@@ -125,13 +130,13 @@ public class MatchResult extends DialogFragment {
 
         final ArrayList<ResultItem> resultItems = new ArrayList<>();
 
-        for (Fixture f : CareerSavedData.getInstance().getWeeksResultsFromLeague(fixtureDate, leagueToDisplay)) {
+        for (Fixture f : GameDBHandler.getInstance().getWeeksResultsFromLeague(fixtureDate, leagueToDisplay)) {
             ResultItem item = new ResultItem();
             item.setDate("");
-            item.setHomeTeam(CareerSavedData.getInstance().getTeamFromID(f.getHomeTeamID()).getName());
+            item.setHomeTeam(GameDBHandler.getInstance().getTeamFromID(f.getHomeTeamID()).getName());
             item.setHomeScore(String.valueOf(f.getHomeScore()));
             item.setAwayScore(String.valueOf(f.getAwayScore()));
-            item.setAwayTeam(CareerSavedData.getInstance().getTeamFromID(f.getAwayTeamID()).getName());
+            item.setAwayTeam(GameDBHandler.getInstance().getTeamFromID(f.getAwayTeamID()).getName());
 
             int homePos = Leagues.getPositionInLeague(f.getHomeTeamID(), f.getLeague());
             int awayPos = Leagues.getPositionInLeague(f.getAwayTeamID(), f.getLeague());

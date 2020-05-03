@@ -40,10 +40,10 @@ import com.cutlerdevelopment.fitnessgoals.Integrations.GoogleIntegrations.Google
 import com.cutlerdevelopment.fitnessgoals.Integrations.IntegrationConnectionHandler;
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.R;
-import com.cutlerdevelopment.fitnessgoals.SavedData.CareerSavedData;
-import com.cutlerdevelopment.fitnessgoals.SavedData.AppSavedData;
-import com.cutlerdevelopment.fitnessgoals.Settings.AppSettings;
-import com.cutlerdevelopment.fitnessgoals.Settings.CareerSettings;
+import com.cutlerdevelopment.fitnessgoals.SavedData.AppDBHandler;
+import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
+import com.cutlerdevelopment.fitnessgoals.Data.AppData;
+import com.cutlerdevelopment.fitnessgoals.Data.GameData;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.ColourDisplaySmallCardAdapter;
@@ -149,14 +149,15 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         });
 
 
-        AppSavedData.createAppSavedData(this);
-        CareerSavedData.createCareerSavedData(this);
-        if (CareerSavedData.getInstance().loadSettings() != null) {
+        AppDBHandler.createAppDBHandler(this);
+        GameDBHandler.createGameDBHandler(this);
+        if (GameDBHandler.getInstance().loadSettings() != null) {
             loadGame();
             finish();
         }
         else {
 
+            IntegrationConnectionHandler.getInstance().setSetupListener(this);
             backgroundLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
@@ -220,7 +221,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                     else {
                         speechBubbleText.setText(getString(R.string.firs_menu_confirm_name, "player"));
                         teamPlayerNameText.setHint("Player Name");
-                        if (AppSettings.getInstance().getFitnessApp() == FitnessApps.GOOGLE_FIT) {
+                        if (AppData.getInstance().getFitnessApp() == FitnessApps.GOOGLE_FIT) {
                             String name = GoogleFitAPI.getInstance().getName();
                             teamPlayerNameText.getEditText().setText(name);
                         }
@@ -616,7 +617,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
             default:
                 speechBubbleText.setText(R.string.first_menu_app_connected);
         }
-        AppSettings.getInstance().changeFitnessApp(app);
+        AppData.getInstance().changeFitnessApp(app);
 
     }
 
@@ -869,7 +870,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                     Leagues.getLeagueName(4),
                     String.valueOf(daysBetween),
                     StringHelper.getNumberWithCommas(stepTarget),
-                    FitnessApps.getFitnessAppName(AppSettings.getInstance().getFitnessApp())));
+                    FitnessApps.getFitnessAppName(AppData.getInstance().getFitnessApp())));
         }
         else if (gameMode == GameModes.TEAM_MODE && stepMode == StepModes.SCALED_MODE) {
             speechBubbleText.setText(getString(
@@ -877,7 +878,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                     teamPlayerName,
                     Leagues.getLeagueName(Leagues.BOTTOM_LEAGUE),
                     String.valueOf(daysBetween),
-                    FitnessApps.getFitnessAppName(AppSettings.getInstance().getFitnessApp())
+                    FitnessApps.getFitnessAppName(AppData.getInstance().getFitnessApp())
             ));
         }
 
@@ -905,9 +906,9 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
      */
     void newGame() {
 
-        AppSettings.getInstance().setupTeamGame(stepMode, stepTarget);
-        CareerSettings.getInstance().createNewCareerSettings(daysBetween);
-        CareerSettings.getInstance().startNewSeason();
+        AppData.getInstance().setupTeamGame(stepMode, stepTarget);
+        GameData.getInstance().createNewGameData(daysBetween);
+        GameData.getInstance().startNewSeason();
 
         if (gameMode == GameModes.TEAM_MODE) {
             replaceRandomTeam();
@@ -923,24 +924,23 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
      * Saves this User ID in the CareerSettings.
      */
     void replaceRandomTeam() {
-        List<Team> league4Teams = CareerSavedData.getInstance().getAllTeamsInLeague(Leagues.BOTTOM_LEAGUE);
+        List<Team> league4Teams = GameDBHandler.getInstance().getAllTeamsInLeague(Leagues.BOTTOM_LEAGUE);
         Random r = new Random();
         int randomTeam = r.nextInt(league4Teams.size());
         Team teamToReplace = league4Teams.get(randomTeam);
         teamToReplace.changeName(teamPlayerName);
         teamToReplace.changePrimaryColour(teamColour);
         teamToReplace.changeSecondaryColour(Colours.getSecondaryColour(teamColour));
-        CareerSettings.getInstance().changeTeamID(teamToReplace.getID());
+        GameData.getInstance().changeTeamID(teamToReplace.getID());
     }
 
     /**
      * Loads AppSettings & CareerSettings, then stats TMMainMenu.
      */
     void loadGame() {
-        AppSavedData.getInstance().loadSettings();
-        CareerSavedData.getInstance().loadSettings();
+        AppDBHandler.getInstance().loadSettings();
+        GameDBHandler.getInstance().loadSettings();
         IntegrationConnectionHandler.getInstance().initialiseFitnessAppConnection(this, this);
-        CareerSettings.getInstance().refreshPlayerActivity();
 
         Intent intent = new Intent(this, TMMainMenu.class);
         startActivity(intent);
