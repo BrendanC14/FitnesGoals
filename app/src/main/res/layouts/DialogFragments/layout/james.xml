@@ -1,80 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/jamesLayout"
+    app:layout_anchorGravity="bottom"
+    android:foregroundGravity="bottom"
+    android:layout_gravity="bottom"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_menu">
 
     <ImageView
-        android:id="@+id/firstMenuJamesImage"
+        android:id="@+id/jamesImage"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:contentDescription="@string/content_description_james"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/james" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/tmMainMenuSpeechBubble"
+        android:id="@+id/jamesSpeechBubble"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:animateLayoutChanges="true"
+        android:background="@drawable/rounded_menu"
+        app:layout_constraintBottom_toTopOf="@id/jamesImage"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-            android:id="@+id/tmMainMenuSpeechText"
-            style="@style/TextAppearance.FitnessGoals.SpeechText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:background="@drawable/speech_bubble"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <Button
-            android:id="@+id/tmMainMenuSpeechBubblePrevious"
+            android:id="@+id/jamesPrevious"
+            style="@style/Widget.FitnessGoals.Button"
             android:layout_width="100dp"
             android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            style="@style/Widget.FitnessGoals.Button"
-            android:visibility="gone"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:maxLines="1"
             android:onClick="previousJames"
-            android:maxLines="1"
             android:text="@string/previous_arrows_button_text"
-            app:layout_constraintEnd_toStartOf="@id/tmMainMenuSpeechBubbleButton"
-            app:layout_constraintTop_toBottomOf="@id/tmMainMenuSpeechText"/>
+            android:visibility="invisible"
+            app:layout_constraintEnd_toStartOf="@id/jamesDone"
+            app:layout_constraintTop_toTopOf="@id/jamesDone"
+            app:layout_constraintBottom_toBottomOf="@id/jamesDone" />
 
         <Button
-            android:id="@+id/tmMainMenuSpeechBubbleButton"
+            android:id="@+id/jamesDone"
             style="@style/Widget.FitnessGoals.Button"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:maxLines="1"
-            android:text="@string/done_button_text"
             android:onClick="doneJames"
+            android:text="@string/done_button_text"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tmMainMenuSpeechText" />
+            app:layout_constraintTop_toBottomOf="@+id/jamesSpeechText" />
 
         <Button
-            android:id="@+id/tmMainMenuSpeechBubbleNext"
+            android:id="@+id/jamesNext"
+            style="@style/Widget.FitnessGoals.Button"
             android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            style="@style/Widget.FitnessGoals.Button"
             android:maxLines="1"
             android:onClick="nextJames"
             android:text="@string/next_arrows_button_text"
-            app:layout_constraintStart_toEndOf="@id/tmMainMenuSpeechBubbleButton"
-            app:layout_constraintTop_toBottomOf="@id/tmMainMenuSpeechText">
+            app:layout_constraintStart_toEndOf="@id/jamesDone"
+            app:layout_constraintTop_toTopOf="@id/jamesDone"
+            app:layout_constraintBottom_toBottomOf="@id/jamesDone">
 
         </Button>
+
+        <TextView
+            android:id="@+id/jamesSpeechText"
+            style="@style/TextAppearance.FitnessGoals.SpeechText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:animateLayoutChanges="true"
+            android:background="@drawable/speech_bubble"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -118,7 +118,11 @@ public class AppDBHandler {
     public List<Badge> getAllBadges() { return Arrays.asList(db.badgeDao().selectAllBadges()); }
     public List<Badge> getBadgesWhereUnlockedIs(boolean unlocked) { return Arrays.asList(db.badgeDao().selectBadgesWhereUnlocked(unlocked)); }
     public Badge getNextLockedBadgeIn(int category) {
-        return Arrays.asList(db.badgeDao().selectAllBadgesWhereUnlockedFromCategory(false, category)).get(0);
+        List<Badge> list = Arrays.asList(db.badgeDao().selectAllBadgesWhereUnlockedFromCategory(false, category));
+        if (list.size() > 0) {
+            return list.get(0);
+        }
+        return null;
     }
 
     public List<Badge> getDailyStepBadgesWhereUnlockedIs(boolean unlocked) {

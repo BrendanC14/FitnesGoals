@@ -2,6 +2,12 @@ package com.cutlerdevelopment.fitnessgoals.Constants;
 
 public class TutorialSteps {
 
+    public static final int FIRST_TIME_INTRO  = 1;
+    public static final int FIRST_TIME_FITNESS_APP_INTRO = 101;
+    public static final int FIRST_TIME_FITNESS_APP_SELECTION = 102;
+
+
+
     public static final int FIRST_MENU_MEDICAL_INTRO = 1;
     public static final int FIRST_MENU_FITNESS_APP_STEP = 2;
     public static final int FIRST_MENU_TEAM_PLAYER_INTRO = 3;

@@ -3,12 +3,17 @@ package com.cutlerdevelopment.fitnessgoals.ViewControllers;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.Constants.Leagues;
@@ -21,6 +26,8 @@ import com.cutlerdevelopment.fitnessgoals.ViewAdapters.FullTableRowAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.FullTableRow;
 import com.google.android.material.card.MaterialCardView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,12 +36,13 @@ public class LeagueTableCardController {
     private Context c;
 
     MaterialCardView cardView;
+    private LinearLayout leagueTableLayout;
     private TextView leagueNameText;
     private ListView leagueTableHolder;
     private Button leagueExpandCollapseButton;
     private Button leagueUpLeagueButton;
     private Button leagueDownLeagueButton;
-    private LinearLayout leagueTeableHeader;
+    private LinearLayout leagueTableHeader;
     private FullTableRowAdapter adapter;
 
     private int leagueToDisplay;
@@ -48,18 +56,20 @@ public class LeagueTableCardController {
         c = context;
 
         cardView = card.findViewById(R.id.leagueTableCard);
+        leagueTableLayout = card.findViewById(R.id.leagueTableLayout);
         leagueTableHolder = card.findViewById(R.id.leagueTableCardList);
         leagueExpandCollapseButton = card.findViewById(R.id.leagueTableCardExpandCollapseButton);
         leagueNameText = card.findViewById(R.id.leagueTableCardHeader);
         leagueUpLeagueButton = card.findViewById(R.id.leagueTableCardUp);
         leagueDownLeagueButton = card.findViewById(R.id.leagueTableCardDown);
-        leagueTeableHeader = card.findViewById(R.id.leagueTableHeader);
-        leagueNameText.setText(Leagues.getLeagueName(leagueToDisplay));
+        leagueTableHeader = card.findViewById(R.id.leagueTableHeader);
+
 
         usersTeam = GameDBHandler.getInstance().getTeamFromID(GameData.getInstance().getTeamID());
         usersLeague = usersTeam.getLeague();
         leagueToDisplay = usersLeague;
         teamsPosition = Leagues.getPositionInLeague(usersTeam.getID(), leagueToDisplay);
+        leagueNameText.setText(Leagues.getLeagueName(leagueToDisplay));
 
         leagueExpandCollapseButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,8 +97,8 @@ public class LeagueTableCardController {
         leagueDownLeagueButton.setTextColor(secondaryColour);
         leagueNameText.setTextColor(secondaryColour);
         leagueUpLeagueButton.setTextColor(secondaryColour);
-        for (int i = 0; i < leagueTeableHeader.getChildCount(); i++) {
-            TextView text = (TextView) leagueTeableHeader.getChildAt(i);
+        for (int i = 0; i < leagueTableHeader.getChildCount(); i++) {
+            TextView text = (TextView) leagueTableHeader.getChildAt(i);
             text.setTextColor(secondaryColour);
         }
 
@@ -181,6 +191,26 @@ public class LeagueTableCardController {
 
     private  void upALeagueTable() {
         leagueToDisplay--;
+
+        Animation slideOutRight = AnimationUtils.loadAnimation(c,
+                R.anim.slide_out_right);
+        Animation slideInLeft = AnimationUtils.loadAnimation(c,
+                R.anim.slide_in_left);
+
+        ViewGroup.LayoutParams listParams = leagueTableHolder.getLayoutParams();
+
+        leagueTableHolder.startAnimation(slideOutRight);
+        leagueTableLayout.removeView(leagueTableHolder);
+        ListView newListView = new ListView(c);
+        newListView.setId(View.generateViewId());
+        newListView.setLayoutParams(listParams);
+        leagueTableLayout.addView(newListView);
+        this.leagueTableHolder = newListView;
+        newListView.startAnimation(slideInLeft);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            newListView.setNestedScrollingEnabled(true);
+        }
+
         leagueNameText.setText(Leagues.getLeagueName(leagueToDisplay));
         fillLeagueTableDisplay();
         checkLeagueButtonValidity();
@@ -188,7 +218,29 @@ public class LeagueTableCardController {
     }
     private  void downALeagueTable() {
         leagueToDisplay++;
+
+        ViewGroup.LayoutParams layoutParams = leagueTableHolder.getLayoutParams();
+        leagueTableHolder.setLayoutParams(layoutParams);
+
+        Animation slideOutLeft = AnimationUtils.loadAnimation(c,
+                R.anim.slide_out_left);
+        Animation slideInRight = AnimationUtils.loadAnimation(c,
+                R.anim.slide_in_right);
+
+        leagueTableHolder.startAnimation(slideOutLeft);
+        leagueTableLayout.removeView(leagueTableHolder);
+        ListView newListView = new ListView(c);
+        newListView.setId(View.generateViewId());
+        newListView.setLayoutParams(layoutParams);
+        leagueTableLayout.addView(newListView);
+        this.leagueTableHolder = newListView;
+        newListView.startAnimation(slideInRight);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            newListView.setNestedScrollingEnabled(true);
+        }
+
         leagueNameText.setText(Leagues.getLeagueName(leagueToDisplay));
+
         fillLeagueTableDisplay();
         checkLeagueButtonValidity();
     }

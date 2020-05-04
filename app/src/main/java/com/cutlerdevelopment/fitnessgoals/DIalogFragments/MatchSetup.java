@@ -1,12 +1,16 @@
 package com.cutlerdevelopment.fitnessgoals.DIalogFragments;
 
+import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,6 +18,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 
 import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
+import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.Constants.StepModes;
 import com.cutlerdevelopment.fitnessgoals.Constants.TacticOptions;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
@@ -26,6 +31,7 @@ import com.cutlerdevelopment.fitnessgoals.Data.AppData;
 import com.cutlerdevelopment.fitnessgoals.Data.GameData;
 import com.cutlerdevelopment.fitnessgoals.Data.UserActivity;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
+import com.cutlerdevelopment.fitnessgoals.Utils.JamesStep;
 import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.MatchSetupStepAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.MatchSetupItem;
@@ -39,6 +45,7 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
 
     private LinearLayout cardView;
 
+    private ImageView phoneButton;
     private TextView titleText;
     private TextView defendingHeader;
     private TextView attackingHeader;
@@ -57,8 +64,6 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
 
     private Button defendingTactic;
     private Button attackingTactic;
-    private Button randomTactic;
-    private Button evenTactic;
     private Button playMatch;
 
 
@@ -84,6 +89,7 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View matchSetupView = inflater.inflate(R.layout.match_setup, null);
 
+        phoneButton = matchSetupView.findViewById(R.id.matchSetupPhone);
         titleText = matchSetupView.findViewById(R.id.matchSetupTitle);
         defendingHeader = matchSetupView.findViewById(R.id.matchSetupDefendingHeader);
         attackingHeader = matchSetupView.findViewById(R.id.matchSetupAttackingHeader);
@@ -100,8 +106,6 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
         oppAttackingText = matchSetupView.findViewById(R.id.matchSetupOpponentAttacking);
         defendingTactic = matchSetupView.findViewById(R.id.matchSetupDefendButton);
         attackingTactic = matchSetupView.findViewById(R.id.matchSetupAttackButton);
-        randomTactic = matchSetupView.findViewById(R.id.matchSetupRandomButton);
-        evenTactic = matchSetupView.findViewById(R.id.matchSetupEvenButton);
         playMatch = matchSetupView.findViewById(R.id.matchSetupPlayMatchButton);
         Button closeButton = matchSetupView.findViewById(R.id.matchSetupCloseButton);
 
@@ -180,18 +184,6 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
                 applyTactic(TacticOptions.ATTACKING);
             }
         });
-        randomTactic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                applyTactic(TacticOptions.RANDOM);
-            }
-        });
-        evenTactic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                applyTactic(TacticOptions.EVEN);
-            }
-        });
         playMatch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -214,10 +206,6 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
         defendingTactic.setTextColor(primaryColour);
         attackingTactic.setBackgroundColor(secondaryColour);
         attackingTactic.setTextColor(primaryColour);
-        evenTactic.setBackgroundColor(secondaryColour);
-        evenTactic.setTextColor(primaryColour);
-        randomTactic.setBackgroundColor(secondaryColour);
-        randomTactic.setTextColor(primaryColour);
         playMatch.setBackgroundColor(secondaryColour);
         playMatch.setTextColor(primaryColour);
         closeButton.setTextColor(secondaryColour);
@@ -225,6 +213,12 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
             @Override
             public void onClick(View view) {
                 dismiss();
+            }
+        });
+        phoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                callJames();
             }
         });
 
@@ -244,46 +238,29 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
             return;
         }
 
-        if (tactic == TacticOptions.EVEN) {
-            for (int i = 0; i < numDays; i += 2) {
-                defendingNumbers.add(stepList.get(i));
+        //Sorted smallest to largest. Go through first half (lower step numbers)
+        for (int i = 0; i < numDays / 2; i++) {
+            switch (tactic) {
+                case TacticOptions.ATTACKING:
+                    defendingNumbers.add(stepList.get(i));
+                    break;
+                case TacticOptions.DEFENDING:
+                    attackingNumbers.add(stepList.get(i));
+                    break;
             }
+        }
+        //Go through second half (higher step numbers)
+        for (int i = numDays / 2; i < numDays; i++) {
+            switch (tactic) {
+                case TacticOptions.ATTACKING:
+                    attackingNumbers.add(stepList.get(i));
+                    break;
+                case TacticOptions.DEFENDING:
+                    defendingNumbers.add(stepList.get(i));
+                    break;
+            }
+        }
 
-            for (int i = 1; i < numDays; i += 2) {
-                attackingNumbers.add(stepList.get(i));
-            }
-        }
-        else {
-            if (tactic == TacticOptions.RANDOM) { Collections.shuffle(stepList); }
-            //Sorted smallest to largest. Go through first half (lower step numbers)
-            for (int i = 0; i < numDays / 2; i++) {
-                switch (tactic) {
-                    case TacticOptions.ATTACKING:
-                        defendingNumbers.add(stepList.get(i));
-                        break;
-                    case TacticOptions.DEFENDING:
-                        attackingNumbers.add(stepList.get(i));
-                        break;
-                    case TacticOptions.RANDOM:
-                        defendingNumbers.add(stepList.get(i));
-                        break;
-                }
-            }
-            //Go through second half (higher step numbers)
-            for (int i = numDays / 2; i < numDays; i++) {
-                switch (tactic) {
-                    case TacticOptions.ATTACKING:
-                        attackingNumbers.add(stepList.get(i));
-                        break;
-                    case TacticOptions.DEFENDING:
-                        defendingNumbers.add(stepList.get(i));
-                        break;
-                    case TacticOptions.RANDOM:
-                        attackingNumbers.add(stepList.get(i));
-                        break;
-                }
-            }
-        }
 
         List<Button> allButtons = new ArrayList<>();
         //Go through each grid view and add create a list of buttons (including the empty ones)
@@ -314,20 +291,23 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
         }
         int emptyCount = 0;
         //Go back through the buttons and assign a new parent based on whether there's a text value and what list the step number is
+        int attackIndex = 0;
+        int defendIndex = 0;
         for (Button b2 : allButtons) {
             String text = b2.getText().toString();
             if (!text.equals("")) {
                 ConstraintLayout newParent;
                 int steps = Integer.parseInt(StringHelper.removeCommaFromString(text));
                 if (attackingNumbers.contains(steps)) {
-                    newParent = (ConstraintLayout) attackingStepsList.getChildAt(attackingNumbers.indexOf(steps));
+                    newParent = (ConstraintLayout) attackingStepsList.getChildAt(attackIndex);
+                    attackIndex++;
                 } else {
-                    newParent = (ConstraintLayout) defendingStepsList.getChildAt(defendingNumbers.indexOf(steps));
+                    newParent = (ConstraintLayout) defendingStepsList.getChildAt(defendIndex);
+                    defendIndex++;
                 }
-                animateViewsMoving(newParent, b2);
-            }
-            else {
-                animateViewsMoving((ConstraintLayout) usersStepsGridViews.getChildAt(emptyCount), b2);
+                animateViewsMoving(newParent, b2, false);
+            } else {
+                animateViewsMoving((ConstraintLayout) usersStepsGridViews.getChildAt(emptyCount), b2, true);
                 emptyCount++;
 
             }
@@ -344,6 +324,7 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
         for (int i = 0; i < defendingStepsList.getChildCount(); i++) {
             ConstraintLayout layout = (ConstraintLayout) defendingStepsList.getChildAt(i);
             Button view = (Button) layout.getChildAt(0);
+            if (view == null) { return; }
             if (!view.getText().equals("")) {
                 defensiveNumber++;
                 userDefence += Integer.parseInt(StringHelper.removeCommaFromString(view.getText().toString()));
@@ -353,6 +334,7 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
         for (int i = 0; i < attackingStepsList.getChildCount(); i++) {
             ConstraintLayout layout = (ConstraintLayout)  attackingStepsList.getChildAt(i);
             Button view = (Button) layout.getChildAt(0);
+            if (view == null) { return; }
             if (!view.getText().equals("")) {
                 attackingNumber++;
                 userAttack += Integer.parseInt(StringHelper.removeCommaFromString(view.getText().toString()));
@@ -374,8 +356,14 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
         else { attackingTotalText.setTextColor(getResources().getColor(R.color.colorRed)); }
     }
 
-    void animateViewsMoving(final ConstraintLayout newParent, final Button stepButton) {
+    void animateViewsMoving(final ConstraintLayout newParent, final Button stepButton, boolean empty) {
 
+
+        Animation slideInRight = AnimationUtils.loadAnimation(getContext(),
+                R.anim.slide_in_right);
+        slideInRight.setDuration(500);
+        if (empty) { stepButton.startAnimation(slideInRight); }
+        else { stepButton.startAnimation(slideInRight); }
         moveViews(
                 newParent,
                 stepButton);
@@ -391,5 +379,18 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
         MatchEngine.playTeamModeMatch(userDefence, userAttack, opponentDefence, opponentAttack, f);
 
         dismiss();
+    }
+
+    void callJames() {
+
+        String goalSteps = StringHelper.getNumberWithCommas(Numbers.TM_GOAL);
+        List<JamesStep> steps = new ArrayList<>();
+        steps.add(new JamesStep(getString(R.string.match_setup_james_description1)));
+        steps.add(new JamesStep(getString(R.string.match_setup_james_description2)));
+        steps.add(new JamesStep(getString(R.string.match_setup_james_description3, goalSteps)));
+        steps.add(new JamesStep(getString(R.string.match_setup_james_description4, goalSteps)));
+        JamesTutorial james = new JamesTutorial(steps);
+        james.show(getFragmentManager(), "james");
+
     }
 }

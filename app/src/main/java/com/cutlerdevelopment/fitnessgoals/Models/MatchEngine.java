@@ -76,6 +76,24 @@ public class MatchEngine {
 
     }
 
+    public static void playAIGame(Fixture f) {
+
+        GameDBHandler savedData = GameDBHandler.getInstance();
+        Team homeTeam = savedData.getTeamFromID(f.getHomeTeamID());
+        Team awayTeam = savedData.getTeamFromID(f.getAwayTeamID());
+
+
+        int homeDefence = getRandomAISteps(homeTeam);
+        int homeAttack = getRandomAISteps(homeTeam);
+        int awayDefence = getRandomAISteps(awayTeam);
+        int awayAttack = getRandomAISteps(awayTeam);
+
+        int homeGoals = getTeamModeGoals(homeAttack, awayDefence);
+        int awayGoals = getTeamModeGoals(awayAttack, homeDefence);
+
+        f.updateScores(homeGoals, awayGoals, homeAttack, homeDefence, awayAttack, awayDefence);
+    }
+
     static int getRandomAISteps(Team team) {
         int steps = 0;
         for (int i = 0; i < GameData.getInstance().getDaysBetween() / 2; i++) {

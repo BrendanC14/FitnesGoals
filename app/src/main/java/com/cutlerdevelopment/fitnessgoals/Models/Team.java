@@ -4,8 +4,10 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.Leagues;
 import com.cutlerdevelopment.fitnessgoals.Constants.MatchResult;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
+import com.cutlerdevelopment.fitnessgoals.SavedData.AppDBHandler;
 import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
 import com.cutlerdevelopment.fitnessgoals.Data.GameData;
 
@@ -196,5 +198,26 @@ public class Team {
         GameDBHandler.getInstance().updateObject(this);
 
 
+    }
+
+     public void promote() {
+        league--;
+         GameDBHandler.getInstance().updateObject(this);
+     }
+     public void relegate() {
+        league++;
+         GameDBHandler.getInstance().updateObject(this);
+     }
+
+    public void startNewSeason() {
+        this.points = 0;
+        this.wins = 0;
+        this.draws = 0;
+        this.losses = 0;
+        this.scored = 0;
+        this.conceded = 0;
+        this.totalDefendingSteps = 0;
+        this.totalAttackingSteps = 0;
+        GameDBHandler.getInstance().updateObject(this);
     }
 }

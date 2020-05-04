@@ -76,6 +76,11 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+        <LinearLayout
+            android:id="@+id/resultsTableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
 
             <ListView
@@ -87,6 +92,7 @@
                 tools:targetApi="lollipop">
 
             </ListView>
+        </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

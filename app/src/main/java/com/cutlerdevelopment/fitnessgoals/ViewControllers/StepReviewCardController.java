@@ -5,10 +5,14 @@ import android.content.Context;
 import android.graphics.PorterDuff;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
@@ -35,6 +39,7 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
     private  TextView dateText;
     private  Button rightDateButton;
     private  ImageView goldenFootball;
+    private ConstraintLayout progressBarHolder;
     private  ProgressBar progressBar;
     private  TextView stepsText;
     private  TextView notEnoughDataText;
@@ -43,6 +48,7 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
     private Date dateChosen;
     private Date yesterday;
 
+    int secondaryColour;
     ValueAnimator animateProgressCircle;
 
 
@@ -53,6 +59,7 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
         dateText = card.findViewById(R.id.stepReviewDate);
         rightDateButton = card.findViewById(R.id.stepReviewRight);
         goldenFootball = card.findViewById(R.id.stepReviewGoldFootball);
+        progressBarHolder = card.findViewById(R.id.stepReviewProgressBarHolder);
         progressBar = card.findViewById(R.id.stepReviewProgressBar);
         stepsText = card.findViewById(R.id.stepReviewSteps);
         notEnoughDataText = card.findViewById(R.id.stepReviewNotEnoughData);
@@ -77,7 +84,7 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
         });
 
         int primaryColour = Colours.getUsersPrimaryColour();
-        int secondaryColour = Colours.getUsersSecondaryColour();
+        secondaryColour = Colours.getUsersSecondaryColour();
         cardView.setBackgroundColor(primaryColour);
         leftDateButton.setTextColor(secondaryColour);
         dateText.setTextColor(secondaryColour);
@@ -102,7 +109,7 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
 
         stepsText.setText(String.valueOf(1));
 
-        progressBar.setProgress(0);
+        progressBar.setProgress(1);
 
         int steps = savedData.getActivityOnDate(dateChosen).getSteps();
         progressBar.setMax(AppData.getInstance().getStepTarget());
@@ -114,6 +121,28 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
         dateChosen = DateHelper.addDays(dateChosen, -1);
         dateText.setText(DateHelper.formatDateToString(dateChosen));
         animateProgressCircle.cancel();
+
+        Animation slideOutRight = AnimationUtils.loadAnimation(c,
+                R.anim.slide_out_right);
+        Animation slideInLeft = AnimationUtils.loadAnimation(c,
+                R.anim.slide_in_left);
+
+        ViewGroup.LayoutParams progressParams = progressBar.getLayoutParams();
+
+        progressBar.startAnimation(slideOutRight);
+        progressBarHolder.removeView(progressBar);
+        ProgressBar newProgressBar = new ProgressBar(c, null, android.R.attr.progressBarStyleHorizontal);
+        newProgressBar.setId(View.generateViewId());
+        newProgressBar.setProgressDrawable(c.getResources().getDrawable(R.drawable.circular_progress_bar));
+
+        newProgressBar.setLayoutParams(progressParams);
+        progressBarHolder.addView(newProgressBar);
+        newProgressBar.getProgressDrawable().setColorFilter(
+                secondaryColour, PorterDuff.Mode.SRC_IN
+        );
+        this.progressBar = newProgressBar;
+        newProgressBar.startAnimation(slideInLeft);
+
         refreshStepCircle();
         takeFootballOut();
         animatingGoldenFootball = false;
@@ -125,6 +154,29 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
         if (dateChosen.equals(yesterday)) { dateText.setText(R.string.step_review_yesterday); }
         else { dateText.setText(DateHelper.formatDateToString(dateChosen)); }
         animateProgressCircle.cancel();
+
+        Animation slideOutLeft = AnimationUtils.loadAnimation(c,
+                R.anim.slide_out_left);
+        Animation slideInRight = AnimationUtils.loadAnimation(c,
+                R.anim.slide_in_right);
+
+        ViewGroup.LayoutParams progressParams = progressBar.getLayoutParams();
+
+        progressBar.startAnimation(slideOutLeft);
+        progressBarHolder.removeView(progressBar);
+        ProgressBar newProgressBar = new ProgressBar(c, null, android.R.attr.progressBarStyleHorizontal);
+        newProgressBar.setId(View.generateViewId());
+        newProgressBar.setProgressDrawable(c.getResources().getDrawable(R.drawable.circular_progress_bar));
+
+        newProgressBar.setLayoutParams(progressParams);
+        progressBarHolder.addView(newProgressBar);
+        newProgressBar.getProgressDrawable().setColorFilter(
+                secondaryColour, PorterDuff.Mode.SRC_IN
+        );
+        this.progressBar = newProgressBar;
+        newProgressBar.startAnimation(slideInRight);
+
+
         refreshStepCircle();
         takeFootballOut();
         animatingGoldenFootball = false;

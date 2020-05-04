@@ -236,11 +236,11 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                     moveSpeechBubbleUp(targetModeLayout);
                     break;
                 case TutorialSteps.FIRST_MENU_TARGET_MODE_STEP_2:
-                        populateStepTargetSpinner();
-                        showMenu(stepTargetLayout);
-                        readyToProgress = false;
-                        speechBubbleText.setText(getString(R.string.first_menu_step_target_question));
-                        pushSpeechBubbleToRight(stepTargetLayout);
+                    populateStepTargetSpinner();
+                    showMenu(stepTargetLayout);
+                    readyToProgress = false;
+                    speechBubbleText.setText(getString(R.string.first_menu_step_target_question));
+                    pushSpeechBubbleToRight(stepTargetLayout);
 
                     break;
                 case TutorialSteps.FIRST_MENU_DAYS_BETWEEN_INTRO:
@@ -525,7 +525,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
 
         final ColourDisplaySmallCardAdapter adapter = new ColourDisplaySmallCardAdapter(this, colourItems);
         teamColourGrid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
+            @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ColourDisplaySmallCard item = (ColourDisplaySmallCard) adapterView.getItemAtPosition(i);
                 teamColour = item.getTeamColour();

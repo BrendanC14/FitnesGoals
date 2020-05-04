@@ -22,6 +22,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <ImageButton
+                android:id="@+id/matchSetupPhone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/phone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/matchSetupTitle"
+                app:layout_constraintBottom_toBottomOf="@id/matchSetupTitle">
+
+            </ImageButton>
+
             <TextView
                 android:id="@+id/matchSetupTitle"
                 android:layout_width="match_parent"
@@ -302,21 +313,6 @@
 
             </Button>
 
-            <Button
-                android:id="@+id/matchSetupAttackButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:maxLines="1"
-                style="@style/Widget.FitnessGoals.Button"
-                android:text="@string/match_setup_attacking_tactic"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/matchSetupDefendButton"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/matchSetupTacticCentreDivider"
-                >
-
-            </Button>
 
             <TextView
                 android:id="@+id/matchSetupTacticCentreDivider"
@@ -328,36 +324,22 @@
                 app:layout_constraintBottom_toBottomOf="parent">
             </TextView>
 
+
             <Button
-                android:id="@+id/matchSetupRandomButton"
+                android:id="@+id/matchSetupAttackButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:maxLines="1"
                 style="@style/Widget.FitnessGoals.Button"
-                android:text="@string/match_setup_random_tactic"
-                app:layout_constraintStart_toEndOf="@+id/matchSetupTacticCentreDivider"
+                android:text="@string/match_setup_attacking_tactic"
+                app:layout_constraintStart_toStartOf="@+id/matchSetupTacticCentreDivider"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 >
 
             </Button>
-
-            <Button
-                android:id="@+id/matchSetupEvenButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                style="@style/Widget.FitnessGoals.Button"
-                android:text="@string/match_setup_even_tactic"
-                app:layout_constraintStart_toEndOf="@id/matchSetupTacticCentreDivider"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/matchSetupRandomButton"
-                app:layout_constraintBottom_toBottomOf="parent">
-
-            </Button>
-
 
 
 

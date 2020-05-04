@@ -1,0 +1,121 @@
+package com.cutlerdevelopment.fitnessgoals.DIalogFragments;
+
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.fragment.app.DialogFragment;
+
+import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
+import com.cutlerdevelopment.fitnessgoals.R;
+import com.cutlerdevelopment.fitnessgoals.Utils.JamesStep;
+
+import java.util.List;
+
+public class JamesTutorial extends DialogFragment {
+
+    private static ImageView jamesImage;
+    private static ConstraintLayout speechBubbleLayout;
+    private static TextView speechBubbleText;
+    private static Button nextButton;
+    private static Button previousButton;
+    private static Button doneButton;
+
+    private static Animation slideInRight;
+    private static Animation slideInTop;
+    private static Animation slideOutLeft;
+
+    private static int currentStep;
+    private static List<JamesStep> steps;
+
+    public JamesTutorial(List<JamesStep> jamesSteps) {
+        steps = jamesSteps;
+        currentStep = 0;
+    }
+
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+        View jamesView = inflater.inflate(R.layout.james_tutorial, null);
+        jamesImage = jamesView.findViewById(R.id.jamesTutorialImage);
+        speechBubbleLayout = jamesView.findViewById(R.id.jamesTutorialSpeechBubble);
+        speechBubbleText = jamesView.findViewById(R.id.jamesTutorialSpeechText);
+        nextButton = jamesView.findViewById(R.id.jamesTutorialNext);
+        previousButton = jamesView.findViewById(R.id.jamesTutorialPrevious);
+        doneButton = jamesView.findViewById(R.id.jamesTutorialDone);
+
+        slideInRight = AnimationUtils.loadAnimation(getActivity(),
+                R.anim.slide_in_right);
+        slideInRight.setDuration(Numbers.TM_MAIN_MENU_CARD_INTRO_DURATION);
+        slideOutLeft = AnimationUtils.loadAnimation(getActivity(),
+                R.anim.slide_out_left);
+        slideOutLeft.setDuration(Numbers.TM_MAIN_MENU_CARD_INTRO_DURATION);
+        slideInTop = AnimationUtils.loadAnimation(getActivity(),
+                R.anim.slide_in_top);
+        slideInTop.setDuration(Numbers.TM_MAIN_MENU_CARD_INTRO_DURATION);
+
+        previousButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentStep--;
+                displayJamesStep();
+            }
+        });
+        doneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentStep++;
+                displayJamesStep();
+            }
+        });
+
+        jamesImage.startAnimation(slideInRight);
+        speechBubbleLayout.startAnimation(slideInTop);
+        displayJamesStep();
+        builder.setView(jamesView);
+        return builder.create();
+    }
+
+    private static void displayJamesStep() {
+
+        if (steps.size() <= currentStep) { return; }
+
+        JamesStep thisStep = steps.get(currentStep);
+        speechBubbleText.setText(thisStep.getSpeechBubbleText());
+
+        if (thisStep.isPreviousButtonAvailable() && currentStep != 0) { previousButton.setVisibility(View.VISIBLE); }
+        else { previousButton.setVisibility(View.INVISIBLE); }
+        if (thisStep.isDoneButtonAvailable()) { doneButton.setVisibility(View.VISIBLE); }
+        else { doneButton.setVisibility(View.INVISIBLE); }
+        if (thisStep.isNextButtonAvailable() && currentStep != steps.size() - 1) { nextButton.setVisibility(View.VISIBLE); }
+        else { nextButton.setVisibility(View.INVISIBLE); }
+
+
+    }
+
+
+    public static void addMoreSteps(List<JamesStep> stepsToAdd) {
+        steps.addAll(stepsToAdd);
+    }
+    public static void forceNextStep() {
+        currentStep++;
+        displayJamesStep();
+    }
+}

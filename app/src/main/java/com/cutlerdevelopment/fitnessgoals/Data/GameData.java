@@ -12,8 +12,10 @@ import com.cutlerdevelopment.fitnessgoals.Constants.MatchResult;
 import com.cutlerdevelopment.fitnessgoals.Integrations.IntegrationConnectionHandler;
 import com.cutlerdevelopment.fitnessgoals.Models.Badge;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
+import com.cutlerdevelopment.fitnessgoals.Models.MatchEngine;
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.SavedData.AppDBHandler;
+import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
 import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 
@@ -94,20 +96,23 @@ public class GameData {
         this.startDate = startDate;
         GameDBHandler.getInstance().saveObject(this);
     }
+    private Date seasonStartDate;
+    public Date getSeasonStartDate() { return seasonStartDate; }
+    public void setSeasonStartDate(Date seasonStartDate) { this.seasonStartDate = seasonStartDate; }
+    public void changeSeasonStartDate(Date seasonStartDate) {
+        this.seasonStartDate = seasonStartDate;
+        GameDBHandler.getInstance().updateObject(this);
+    }
 
     private int season;
     public int getSeason() { return season; }
     public void setSeason(int season) { this.season = season; }
 
     private int careerGamesPlayed;
-
     public int getCareerGamesPlayed() {
         return careerGamesPlayed;
     }
-
-    public void setCareerGamesPlayed(int careerGamesPlayed) {
-        this.careerGamesPlayed = careerGamesPlayed;
-    }
+    public void setCareerGamesPlayed(int careerGamesPlayed) { this.careerGamesPlayed = careerGamesPlayed; }
     public void addGamesPlayed(int matchResult, int goals) {
         careerGamesPlayed++;
         checkNextBadge(BadgeCategories.GAMES, careerGamesPlayed);
@@ -115,6 +120,7 @@ public class GameData {
         else if (matchResult == MatchResult.DRAW) { addUnbeatenRecord(); }
         else { resetUnbeatenRecord(); }
         if (goals > 0) { addCareerGoals(goals); }
+        GameDBHandler.getInstance().updateObject(this);
     }
 
     private int careerWins;
@@ -123,6 +129,7 @@ public class GameData {
     public void addCareerWin() {
         careerWins++;
         checkNextBadge(BadgeCategories.WINS, careerWins);
+        GameDBHandler.getInstance().updateObject(this);
     }
 
     private int currentUnbeatenRecord;
@@ -131,6 +138,7 @@ public class GameData {
     public void addUnbeatenRecord() {
         currentUnbeatenRecord++;
         checkNextBadge(BadgeCategories.UNBEATEN, currentUnbeatenRecord);
+        GameDBHandler.getInstance().updateObject(this);
     }
     public void resetUnbeatenRecord() { this.currentUnbeatenRecord = 0; }
 
@@ -140,6 +148,7 @@ public class GameData {
     public void addCareerGoals(int goals) {
         this.careerGoals += goals;
         checkNextBadge(BadgeCategories.GOALS, careerGoals);
+        GameDBHandler.getInstance().updateObject(this);
     }
 
     private int pointsForWin;
@@ -177,10 +186,32 @@ public class GameData {
     }
 
     public void startNewSeason() {
-        season++;
-        startDate = DateHelper.addDays(new Date(), (daysBetween * 10) * -1);
+        season = 1;
+        startDate = DateHelper.addDays(new Date(), (daysBetween * 47) * -1);
+        seasonStartDate = startDate;
         GameDBHandler.getInstance().saveObject(this);
         createFixtures();
+    }
+    public void startNextSeason() {
+
+        seasonStartDate = DateHelper.cleanDate(new Date());
+
+        for (Fixture f : GameDBHandler.getInstance().getAllUnplayedFixtures()) {
+            MatchEngine.playAIGame(f);
+        }
+        season++;
+        for (Team promotedTeam : Leagues.getAllTeamsForPromotion()) {
+            promotedTeam.promote();
+        }
+        for (Team relegatedTeam: Leagues.getAllTeamsForRelegation()) {
+            relegatedTeam.relegate();
+        }
+        for (Team t : GameDBHandler.getInstance().getAllTeams()) {
+            t.startNewSeason();
+        }
+        GameDBHandler.getInstance().removeAllFixtures();
+        createFixtures();
+        GameDBHandler.getInstance().updateObject(this);
     }
 
 
@@ -228,7 +259,7 @@ public class GameData {
                     int homeTeam = teamsInLeague.get(home).getID();
                     int awayTeam = teamsInLeague.get(away).getID();
                     int numDays = round * GameData.getInstance().getDaysBetween() + 1;
-                    Date matchDate = DateHelper.addDays(startDate, numDays);
+                    Date matchDate = DateHelper.addDays(seasonStartDate, numDays);
                     new Fixture(GameDBHandler.getInstance().getNumRowsFromFixtureTable(),
                             homeTeam,
                             awayTeam,
@@ -260,7 +291,7 @@ public class GameData {
                     int homeTeam = teamsInLeague.get(home).getID();
                     int awayTeam = teamsInLeague.get(away).getID();
                     int numDays = round * GameData.getInstance().getDaysBetween() + 1;
-                    Date matchDate = DateHelper.addDays(startDate, numDays);
+                    Date matchDate = DateHelper.addDays(seasonStartDate, numDays);
                     new Fixture(GameDBHandler.getInstance().getNumRowsFromFixtureTable(),
                             homeTeam,
                             awayTeam,

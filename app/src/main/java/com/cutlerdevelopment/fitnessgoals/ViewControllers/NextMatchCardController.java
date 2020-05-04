@@ -58,7 +58,8 @@ public class NextMatchCardController {
         Fixture f = GameDBHandler.getInstance().getNextFixtureForTeam(teamID);
 
         if (f == null) {
-            playMatchButton.setVisibility(GONE);
+            playMatchButton.setText(c.getResources().getString(R.string.next_season));
+            opponentText.setText(c.getResources().getString(R.string.next_season));
             return;
         }
 
@@ -77,4 +78,9 @@ public class NextMatchCardController {
         }
 
     }
+
+    public void addNextSeason() {
+
+    }
+
 }

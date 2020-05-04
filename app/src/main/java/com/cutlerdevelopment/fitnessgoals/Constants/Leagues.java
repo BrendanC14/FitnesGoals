@@ -2,6 +2,7 @@ package com.cutlerdevelopment.fitnessgoals.Constants;
 
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
+import com.google.android.material.bottomappbar.BottomAppBar;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -81,34 +82,26 @@ public class Leagues {
         int pos = getPositionInLeague(teamID, league);
         return (league == TOP_LEAGUE && pos >= 18) || (league > TOP_LEAGUE && league < BOTTOM_LEAGUE && pos >= 22);
     }
-    public static int getNumTeamsInLeague(int league) {
-        return GameDBHandler.getInstance().getAllTeamsInLeague(league).size();
+
+    public static List<Team> getAllTeamsForPromotion() {
+        List<Team> teams = new ArrayList<>();
+        for (int i = 2; i <= BOTTOM_LEAGUE; i++) {
+            teams.add(getTeamAtPosition(1, i));
+            teams.add(getTeamAtPosition(2, i));
+            teams.add(getTeamAtPosition(3, i));
+        }
+        return teams;
     }
-
-
-    public static List<Team> getLeagueNeighbours(Team team, int numOfNeighbours) {
-
-        List<Team> neighbouringTeams = new ArrayList<>();
-        List<Team> allTeams = getLeagueList(team.getLeague());
-        int homePosition = getPositionInLeague(team.getID(), team.getLeague());
-
-        int startingPosition = (homePosition - (numOfNeighbours / 2)) - 1;
-        int endPosition = (homePosition + (numOfNeighbours / 2)) - 1;
-
-        if (startingPosition < 0) {
-            startingPosition = 0;
-            endPosition = startingPosition + numOfNeighbours;
+    public static List<Team> getAllTeamsForRelegation() {
+        List<Team> teams = new ArrayList<>();
+        teams.add(getTeamAtPosition(18, 1));
+        teams.add(getTeamAtPosition(19, 1));
+        teams.add(getTeamAtPosition(20, 1));
+        for (int i = TOP_LEAGUE + 1; i < BOTTOM_LEAGUE; i++) {
+            teams.add(getTeamAtPosition(22, i));
+            teams.add(getTeamAtPosition(23, i));
+            teams.add(getTeamAtPosition(24, i));
         }
-        else if (endPosition > allTeams.size() - 1) {
-            endPosition = allTeams.size() - 1;
-            startingPosition = endPosition - numOfNeighbours;
-        }
-
-        for (int i = startingPosition; i <= endPosition; i++) {
-            neighbouringTeams.add(allTeams.get(i));
-        }
-
-
-        return neighbouringTeams;
+        return teams;
     }
 }

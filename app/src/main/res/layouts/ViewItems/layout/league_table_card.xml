@@ -46,6 +46,7 @@
 
                 </Button>
 
+
                 <TextView
                     android:id="@+id/leagueTableCardHeader"
                     style="@style/TextAppearance.FitnessGoals.Title"
@@ -190,6 +191,11 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/leagueTableLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
             <ListView
                 android:id="@+id/leagueTableCardList"
                 android:layout_width="match_parent"
@@ -202,6 +208,7 @@
 
             </ListView>
 
+            </LinearLayout>
 
                 <Button
                     android:id="@+id/leagueTableCardExpandCollapseButton"

@@ -22,21 +22,27 @@ import android.widget.TextView;
 
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.AllBadgesMenu;
+import com.cutlerdevelopment.fitnessgoals.DIalogFragments.JamesTutorial;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.MatchResult;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.MatchSetup;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.SingleBadgeMenu;
 import com.cutlerdevelopment.fitnessgoals.Models.Badge;
+import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
 import com.cutlerdevelopment.fitnessgoals.Models.MatchEngine;
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.R;
 import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
 import com.cutlerdevelopment.fitnessgoals.Data.GameData;
+import com.cutlerdevelopment.fitnessgoals.Utils.JamesStep;
 import com.cutlerdevelopment.fitnessgoals.ViewControllers.FixturesCardController;
 import com.cutlerdevelopment.fitnessgoals.ViewControllers.LeagueTableCardController;
 import com.cutlerdevelopment.fitnessgoals.ViewControllers.NextMatchCardController;
 import com.cutlerdevelopment.fitnessgoals.ViewControllers.ResultsCardController;
 import com.cutlerdevelopment.fitnessgoals.ViewControllers.StepReviewCardController;
 import com.google.android.material.card.MaterialCardView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -73,7 +79,6 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
 
     Team usersTeam;
     int usersLeague;
-    int tutorialStep = 1;
 
 
 
@@ -106,6 +111,15 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
         //header.setBackgroundColor(Color.parseColor(usersTeam.getPrimaryColour()));
         //footer.setBackgroundColor(Color.parseColor(usersTeam.getPrimaryColour()));
 
+        setupAndSlideCardsIn();
+
+        GameData.getInstance().setListener(this);
+
+        RefreshActivityAsync refreshActivityAsync = new RefreshActivityAsync();
+        refreshActivityAsync.execute();
+    }
+
+    void setupAndSlideCardsIn() {
         getLayoutInflater().inflate(R.layout.step_review_card, layoutParent);
         stepReviewCard = layoutParent.getChildAt(0);
         stepReviewCardController = new StepReviewCardController(stepReviewCard, c);
@@ -145,102 +159,36 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
         leagueTableCard.startAnimation(slideInBottom);
         fixturesCard.startAnimation(slideInLeft);
         resultsCard.startAnimation(slideInBottom);
-
-        GameData.getInstance().setListener(this);
-
-        RefreshActivityAsync refreshActivityAsync = new RefreshActivityAsync();
-        refreshActivityAsync.execute();
     }
 
     public void callJames(View view) {
-        animateJamesIntroduction();
-    }
-    /**
-     * In this method James slides onto the screen from the right, the speech bubble drops down too far then bounces back up, and
-     * the Next button slides in from the left. It does all of this after a delay.
-     * Delays and speed are controlled by FIRST_MENU variables in Numbers.
-     */
-    void animateJamesIntroduction() {
+        List<JamesStep> steps = new ArrayList<>();
+        steps.add(new JamesStep(getString(R.string.tm_main_menu_james_description1)));
+        steps.add(new JamesStep(getString(R.string.tm_main_menu_james_description2)));
+        steps.add(new JamesStep(getString(R.string.tm_main_menu_james_description3)));
+        steps.add(new JamesStep(getString(R.string.tm_main_menu_james_description4)));
 
-        speechBubbleText.setText(getString(R.string.tm_main_menu_james_description1));
-        jamesNextButton.setVisibility(VISIBLE);
-        jamesPreviousButton.setVisibility(GONE);
-        tutorialStep = 1;
+        JamesTutorial james = new JamesTutorial(steps);
+        james.show(getSupportFragmentManager(), "james");
 
-        float jamesFinalXPosition = backgroundLayout.getX() + (backgroundLayout.getWidth() - jamesImage.getWidth());
-        float speechBounceYPosition = jamesImage.getScaleY() + Numbers.SPEECH_BUBBLE_PADDING_OFFSET;
-        float speechFinalYPosition = jamesImage.getScaleY() + Numbers.SPEECH_BUBBLE_PADDING_OFFSET;
-
-        AnimatorSet manAndSpeechIntroAnimSet = new AnimatorSet();
-        AnimatorSet speechBounceAndButtonIntroAnimSet = new AnimatorSet();
-        AnimatorSet fullSet = new AnimatorSet();
-
-        manAndSpeechIntroAnimSet.playTogether(
-                ObjectAnimator.ofFloat( //Animating the man onto the screen
-                        jamesImage,
-                        "x",
-                        jamesFinalXPosition)
-                        .setDuration(Numbers.FIRST_MENU_JAMES_ANIM_DURATION),
-                ObjectAnimator.ofFloat( //Animating the speech bubble onto the screen
-                        speechBubbleLayout,
-                        "y",
-                        speechBounceYPosition)
-                        .setDuration(Numbers.FIRST_MENU_SPEECH_BUBBLE_ANIM_DURATION));
-
-        speechBounceAndButtonIntroAnimSet.play(
-                ObjectAnimator.ofFloat( //Animating the speech bubble bouncing up
-                        speechBubbleLayout,
-                        "y",
-                        speechFinalYPosition)
-                        .setDuration(Numbers.FIRST_MENU_SPEECH_BUBBLE_BOUNCE_ANIM_DURATION));
-
-        fullSet.playSequentially(manAndSpeechIntroAnimSet, speechBounceAndButtonIntroAnimSet);
-        fullSet.start();
 
 
     }
 
-    public void nextJames(View view) {
-        tutorialStep++;
-        jamesPreviousButton.setVisibility(VISIBLE);
-        if (tutorialStep == 2) {
-            speechBubbleText.setText(getString(R.string.tm_main_menu_james_description2));
-        }
-        else if (tutorialStep == 3) {
-            speechBubbleText.setText(getString(R.string.tm_main_menu_james_description3));
-        }
-        else if (tutorialStep == 4) {
-            speechBubbleText.setText(getString(R.string.tm_main_menu_james_description4));
-            jamesNextButton.setVisibility(GONE);
-        }
-
-    }
-
-    public void previousJames(View view) {
-        tutorialStep--;
-        jamesNextButton.setVisibility(VISIBLE);
-        if (tutorialStep == 1) {
-            speechBubbleText.setText(getString(R.string.tm_main_menu_james_description1));
-            jamesPreviousButton.setVisibility(GONE);
-        }
-        else if (tutorialStep == 2) {
-            speechBubbleText.setText(getString(R.string.tm_main_menu_james_description2));
-        }
-        else if (tutorialStep == 3) {
-            speechBubbleText.setText(getString(R.string.tm_main_menu_james_description3));
-        }
-    }
-
-    public void doneJames(View view) {
-        jamesImage.setX(backgroundLayout.getWidth());
-        speechBubbleLayout.setY(0 - speechBubbleLayout.getHeight());
-    }
 
     public void openMatchSetup(View view) {
+        int teamID = GameData.getInstance().getTeamID();
+        Fixture f = GameDBHandler.getInstance().getNextFixtureForTeam(teamID);
 
-        DialogFragment careerDialog = new MatchSetup();
-        careerDialog.show(getSupportFragmentManager(), "MatchSetup");
-        MatchEngine.setListener(this);
+        if (f == null) {
+            GameData.getInstance().startNextSeason();
+            layoutParent.removeAllViews();
+            setupAndSlideCardsIn();
+        } else {
+            DialogFragment careerDialog = new MatchSetup();
+            careerDialog.show(getSupportFragmentManager(), "MatchSetup");
+            MatchEngine.setListener(this);
+        }
     }
 
     @Override
@@ -253,6 +201,7 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
 
         DialogFragment careerDialog = new MatchResult();
         careerDialog.show(getSupportFragmentManager(), "MatchResult");
+
 
     }
 

@@ -14,6 +14,7 @@
     <string name="average_word">Average: </string>
     <string name="slash">/</string>
     <string name="play_match">Play Match</string>
+    <string name="next_season">Next Season</string>
     <string name="versus">vs</string>
     <string name="close_text">X</string>
 
@@ -55,7 +56,7 @@
         Before you get on the pitch, we need to do a medical. I\'m gonna need to get in touch with your fitness app and get some details. Don\'t worry though, this info is only used to decide your match performance!"
     </string>
     <string name="first_menu_intro_text_2_2">Which app should I call?</string>
-    <string name="first_menu_app_connected">Nice one, got the details.</string>
+    <string name="first_menu_app_connected">Nice one, got the details. Next up we\'re gonna get your team setup in the League, just need to take a few details.</string>
     <string name="first_menu_calling_app">Alright give me a sec just calling.</string>
     <string name="first_menu_app_unavailable">I can\'t get in touch with them right now, can we try another?</string>
     <string name="first_menu_app_cant_connect">Can\'t get hold of them, did you give me permission?</string>
@@ -147,7 +148,7 @@
         The second is the league table which can be expanded. Teams with a light green background are in a promotion place. Teams with a red background are in a relegation place.
     </string>
     <string name="tm_main_menu_james_description3">
-        The next card is your next, un-played fixture. Hitting Play Match will open up your tactics before getting a result.
+        The next card is your next, un-played fixture. If you\'ve reached match date, you can press Play Match and setup your tactics before getting a result.
     </string>
     <string name="tm_main_menu_james_description4">
         Finally, you have 2 cards for your fixtures and results, which can also be amended to show the fixtures/results in the leagues.
@@ -173,6 +174,20 @@
     <string name="match_setup_attacking_tactic">Attacking</string>
     <string name="match_setup_random_tactic">Random</string>
     <string name="match_setup_even_tactic">Even</string>
+
+    <string name="match_setup_james_description1">
+        Ahh match day! This is where all your hard work comes together! Before you get a result you need to decide how you want to play the game.
+    </string>
+    <string name="match_setup_james_description2">
+        The match is split into two. In one half, you\'ll be attacking, and in the other half you\'ll be defending.
+        Move your steps into the appropriate category to decide how you want to approach the game.
+    </string>
+    <string name="match_setup_james_description3">
+        If your average steps in attack is equal to your opponents defense you score a goal. You score another goal for each %1s steps after the target.
+    </string>
+    <string name="match_setup_james_description4">
+        If your average steps in defence is equal to your opponents attack, you keep a clean sheet. You concede a goal if it\'s less, and concede another for each %1s steps after the target.
+    </string>
 
     <string name="match_results_title">Result</string>
 

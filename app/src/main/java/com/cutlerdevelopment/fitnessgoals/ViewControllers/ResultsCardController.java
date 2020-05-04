@@ -2,9 +2,13 @@ package com.cutlerdevelopment.fitnessgoals.ViewControllers;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -36,6 +40,7 @@ public class ResultsCardController {
     MaterialCardView cardView;
     private Button viewModeButton;
     private  TextView leagueNameText;
+    private LinearLayout resultsTableLayout;
     private ListView resultTableHolder;
     private Button resultExpandCollapseButton;
     private Button upLeagueButton;
@@ -54,6 +59,7 @@ public class ResultsCardController {
         cardView = card.findViewById(R.id.resultsCardResultsCard);
         viewModeButton = card.findViewById(R.id.resultsCardSwitchButton);
         leagueNameText = card.findViewById(R.id.resultsCardHeader);
+        resultsTableLayout = card.findViewById(R.id.resultsTableLayout);
         resultTableHolder = card.findViewById(R.id.resultsCardList);
         resultExpandCollapseButton = card.findViewById(R.id.resultsCardExpandCollapseButton);
         upLeagueButton = card.findViewById(R.id.resultsCardLeagueLeft);
@@ -190,12 +196,53 @@ public class ResultsCardController {
 
     public void upAResultLeague() {
         leagueToDisplay--;
+
+        Animation slideOutRight = AnimationUtils.loadAnimation(c,
+                R.anim.slide_out_right);
+        Animation slideInLeft = AnimationUtils.loadAnimation(c,
+                R.anim.slide_in_left);
+
+        ViewGroup.LayoutParams listParams = resultTableHolder.getLayoutParams();
+
+        resultTableHolder.startAnimation(slideOutRight);
+        resultsTableLayout.removeView(resultTableHolder);
+        ListView newListView = new ListView(c);
+        newListView.setId(View.generateViewId());
+        newListView.setLayoutParams(listParams);
+        resultsTableLayout.addView(newListView);
+        this.resultTableHolder = newListView;
+        newListView.startAnimation(slideInLeft);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            newListView.setNestedScrollingEnabled(true);
+        }
+
         fillResultDisplay();
         checkResultLeagueButtonValidity();
 
     }
     public void downAResultLeague() {
         leagueToDisplay++;
+
+        ViewGroup.LayoutParams layoutParams = resultTableHolder.getLayoutParams();
+        resultTableHolder.setLayoutParams(layoutParams);
+
+        Animation slideOutLeft = AnimationUtils.loadAnimation(c,
+                R.anim.slide_out_left);
+        Animation slideInRight = AnimationUtils.loadAnimation(c,
+                R.anim.slide_in_right);
+
+        resultTableHolder.startAnimation(slideOutLeft);
+        resultsTableLayout.removeView(resultTableHolder);
+        ListView newListView = new ListView(c);
+        newListView.setId(View.generateViewId());
+        newListView.setLayoutParams(layoutParams);
+        resultsTableLayout.addView(newListView);
+        this.resultTableHolder = newListView;
+        newListView.startAnimation(slideInRight);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            newListView.setNestedScrollingEnabled(true);
+        }
+
         fillResultDisplay();
         checkResultLeagueButtonValidity();
 

@@ -2,9 +2,13 @@ package com.cutlerdevelopment.fitnessgoals.ViewControllers;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.os.Build;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,6 +41,7 @@ public class FixturesCardController {
     private MaterialCardView cardView;
     private Button viewModeButton;
     private TextView leagueNameText;
+    private LinearLayout fixtureTableLayout;
     private ListView fixtureTableHolder;
     private Button fixtureExpandCollapseButton;
     private Button upLeagueButton;
@@ -53,6 +58,7 @@ public class FixturesCardController {
         cardView = card.findViewById(R.id.fixturesCard);
         viewModeButton = card.findViewById(R.id.fixturesCardSwitchButton);
         leagueNameText = card.findViewById(R.id.fixturesCardHeader);
+        fixtureTableLayout = card.findViewById(R.id.fixturesTableLayout);
         fixtureTableHolder = card.findViewById(R.id.fixturesCardList);
         fixtureExpandCollapseButton = card.findViewById(R.id.fixturesCardExpandCollapseButton);
         upLeagueButton = card.findViewById(R.id.fixturesCardLeagueLeft);
@@ -120,11 +126,13 @@ public class FixturesCardController {
         if (myFixtureMode) {
             fixtures = GameDBHandler.getInstance().getAllUpcomingFixturesForTeam(usersTeam.getID());
             leagueNameText.setText(R.string.my_fixtures_mode);
+            if (fixtures.size() == 0) { return; }
         }
         else {
             Fixture nextFixture = GameDBHandler.getInstance().getNextFixtureForTeam(usersTeam.getID());
-            fixtures = GameDBHandler.getInstance().getWeeksFixtureFromLeague(nextFixture.getDate(), leagueToDisplay);
             leagueNameText.setText(c.getString(R.string.league_fixtures_mode, Leagues.getLeagueName(leagueToDisplay)));
+            if (nextFixture == null) { return; }
+            fixtures = GameDBHandler.getInstance().getWeeksFixtureFromLeague(nextFixture.getDate(), leagueToDisplay);
         }
 
         if (fixtures.size() >= Numbers.TM_MAIN_MENU_SMALL_FIXTURES_TABLE_ROW_NUMBER) { fixtureExpandCollapseButton.setVisibility(VISIBLE); }
@@ -184,12 +192,52 @@ public class FixturesCardController {
 
     private  void upAFixtureLeague() {
         leagueToDisplay--;
+
+        Animation slideOutRight = AnimationUtils.loadAnimation(c,
+                R.anim.slide_out_right);
+        Animation slideInLeft = AnimationUtils.loadAnimation(c,
+                R.anim.slide_in_left);
+
+        ViewGroup.LayoutParams listParams = fixtureTableHolder.getLayoutParams();
+
+        fixtureTableHolder.startAnimation(slideOutRight);
+        fixtureTableLayout.removeView(fixtureTableHolder);
+        ListView newListView = new ListView(c);
+        newListView.setId(View.generateViewId());
+        newListView.setLayoutParams(listParams);
+        fixtureTableLayout.addView(newListView);
+        this.fixtureTableHolder = newListView;
+        newListView.startAnimation(slideInLeft);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            newListView.setNestedScrollingEnabled(true);
+        }
+
         fillFixtureDisplay();
         checkFixtureLeagueButtonValidity();
 
     }
     private  void downAFixtureLeague() {
         leagueToDisplay++;
+
+        ViewGroup.LayoutParams layoutParams = fixtureTableHolder.getLayoutParams();
+        fixtureTableHolder.setLayoutParams(layoutParams);
+
+        Animation slideOutLeft = AnimationUtils.loadAnimation(c,
+                R.anim.slide_out_left);
+        Animation slideInRight = AnimationUtils.loadAnimation(c,
+                R.anim.slide_in_right);
+
+        fixtureTableHolder.startAnimation(slideOutLeft);
+        fixtureTableLayout.removeView(fixtureTableHolder);
+        ListView newListView = new ListView(c);
+        newListView.setId(View.generateViewId());
+        newListView.setLayoutParams(layoutParams);
+        fixtureTableLayout.addView(newListView);
+        this.fixtureTableHolder = newListView;
+        newListView.startAnimation(slideInRight);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            newListView.setNestedScrollingEnabled(true);
+        }
         fillFixtureDisplay();
         checkFixtureLeagueButtonValidity();
 
