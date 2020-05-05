@@ -11,6 +11,7 @@ import com.cutlerdevelopment.fitnessgoals.Integrations.GoogleIntegrations.Google
 import com.cutlerdevelopment.fitnessgoals.Integrations.GoogleIntegrations.GoogleFitAPI;
 import com.cutlerdevelopment.fitnessgoals.Data.AppData;
 import com.cutlerdevelopment.fitnessgoals.Data.UserActivity;
+import com.cutlerdevelopment.fitnessgoals.Integrations.SHealthIntegrations.SHealthAPI;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 
 import java.util.Date;
@@ -20,6 +21,7 @@ import java.util.Random;
 
 public class IntegrationConnectionHandler implements GoogleFitAPI.GoogleFitListener,
                                                     FitbitAPI.FitbitListener,
+                                                    SHealthAPI.SHealthFitListener,
         GoogleFirestoreConnector.FirestoreListener {
 
     public interface SetupListener {
@@ -74,6 +76,11 @@ public class IntegrationConnectionHandler implements GoogleFitAPI.GoogleFitListe
         if (chosenApp == FitnessApps.FITBIT) {
             FitbitAPI.getInstance().setListener(this);
             FitbitAPI.getInstance().getAverageFromDates(startDate, endDate);
+        }
+        if (chosenApp == FitnessApps.SHEALTH) {
+            SHealthAPI.getInstance().setListener(this);
+            SHealthAPI.getInstance().getAverageFromDates(startDate, endDate);
+
         }
     }
 

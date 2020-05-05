@@ -38,6 +38,7 @@ import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.Fitbit
 import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitStringsSavedData;
 import com.cutlerdevelopment.fitnessgoals.Integrations.GoogleIntegrations.GoogleFitAPI;
 import com.cutlerdevelopment.fitnessgoals.Integrations.IntegrationConnectionHandler;
+import com.cutlerdevelopment.fitnessgoals.Integrations.SHealthIntegrations.SHealthAPI;
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.R;
 import com.cutlerdevelopment.fitnessgoals.SavedData.AppDBHandler;
@@ -64,7 +65,7 @@ import java.util.Random;
  * FirstMenu Activity is the first Activity that loads when the User first opens the app. It's a setup menu.
  * However if some CareerSettings are found in RoomDB then it will load the existing game.
  */
-public class FirstMenu extends AppCompatActivity implements IntegrationConnectionHandler.SetupListener {
+public class FirstMenu extends AppCompatActivity implements IntegrationConnectionHandler.SetupListener, SHealthAPI.InitialConnectionListener{
 
     Boolean readyToProgress = false;
 
@@ -614,6 +615,12 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                 FitbitAPI.createFitbitAPIInstance(this);
                 FitbitAPI.getInstance().requestFitbitPermission(this);
                 break;
+            case FitnessApps.SHEALTH:
+                speechBubbleText.setText(R.string.first_menu_calling_app);
+                hideMenu(fitnessAppsLayout);
+                putSpeechBubbleBackIntoMiddle();
+                SHealthAPI.createSHealthAPIInstance(this);
+                break;
             default:
                 speechBubbleText.setText(R.string.first_menu_app_connected);
         }
@@ -652,6 +659,23 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
             }
         }
     }
+
+    @Override
+    public void connectionResult(int resultCode) {
+        if (resultCode == 0) {
+            confirmAppConnected();
+        }
+        if (resultCode == 1) {
+            confirmCantConnect();
+        }
+        else if (resultCode == 2) {
+            speechBubbleText.setText(getString(R.string.first_menu_shealth_not_installed));
+            showMenu(fitnessAppsLayout);
+            pushSpeechBubbleToRight(fitnessAppsLayout);
+        }
+
+    }
+
     /**
      * Sets speech bubble text to first_menu_app_connected String
      * Sets the app ready to progress
