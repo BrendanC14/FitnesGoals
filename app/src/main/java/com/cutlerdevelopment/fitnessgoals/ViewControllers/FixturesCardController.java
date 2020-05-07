@@ -64,7 +64,7 @@ public class FixturesCardController {
         upLeagueButton = card.findViewById(R.id.fixturesCardLeagueLeft);
         downLeagueButton = card.findViewById(R.id.fixturesCardLeagueRight);
 
-        usersTeam = GameDBHandler.getInstance().getTeamFromID(GameData.getInstance().getTeamID());
+        usersTeam = GameData.getInstance().getUsersTeam();
 
         leagueToDisplay = usersLeague;
         fixtureExpandCollapseButton.setOnClickListener(new View.OnClickListener() {

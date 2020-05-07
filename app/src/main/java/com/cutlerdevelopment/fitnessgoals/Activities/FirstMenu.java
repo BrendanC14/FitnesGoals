@@ -520,6 +520,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         for (String c : Colours.getAllTeamColours()) {
             ColourDisplaySmallCard item = new ColourDisplaySmallCard();
             item.setTeamColour(c);
+            item.setUsersColour(false);
             colourItems.add(item);
         }
 

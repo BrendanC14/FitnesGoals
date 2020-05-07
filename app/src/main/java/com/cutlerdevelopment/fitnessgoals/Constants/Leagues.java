@@ -104,4 +104,16 @@ public class Leagues {
         }
         return teams;
     }
+
+    public static int getAverageStepsInLeague(int league) {
+        int leagueTotal = 0;
+        int leagueCount = 0;
+        for (Team t : GameDBHandler.getInstance().getAllTeamsInLeague(league)) {
+            int teamAverage = (t.getMaxNumberOfSteps() + t.getMinNumberOfSteps()) / 2;
+            leagueTotal += teamAverage;
+            leagueCount++;
+        }
+
+        return leagueTotal / leagueCount;
+    }
 }

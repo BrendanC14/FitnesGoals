@@ -50,6 +50,7 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
 
     int secondaryColour;
     ValueAnimator animateProgressCircle;
+    ValueAnimator enlargeFootballAnim;
 
 
     public StepReviewCardController(View card, Context context) {
@@ -230,7 +231,7 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
 
 
     private void enlargeFootball() {
-        ValueAnimator enlargeFootballAnim = ValueAnimator.ofInt(
+        enlargeFootballAnim = ValueAnimator.ofInt(
                 goldenFootball.getWidth(),
                 (int) c.getResources().getDimension(R.dimen.golden_football_height));
         enlargeFootballAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -253,7 +254,7 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
         layoutParams.height = 1;
         layoutParams.width = 1;
         goldenFootball.setLayoutParams(layoutParams);
-
+        if (enlargeFootballAnim != null && enlargeFootballAnim.isRunning()) { enlargeFootballAnim.cancel(); }
     }
 
     @Override

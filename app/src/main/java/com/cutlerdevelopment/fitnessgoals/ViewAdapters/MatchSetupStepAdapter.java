@@ -62,6 +62,7 @@ public class MatchSetupStepAdapter extends BaseAdapter implements View.OnDragLis
             newView = thisInflater.inflate(R.layout.match_setup_step_item, parent, false);
         }
 
+
         TextView stepsText = newView.findViewById(R.id.matchSetupItemButton);
 
         final MatchSetupItem currentItem = (MatchSetupItem) getItem(i);

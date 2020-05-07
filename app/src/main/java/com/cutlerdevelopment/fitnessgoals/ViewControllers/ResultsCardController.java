@@ -100,7 +100,7 @@ public class ResultsCardController {
                 downAResultLeague();
             }
         });
-        usersTeam = GameDBHandler.getInstance().getTeamFromID(GameData.getInstance().getTeamID());
+        usersTeam = GameData.getInstance().getUsersTeam();
         leagueToDisplay = usersLeague;
 
         int primaryColour = Colours.getUsersPrimaryColour();

@@ -139,7 +139,7 @@ public class Fixture implements Comparable<Fixture> {
     private Date date;
     public Date getDate() { return  date; }
     public void setDate(Date date) { this.date = date; }
-    public void updateDate(Date date) {
+    public void changeDate(Date date) {
         this.date = date;
         GameDBHandler.getInstance().updateObject(this);
     }

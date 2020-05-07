@@ -65,7 +65,7 @@ public class LeagueTableCardController {
         leagueTableHeader = card.findViewById(R.id.leagueTableHeader);
 
 
-        usersTeam = GameDBHandler.getInstance().getTeamFromID(GameData.getInstance().getTeamID());
+        usersTeam = GameData.getInstance().getUsersTeam();
         usersLeague = usersTeam.getLeague();
         leagueToDisplay = usersLeague;
         teamsPosition = Leagues.getPositionInLeague(usersTeam.getID(), leagueToDisplay);
@@ -95,6 +95,7 @@ public class LeagueTableCardController {
         int secondaryColour = Colours.getUsersSecondaryColour();
         cardView.setBackgroundColor(primaryColour);
         leagueDownLeagueButton.setTextColor(secondaryColour);
+        leagueExpandCollapseButton.setTextColor(secondaryColour);
         leagueNameText.setTextColor(secondaryColour);
         leagueUpLeagueButton.setTextColor(secondaryColour);
         for (int i = 0; i < leagueTableHeader.getChildCount(); i++) {

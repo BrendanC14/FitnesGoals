@@ -20,11 +20,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.AllBadgesMenu;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.JamesTutorial;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.MatchResult;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.MatchSetup;
+import com.cutlerdevelopment.fitnessgoals.DIalogFragments.Settings;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.SingleBadgeMenu;
 import com.cutlerdevelopment.fitnessgoals.Models.Badge;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
@@ -47,7 +49,8 @@ import java.util.List;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEngineListener, GameData.BadgeListener {
+public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEngineListener, GameData.BadgeListener,
+        Settings.SettingsListener {
 
     LinearLayout layoutParent;
     View stepReviewCard;
@@ -62,12 +65,6 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
     ResultsCardController resultsCardController;
 
 
-    ImageView jamesImage;
-    ConstraintLayout speechBubbleLayout;
-    TextView speechBubbleText;
-    Button speechBubbleButton;
-    Button jamesNextButton;
-    Button jamesPreviousButton;
     ConstraintLayout backgroundLayout;
 
     MaterialCardView header;
@@ -88,13 +85,7 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tm_main_menu);
 
-        jamesImage = findViewById(R.id.tmMainMenuJamesImage);
-        speechBubbleLayout = findViewById(R.id.tmMainMenuSpeechBubble);
-        speechBubbleText = findViewById(R.id.tmMainMenuSpeechText);
         backgroundLayout = findViewById(R.id.tmMainMenuBackground);
-        jamesNextButton = findViewById(R.id.tmMainMenuSpeechBubbleNext);
-        jamesPreviousButton = findViewById(R.id.tmMainMenuSpeechBubblePrevious);
-        speechBubbleButton = findViewById(R.id.tmMainMenuSpeechBubbleButton);
         header = findViewById(R.id.tmMainMenuheader);
         teamNameText = findViewById(R.id.tmMainMenuTeamName);
         footer = findViewById(R.id.tmMainMenuFooter);
@@ -102,14 +93,12 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
 
         layoutParent = findViewById(R.id.tmMainMenuLinearLayoutScroll);
 
-        usersTeam = GameDBHandler.getInstance().getTeamFromID(GameData.getInstance().getTeamID());
+        usersTeam = GameData.getInstance().getUsersTeam();
         usersLeague = usersTeam.getLeague();
 
         c = this;
         teamNameText.setText(usersTeam.getName());
         teamNameText.setTextColor(Color.parseColor(usersTeam.getSecondaryColour()));
-        //header.setBackgroundColor(Color.parseColor(usersTeam.getPrimaryColour()));
-        //footer.setBackgroundColor(Color.parseColor(usersTeam.getPrimaryColour()));
 
         setupAndSlideCardsIn();
 
@@ -120,6 +109,11 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
     }
 
     void setupAndSlideCardsIn() {
+        usersTeam = GameData.getInstance().getUsersTeam();
+        header.setBackgroundColor(Colours.getUsersPrimaryColour());
+        backgroundLayout.setBackgroundColor(Colours.getUsersSecondaryColour());
+        teamNameText.setTextColor(Colours.getUsersSecondaryColour());
+        teamNameText.setText(usersTeam.getName());
         getLayoutInflater().inflate(R.layout.step_review_card, layoutParent);
         stepReviewCard = layoutParent.getChildAt(0);
         stepReviewCardController = new StepReviewCardController(stepReviewCard, c);
@@ -220,6 +214,20 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
         DialogFragment allBadgesDialog = new AllBadgesMenu();
         allBadgesDialog.show(getSupportFragmentManager(), "AllBadgesMenu");
 
+    }
+
+    public void openSettings(View view) {
+        DialogFragment settingsDialog = new Settings();
+        settingsDialog.show(getSupportFragmentManager(), "settingsDialog");
+
+    }
+
+    @Override
+    public void settingsChanged(boolean refreshMenu) {
+        if (refreshMenu) {
+            layoutParent.removeAllViews();
+            setupAndSlideCardsIn();
+        }
     }
 
     private class RefreshActivityAsync extends AsyncTask<Void, Void, Void> {

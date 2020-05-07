@@ -2,6 +2,12 @@ package com.cutlerdevelopment.fitnessgoals.DIalogFragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +19,12 @@ import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
+import com.cutlerdevelopment.fitnessgoals.Constants.Colours;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
+import com.cutlerdevelopment.fitnessgoals.Data.GameData;
 import com.cutlerdevelopment.fitnessgoals.R;
 import com.cutlerdevelopment.fitnessgoals.Utils.JamesStep;
 
@@ -48,6 +57,7 @@ public class JamesTutorial extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View jamesView = inflater.inflate(R.layout.james_tutorial, null);
+        ConstraintLayout background = jamesView.findViewById(R.id.jamesTutorialLayout);
         jamesImage = jamesView.findViewById(R.id.jamesTutorialImage);
         speechBubbleLayout = jamesView.findViewById(R.id.jamesTutorialSpeechBubble);
         speechBubbleText = jamesView.findViewById(R.id.jamesTutorialSpeechText);
@@ -86,6 +96,31 @@ public class JamesTutorial extends DialogFragment {
             }
         });
 
+        int primaryColour = Colours.getUsersPrimaryColour();
+        int secondaryColour = Colours.getUsersSecondaryColour();
+        background.setBackgroundColor(primaryColour);
+        speechBubbleLayout.setBackgroundColor(primaryColour);
+        speechBubbleText.setTextColor(primaryColour);
+        nextButton.setBackgroundColor(secondaryColour);
+        nextButton.setTextColor(primaryColour);
+        doneButton.setBackgroundColor(secondaryColour);
+        doneButton.setTextColor(primaryColour);
+        previousButton.setBackgroundColor(secondaryColour);
+        previousButton.setTextColor(primaryColour);
+
+        speechBubbleText.getBackground().setColorFilter(secondaryColour, PorterDuff.Mode.SRC_ATOP);
+
+/*
+        Drawable draw = speechBubbleText.getBackground();
+        if (draw instanceof ShapeDrawable) {
+            ((ShapeDrawable)draw).getPaint().setColor(primaryColour);
+        } else if (draw instanceof GradientDrawable) {
+            ((GradientDrawable)draw).setColor(primaryColour);
+        } else if (draw instanceof ColorDrawable) {
+            ((ColorDrawable)draw).setColor(primaryColour);
+        }
+        speechBubbleText.setBackground(draw);
+*/
         jamesImage.startAnimation(slideInRight);
         speechBubbleLayout.startAnimation(slideInTop);
         displayJamesStep();

@@ -110,6 +110,7 @@ public class GameDBHandler {
     public List<Fixture> getFixturesForTeam(int teamID) { return Arrays.asList(db.fixtureDao().selectAllFixturesFromTeam(teamID)); }
     public Fixture getTeamsFixtureForWeek(int week, int teamID) { return db.fixtureDao().selectFixtureForWeekWithTeam(week, teamID); }
     public int getNumRowsFromFixtureTable() { return db.fixtureDao().getRowCount(); }
+    public List<Fixture> getAllFixturesOnDate(Date date) { return Arrays.asList(db.fixtureDao().selectAllFixturesFromDate(date)); }
     public List<Fixture> getAllUnplayedFixtures() { return Arrays.asList(db.fixtureDao().selectAllUnplayedFixtures()); }
     public List<Fixture> getAllUpcomingFixturesForTeam(int teamID) { return Arrays.asList(db.fixtureDao().selectAllUpcomingFixturesFromTeam(teamID)); }
     public List<Fixture> getAllResultsForTeam(int teamID) { return Arrays.asList(db.fixtureDao().selectAllResultsFromTeam(teamID)); }
@@ -180,20 +181,31 @@ public class GameDBHandler {
 
         @Query("SELECT * FROM Fixture")
         Fixture[] selectAllFixtures();
+
         @Query("SELECT * FROM Fixture WHERE id = :fixtureID")
         Fixture selectFixtureFromID(int fixtureID);
+
+        @Query("SELECT * FROM Fixture WHERE homeScore = -1 AND date = :date")
+        Fixture[] selectAllFixturesFromDate(Date date);
+
         @Query("SELECT * FROM Fixture WHERE homeScore = -1 AND date = :date AND league = :league")
         Fixture[] selectAllFixturesInLeagueFromDate(Date date, int league);
+
         @Query("SELECT * FROM Fixture WHERE homeScore = -1")
         Fixture[] selectAllUnplayedFixtures();
+
         @Query("SELECT * FROM Fixture WHERE homeScore > -1 AND date = :date AND league = :league")
         Fixture[] selectAllResultsInLeagueFromDate(Date date, int league);
+
         @Query("SELECT * FROM Fixture WHERE homeTeamID = :teamID OR awayTeamID = :teamID")
         Fixture[] selectAllFixturesFromTeam(int teamID);
+
         @Query("SELECT * FROM Fixture WHERE homeScore = -1 AND (homeTeamID = :teamID OR awayTeamID = :teamID)")
         Fixture[] selectAllUpcomingFixturesFromTeam(int teamID);
+
         @Query("SELECT * FROM Fixture WHERE homeScore > -1 AND (homeTeamID = :teamID OR awayTeamID = :teamID) ORDER BY date")
         Fixture[] selectAllResultsFromTeam(int teamID);
+
         @Query("SELECT * FROM Fixture WHERE week = :week AND (homeTeamID = :teamID OR awayTeamID = :teamID)")
         Fixture selectFixtureForWeekWithTeam(int week, int teamID);
         @Query("SELECT COUNT(id) FROM Fixture")

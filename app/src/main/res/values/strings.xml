@@ -17,6 +17,8 @@
     <string name="next_season">Next Season</string>
     <string name="versus">vs</string>
     <string name="close_text">X</string>
+    <string name="minus_text">-</string>
+    <string name="plus_text">+</string>
 
     <string name="team_mode">Team</string>
     <string name="player_mode">Player</string>
@@ -72,7 +74,7 @@
         \nNext up I\m gonna need to take some details about your %2s.
     </string>
     <string name="firs_menu_confirm_name">What\'s your %1ss name?</string>
-    <string name="first_menu_team_player_name_hint">tea</string>
+    <string name="first_menu_team_player_name_hint">Team Name</string>
     <string name="first_menu_empty_name">Come on, you gotta put a name in.</string>
     <string name="first_menu_player_name_confirmed">Alright %1s nice to meet you. What\'s your favourite team?</string>
     <string name="first_menu_team_nane_confirmed">Alright let\'s get %1s in the leagues. What\'s your team colour?</string>
@@ -202,6 +204,20 @@
     <string name="badge_5k_name">5k</string>
     <string name="badge_5k_description">5k</string>
     <string name="match_results_other_results">Other Results</string>
+
+    <string name="settings_title"><u>Settings</u></string>
+    <string name="settings_team_intro">Here you can change your team name or colour</string>
+    <string name="settings_team_header">Team Settings</string>
+    <string name="settings_game_settings">Game Settings</string>
+    <string name="settings_number_settings">Number Settings</string>
+    <string name="settings_team_colour_header">Team Colour</string>
+    <string name="settings_game_intro">Here you can switch to targeted/scaled mode, or call James for more info on each option. You can also change your current target, or how many days between games.</string>
+    <string name="settings_switch_to_targeted_mode">Switch to Targeted</string>
+    <string name="settings_switch_to_scaled_mode">Switch To Scaled</string>
+    <string name="settings_step_target_header">Step Target</string>
+    <string name="settings_days_between_header">Days Between Games</string>
+    <string name="settings_number_intro">Here you can change the average number of steps in each League, either to increase or decease difficulty.</string>
+    <string name="settings_league_target_header">League Average</string>
 
     <string name="content_description_james">Business man in a white shirt</string>
     <string name="content_description_aoo_logo">Fitness App logo</string>

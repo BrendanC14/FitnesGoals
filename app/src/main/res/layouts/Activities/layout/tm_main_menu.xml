@@ -5,7 +5,7 @@
     android:id="@+id/tmMainMenuBackground"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+    android:background="@color/colorBlack"
     tools:context=".Activities.TMMainMenu">
 
 
@@ -63,7 +63,7 @@
         android:id="@+id/tmMainMenuFooter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/colorPrimaryDark"
+        app:cardBackgroundColor="@color/colorWhite"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,6 +74,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <ImageButton
+                android:id="@+id/tmMainMenuSettingsButton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/settings"
+                android:onClick="openSettings"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/tmMainMenuBadgesButton"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </ImageButton>
             <ImageButton
                 android:id="@+id/tmMainMenuBadgesButton"
                 android:layout_width="wrap_content"
@@ -115,78 +132,7 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-    <ImageView
-        android:id="@+id/tmMainMenuJamesImage"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:contentDescription="@string/content_description_james"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="parent"
-        app:srcCompat="@drawable/james" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/tmMainMenuSpeechBubble"
-        android:layout_width="350dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:animateLayoutChanges="true"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:id="@+id/tmMainMenuSpeechText"
-            style="@style/TextAppearance.FitnessGoals.SpeechText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:background="@drawable/speech_bubble"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/tmMainMenuSpeechBubblePrevious"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            style="@style/Widget.FitnessGoals.Button"
-            android:visibility="gone"
-            android:onClick="previousJames"
-            android:maxLines="1"
-            android:text="@string/previous_arrows_button_text"
-            app:layout_constraintEnd_toStartOf="@id/tmMainMenuSpeechBubbleButton"
-            app:layout_constraintTop_toBottomOf="@id/tmMainMenuSpeechText"/>
-
-        <Button
-            android:id="@+id/tmMainMenuSpeechBubbleButton"
-            style="@style/Widget.FitnessGoals.Button"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:maxLines="1"
-            android:text="@string/done_button_text"
-            android:onClick="doneJames"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tmMainMenuSpeechText" />
-
-        <Button
-            android:id="@+id/tmMainMenuSpeechBubbleNext"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            style="@style/Widget.FitnessGoals.Button"
-            android:maxLines="1"
-            android:onClick="nextJames"
-            android:text="@string/next_arrows_button_text"
-            app:layout_constraintStart_toEndOf="@id/tmMainMenuSpeechBubbleButton"
-            app:layout_constraintTop_toBottomOf="@id/tmMainMenuSpeechText">
-
-        </Button>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

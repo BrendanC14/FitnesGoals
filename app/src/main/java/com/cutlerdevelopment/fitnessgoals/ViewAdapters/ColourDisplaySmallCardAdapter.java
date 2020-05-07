@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.cutlerdevelopment.fitnessgoals.R;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.ColourDisplaySmallCard;
 
@@ -50,11 +52,14 @@ public class ColourDisplaySmallCardAdapter extends BaseAdapter {
             convertView = thisInflater.inflate(R.layout.colour_display_small_card, parent, false);
         }
 
+        ConstraintLayout background = convertView.findViewById(R.id.colourDisplayBackground);
         ImageView colourImage = convertView.findViewById(R.id.colourDIsplayImage);
 
         final ColourDisplaySmallCard currentItem = (ColourDisplaySmallCard) getItem(i);
 
         colourImage.setBackgroundColor(Color.parseColor(currentItem.getTeamColour()));
+        if (currentItem.isUsersColour()) { background.setBackgroundColor(context.getResources().getColor(R.color.colorWhite)); }
+        else { background.setBackgroundColor(context.getResources().getColor(R.color.colorBlack)); }
 
         return convertView;
 

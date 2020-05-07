@@ -10,6 +10,9 @@ import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.SavedData.AppDBHandler;
 import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
 import com.cutlerdevelopment.fitnessgoals.Data.GameData;
+import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
+
+import java.util.Date;
 
 @Entity
 public class Team {
@@ -89,42 +92,43 @@ public class Team {
     private int totalAttackingSteps;
     public int getTotalAttackingSteps() { return totalAttackingSteps; }
     public void setTotalAttackingSteps(int totalAttackingSteps) { this.totalAttackingSteps = totalAttackingSteps; }
-    public void changeAttackingSteps(int averageAttackingSteps) {
+    public void addAttackingSteps(int averageAttackingSteps) {
         this.totalAttackingSteps = averageAttackingSteps;
         GameDBHandler.getInstance().updateObject(this);
     }
-    public int getAverageAttackingSteps() {
+    public int getAverageAttackingSteps(Date fixDate) {
         int games = getGamesPlayed();
-        if (games > 0) { return totalAttackingSteps / (games * (GameData.getInstance().getDaysBetween() / 2)); }
+        if (games > 0) { return totalAttackingSteps / (GameData.getInstance().getDaysBetweenSeasonStartAndNextFixture()/ 2);
+        }
         return (maxNumberOfSteps + minNumberOfSteps) / 2;
     }
 
     private int totalDefendingSteps;
     public int getTotalDefendingSteps() { return totalDefendingSteps; }
     public void setTotalDefendingSteps(int totalDefendingSteps) { this.totalDefendingSteps = totalDefendingSteps; }
-    public void changeDefendingSteps(int averageDefendingSteps) {
+    public void addDefendingSteps(int averageDefendingSteps) {
         this.totalDefendingSteps = averageDefendingSteps;
         GameDBHandler.getInstance().updateObject(this);
     }
-    public int getAverageDefendingSteps() {
+    public int getAverageDefendingSteps(Date fixDate) {
         int games = getGamesPlayed();
-        if (games > 0) { return totalDefendingSteps / (games * (GameData.getInstance().getDaysBetween() / 2)); }
+        if (games > 0) { return totalDefendingSteps / (GameData.getInstance().getDaysBetweenSeasonStartAndNextFixture() / 2); }
         return (maxNumberOfSteps + minNumberOfSteps) / 2;
     }
 
     private int minNumberOfSteps;
     public int getMinNumberOfSteps() { return minNumberOfSteps; }
     public void setMinNumberOfSteps(int minNumberOfSteps) { this.minNumberOfSteps = minNumberOfSteps; }
-    public void changeMinNumberOfSteps (int minNumberOfSteps) {
-        this.minNumberOfSteps = minNumberOfSteps;
+    public void changeMinNumberOfSteps (int stepChange) {
+        this.minNumberOfSteps += stepChange;
         GameDBHandler.getInstance().saveObject(this);
     }
 
     private int maxNumberOfSteps;
     public int getMaxNumberOfSteps() { return maxNumberOfSteps; }
     public void setMaxNumberOfSteps(int maxNumberOfSteps) { this.maxNumberOfSteps = maxNumberOfSteps; }
-    public void changeMaxNumberOfSteps(int maxNumberOfSteps) {
-        this.maxNumberOfSteps = maxNumberOfSteps;
+    public void changeMaxNumberOfSteps(int stepChange) {
+        this.maxNumberOfSteps += stepChange;
         GameDBHandler.getInstance().saveObject(this);
     }
 

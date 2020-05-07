@@ -164,8 +164,12 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
         }
         else {
             Team opponent = f.getOpponent(GameData.getInstance().getTeamID());
-            opponentDefAve = opponent.getAverageDefendingSteps();
-            opponentAttAve = opponent.getAverageAttackingSteps();
+            Fixture lastFixture = GameDBHandler.getInstance().getLastResultForTeam(GameData.getInstance().getTeamID());
+            Date lastDate;
+            if (lastFixture == null) { lastDate = new Date(); }
+            else { lastDate = lastFixture.getDate(); }
+            opponentDefAve = opponent.getAverageDefendingSteps(lastDate);
+            opponentAttAve = opponent.getAverageAttackingSteps(lastDate);
             opponentDefence = opponentDefAve * numInEach;
             opponentAttack = opponentAttAve * numInEach;
         }

@@ -1,5 +1,7 @@
 package com.cutlerdevelopment.fitnessgoals.Data;
 
+import android.database.AbstractWindowedCursor;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -22,7 +24,9 @@ import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 public class GameData {
@@ -72,6 +76,9 @@ public class GameData {
         this.teamID = teamID;
         GameDBHandler.getInstance().saveObject(this);
     }
+    public Team getUsersTeam() {
+        return GameDBHandler.getInstance().getTeamFromID(teamID);
+    }
 
     private List<Integer> filterChoices;
     public List<Integer> getFilterChoices() { return filterChoices; }
@@ -85,6 +92,32 @@ public class GameData {
     public int getDaysBetween() { return daysBetween; }
     public void setDaysBetween(int daysBetween) { this.daysBetween = daysBetween; }
     public void changeDaysBetween(int daysBetween) {
+
+        int differenceInDays = daysBetween - this.daysBetween;
+
+        Map<Date, Fixture> newFixturesDate = new HashMap<>();
+        List<Fixture> usersFixtures = GameDBHandler.getInstance().getAllUpcomingFixturesForTeam(GameData.getInstance().getTeamID());
+        Collections.sort(usersFixtures);
+        if (differenceInDays > 0) {
+            //Because the number of days in between is increasing, we need to start at the end so as not to move the same fixture multiple times
+            for (int i = usersFixtures.size() - 1; i >= 0; i--) {
+                Fixture usersFix = usersFixtures.get(i);
+                Date currentDate = usersFix.getDate();
+                for (Fixture fix : GameDBHandler.getInstance().getAllFixturesOnDate(currentDate)) {
+                    fix.changeDate(DateHelper.addDays(currentDate, differenceInDays * (i + 1)));
+                }
+            }
+        }
+        else {
+            for (int i = 0; i < usersFixtures.size(); i++) {
+                Fixture usersFix = usersFixtures.get(i);
+                Date currentDate = usersFix.getDate();
+                for (Fixture fix : GameDBHandler.getInstance().getAllFixturesOnDate(currentDate)) {
+                    fix.changeDate(DateHelper.addDays(currentDate, differenceInDays * (i + 1)));
+                }
+            }
+        }
+
         this.daysBetween = daysBetween;
         GameDBHandler.getInstance().saveObject(this);
     }
@@ -102,6 +135,11 @@ public class GameData {
     public void changeSeasonStartDate(Date seasonStartDate) {
         this.seasonStartDate = seasonStartDate;
         GameDBHandler.getInstance().updateObject(this);
+    }
+    public int getDaysBetweenSeasonStartAndNextFixture() {
+        Fixture nextFixture = GameDBHandler.getInstance().getNextFixtureForTeam(teamID);
+        Date nextDate = nextFixture != null ? nextFixture.getDate() : new Date();
+        return DateHelper.getDaysBetween(nextDate, seasonStartDate);
     }
 
     private int season;

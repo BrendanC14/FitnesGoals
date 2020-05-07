@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:id="@+id/settingsBackground"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/settingsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.FitnessGoals.WhiteTitle"
+        android:text="@string/settings_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp">
+
+    </TextView>
+
+
+    <Button
+        android:id="@+id/settingsCloseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/settingsTitle"
+        app:layout_constraintBottom_toBottomOf="@+id/settingsTitle"
+        style="@style/Widget.FitnessGoals.Button.TextButton"
+        android:text="@string/close_text">
+
+    </Button>
+
+    <ScrollView
+        android:id="@+id/settingsScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="600dp"
+        app:layout_constraintTop_toBottomOf="@+id/settingsTitle"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/settingsTeamLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <TextView
+                    android:id="@+id/settingsTeamHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.FitnessGoals.WhiteTitle"
+                    android:text="@string/settings_team_header"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+                    \
+                </TextView>
+
+
+                <LinearLayout
+                    android:id="@+id/settingsTeamParent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/settingsTeamHeader"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/settingsTeamIntro"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/TextAppearance.FitnessGoals.NormalText"
+                        android:gravity="center"
+                        android:text="@string/settings_team_intro">
+
+                    </TextView>
+
+
+
+                    <TextView
+                        android:id="@+id/settingsTeamNameHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:layout_marginStart="8dp"
+                        style="@style/TextAppearance.FitnessGoals.NormalText"
+                        android:text="@string/first_menu_team_player_name_hint">
+
+                    </TextView>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/settingsTeamNameInputText"
+                        style="@style/Widget.FitnessGoals.TextInputLayout"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:gravity="start"
+                        android:layout_gravity="start"
+                        android:textColorHint="@color/colorWhite" >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/settingsTeamNameEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorWhite"
+                        android:gravity="center" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <TextView
+                        android:id="@+id/settingsTeamColourHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:layout_marginStart="8dp"
+                        style="@style/TextAppearance.FitnessGoals.NormalText"
+                        android:text="@string/settings_team_colour_header">
+
+                    </TextView>
+
+                    <GridView
+                        android:id="@+id/settingsTeamColourGrid"
+                        android:layout_width="wrap_content"
+                        android:verticalSpacing="5dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_height="250dp" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/settingsGameLayout"
+                 android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <TextView
+                    android:id="@+id/settingsGameHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.FitnessGoals.WhiteTitle"
+                    android:text="@string/settings_game_settings"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+                    \
+                </TextView>
+
+
+                <LinearLayout
+                    android:id="@+id/settingsGameParent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/settingsGameHeader"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:id="@+id/settingsGameIntro"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/TextAppearance.FitnessGoals.NormalText"
+                        android:gravity="center"
+                        android:text="@string/settings_game_intro">
+
+                    </TextView>
+
+                    <Button
+                        android:id="@+id/settingsSwitchStepMode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:maxLines="1"
+                        style="@style/Widget.FitnessGoals.Button"
+                        android:text="@string/settings_switch_to_scaled_mode"
+                        >
+
+                    </Button>
+
+                    <Button
+                        android:id="@+id/settingsWhatIsStepMode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:maxLines="2"
+                        style="@style/Widget.FitnessGoals.Button.TextButton"
+                        android:text="@string/what_is_scaled_mode">
+
+                    </Button>
+
+                    <TextView
+                        android:id="@+id/settingsStepTargetHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:layout_marginStart="8dp"
+                        style="@style/TextAppearance.FitnessGoals.NormalText"
+                        android:text="@string/settings_step_target_header">
+
+                    </TextView>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <Spinner
+                            android:id="@+id/settingsStepTargetSpinner"
+                            style="@style/Widget.FitnessGoals.TextInputLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginStart="8dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+                        <TextView
+                            android:id="@+id/settingsStep000sString"
+                            style="@style/TextAppearance.FitnessGoals.NormalText"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:maxLines="1"
+                            android:text="@string/first_menu_step_target_000s"
+                            app:layout_constraintStart_toEndOf="@+id/settingsStepTargetSpinner"
+                            app:layout_constraintTop_toTopOf="@+id/settingsStepTargetSpinner"
+                            app:layout_constraintBottom_toBottomOf="@+id/settingsStepTargetSpinner"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/settingsDaysBetweenHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:layout_marginStart="8dp"
+                        style="@style/TextAppearance.FitnessGoals.NormalText"
+                        android:text="@string/settings_days_between_header">
+
+                    </TextView>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                        <Spinner
+                            android:id="@+id/settingsDaysBetweenSpinner"
+                            style="@style/Widget.FitnessGoals.TextInputLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginStart="8dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+<androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/settingsNumberLayout"
+                 android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <TextView
+                    android:id="@+id/settingsNumberHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.FitnessGoals.WhiteTitle"
+                    android:text="@string/settings_number_settings"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+                    \
+                </TextView>
+
+
+                <LinearLayout
+                    android:id="@+id/settingsNumberParent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/settingsNumberHeader"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:id="@+id/settingsNumberIntro"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/TextAppearance.FitnessGoals.NormalText"
+                        android:gravity="center"
+                        android:text="@string/settings_number_intro">
+
+                    </TextView>
+
+
+                    <TextView
+                        android:id="@+id/settingsLeagueNumberHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="start"
+                        android:layout_marginStart="8dp"
+                        style="@style/TextAppearance.FitnessGoals.NormalText"
+                        android:text="@string/settings_league_target_header">
+
+                    </TextView>
+
+                    <ListView
+                        android:id="@+id/settingsLeagueStepsList"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/leagueTableCardBackground">
+
+                    </ListView>
+
+
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/settingsSaveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Widget.FitnessGoals.Button"
+        android:text="@string/confirm_button_text"
+        app:layout_constraintTop_toBottomOf="@+id/settingsScrollView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp">
+
+    </Button>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
