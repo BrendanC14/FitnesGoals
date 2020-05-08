@@ -44,7 +44,7 @@ public class FitbitAPI {
 
     public interface FitbitListener {
         void getAverage(int average);
-        void getSteps(HashMap<Date, Integer> map);
+        void getSteps(HashMap<Date, Integer> map, Date startDate, Date endDate);
     }
 
     FitbitListener listener;
@@ -115,7 +115,7 @@ public class FitbitAPI {
         };
     }
 
-    public void getStepsFromDates(Date startDate, Date endDate) {
+    public void getStepsFromDates(final Date startDate, final Date endDate) {
 
         String startDateString = DateHelper.getDateInFitbitFormat(startDate);
         String endDateString = DateHelper.getDateInFitbitFormat(endDate);
@@ -154,7 +154,7 @@ public class FitbitAPI {
                         }
 
 
-                        listener.getSteps(map);
+                        listener.getSteps(map, startDate, endDate);
                     }
                 },
                 new Response.ErrorListener() {

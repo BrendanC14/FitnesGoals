@@ -28,11 +28,13 @@ import com.cutlerdevelopment.fitnessgoals.DIalogFragments.MatchResult;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.MatchSetup;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.Settings;
 import com.cutlerdevelopment.fitnessgoals.DIalogFragments.SingleBadgeMenu;
+import com.cutlerdevelopment.fitnessgoals.Integrations.IntegrationConnectionHandler;
 import com.cutlerdevelopment.fitnessgoals.Models.Badge;
 import com.cutlerdevelopment.fitnessgoals.Models.Fixture;
 import com.cutlerdevelopment.fitnessgoals.Models.MatchEngine;
 import com.cutlerdevelopment.fitnessgoals.Models.Team;
 import com.cutlerdevelopment.fitnessgoals.R;
+import com.cutlerdevelopment.fitnessgoals.SavedData.AppDBHandler;
 import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
 import com.cutlerdevelopment.fitnessgoals.Data.GameData;
 import com.cutlerdevelopment.fitnessgoals.Utils.JamesStep;
@@ -84,6 +86,9 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tm_main_menu);
+        AppDBHandler.getInstance().loadSettings();
+        GameDBHandler.getInstance().loadSettings();
+        IntegrationConnectionHandler.getInstance().initialiseFitnessAppConnection(this, this);
 
         backgroundLayout = findViewById(R.id.tmMainMenuBackground);
         header = findViewById(R.id.tmMainMenuheader);
@@ -104,8 +109,10 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
 
         GameData.getInstance().setListener(this);
 
-        RefreshActivityAsync refreshActivityAsync = new RefreshActivityAsync();
-        refreshActivityAsync.execute();
+        GameData.getInstance().refreshPlayerActivity();
+
+        //RefreshActivityAsync refreshActivityAsync = new RefreshActivityAsync();
+        //refreshActivityAsync.execute();
     }
 
     void setupAndSlideCardsIn() {

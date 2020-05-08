@@ -13,6 +13,7 @@ import com.samsung.android.sdk.healthdata.HealthDataStore;
 import com.samsung.android.sdk.healthdata.HealthPermissionManager;
 import com.samsung.android.sdk.healthdata.HealthResultHolder;
 
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class SHealthAPI {
 
     public interface SHealthFitListener {
         void getAverage(int average);
-        void getSteps(HashMap<Date, Integer> map);
+        void getSteps(HashMap<Date, Integer> map, Date startDate, Date endDate);
     }
 
     SHealthFitListener listener;
@@ -44,6 +45,7 @@ public class SHealthAPI {
     public static void createSHealthAPIInstance(Activity context) {
         new SHealthAPI(context);
     }
+    public void setInitListener(InitialConnectionListener listener) { this.initListener = listener; }
 
     private static SHealthAPI instance = null;
 
@@ -57,19 +59,18 @@ public class SHealthAPI {
     private SHealthAPI(Activity activity) {
 
         act = activity;
-        initListener = (InitialConnectionListener) activity;
         mStore = new HealthDataStore(act, new HealthDataStore.ConnectionListener() {
             @Override
             public void onConnected() {
-                requestPermissions();
+                hasPermissions();
 
             }
 
             @Override
             public void onConnectionFailed(HealthConnectionErrorResult error) {
-                error.getErrorCode();
-                initListener.connectionResult(error.getErrorCode());
-
+                if (initListener != null) {
+                    initListener.connectionResult(error.getErrorCode());
+                }
             }
 
             @Override
@@ -83,6 +84,20 @@ public class SHealthAPI {
         instance = this;
     }
 
+    private void hasPermissions() {Set<HealthPermissionManager.PermissionKey> mKeys = new HashSet<HealthPermissionManager.PermissionKey>();
+        HealthPermissionManager pmsManager = new HealthPermissionManager(mStore);
+        mKeys.add(new HealthPermissionManager.PermissionKey(HealthConstants.StepCount.HEALTH_DATA_TYPE, HealthPermissionManager.PermissionType.READ));
+
+        Map<HealthPermissionManager.PermissionKey, Boolean> resultMap = pmsManager.isPermissionAcquired(mKeys);
+
+        if (resultMap.containsValue(false)) {
+            requestPermissions();
+        }
+        if ( initListener != null) {
+            initListener.connectionResult(0);
+        }
+    }
+
     private void requestPermissions() {
 
         Set<HealthPermissionManager.PermissionKey> mKeys = new HashSet<HealthPermissionManager.PermissionKey>();
@@ -94,12 +109,13 @@ public class SHealthAPI {
                 public void onResult(HealthPermissionManager.PermissionResult permissionResult) {
                     Map<HealthPermissionManager.PermissionKey, Boolean> resultMap = permissionResult.getResultMap();
 
-                    if (resultMap.values().contains(Boolean.FALSE)) {
-                        initListener.connectionResult(1);
-                    } else {
-                        initListener.connectionResult(0);
+                    if (initListener != null) {
+                        if (resultMap.values().contains(Boolean.FALSE)) {
+                            initListener.connectionResult(1);
+                        } else {
+                            initListener.connectionResult(0);
+                        }
                     }
-
                 }
             });
         }
@@ -128,9 +144,8 @@ public class SHealthAPI {
                 }
             };
     public void getAverageFromDates(Date startDate, Date endDate) {
-        long startTime = DateHelper.addDays(new Date(), -1).getTime();
-        long ONE_DAY_IN_MILLIS = 24 * 60 * 60 * 1000L;
-        long endTime = startTime + ONE_DAY_IN_MILLIS;
+        long startTime = startDate.getTime();
+        long endTime = endDate.getTime();
 
         HealthDataResolver resolver = new HealthDataResolver(mStore, null);
         Log.d("TEST", "start "+startTime);
@@ -150,18 +165,9 @@ public class SHealthAPI {
                 .build();
 
         try {
-            resolver.aggregate(request).setResultListener(mStepAggrResult);
-        } catch (Exception e) {
-            Log.d("TEST", "Aggregating health data fails.");
-        }
-    }
-
-    private final HealthResultHolder.ResultListener<HealthDataResolver.AggregateResult> mStepAggrResult=
-            new HealthResultHolder.ResultListener<HealthDataResolver.AggregateResult>() {
-
+            resolver.aggregate(request).setResultListener(new HealthResultHolder.ResultListener<HealthDataResolver.AggregateResult>() {
                 @Override
                 public void onResult(HealthDataResolver.AggregateResult result) {
-// Checks the result
                     Cursor c = result.getResultCursor();
 
                     int count = 0;
@@ -189,5 +195,65 @@ public class SHealthAPI {
                         listener.getAverage(total / count);
                     }
                 }
-            };
+
+            });
+        } catch (Exception e) {
+            Log.d("TEST", "Aggregating health data fails.");
+        }
+    }
+
+    public void getStepsFromDates(final Date startDate, final Date endDate) {
+        long startTime = startDate.getTime();
+        long endTime = endDate.getTime();
+
+        HealthDataResolver resolver = new HealthDataResolver(mStore, null);
+        Log.d("TEST", "start "+startTime);
+        Log.d("TEST", "end "+endTime);
+        HealthDataResolver.Filter filter =
+                HealthDataResolver.Filter.greaterThanEquals(HealthConstants.StepCount.START_TIME, startTime)
+                        .lessThan(HealthConstants.StepCount.END_TIME, endTime);
+
+        HealthDataResolver.AggregateRequest request = new HealthDataResolver.AggregateRequest.Builder()
+                .setDataType(HealthConstants.StepCount.HEALTH_DATA_TYPE)
+                .setFilter(filter)
+                .addFunction(HealthDataResolver.AggregateRequest.AggregateFunction.SUM,
+                        HealthConstants.StepCount.COUNT, "sum")
+                .setTimeGroup(HealthDataResolver.AggregateRequest.TimeGroupUnit.DAILY, 1,
+                        HealthConstants.StepCount.TIME_OFFSET,
+                        HealthConstants.StepCount.END_TIME, "day")
+                .build();
+
+        try {
+            resolver.aggregate(request).setResultListener(new HealthResultHolder.ResultListener<HealthDataResolver.AggregateResult>() {
+                @Override
+                public void onResult(HealthDataResolver.AggregateResult result) {
+                    Cursor c = result.getResultCursor();
+
+                    HashMap<Date, Integer> map = new HashMap<>();
+                    if (c != null) {
+                        while (c.moveToNext()) {
+                            String day = c.getString(c.getColumnIndex("day"));
+                            float sum = c.getInt(c.getColumnIndex("sum"));
+
+                            Date date = new Date();
+                            try {
+                                date = DateHelper.formatStringToDate(day);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            map.put(date, (int) sum);
+                        }
+                        c.close();
+                    }
+
+                    listener.getSteps(map, startDate, endDate);
+                }
+
+            });
+        } catch (Exception e) {
+            Log.d("TEST", "Aggregating health data fails.");
+        }
+    }
+
+
 }

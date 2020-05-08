@@ -61,6 +61,9 @@ public class IntegrationConnectionHandler implements GoogleFitAPI.GoogleFitListe
             FitbitStringsSavedData.createFitbitStringsSavedDataInstance(context);
             FitbitStringsSavedData.getInstance().getTopData();
         }
+        else if (chosenApp == FitnessApps.SHEALTH) {
+            SHealthAPI.createSHealthAPIInstance(activity);
+        }
 
     }
 
@@ -69,15 +72,15 @@ public class IntegrationConnectionHandler implements GoogleFitAPI.GoogleFitListe
         if (chosenApp == FitnessApps.MOCKED) {
             setupListener.getAverageSteps(Numbers.MOCKED_AVERAGE_STEPS);
         }
-        if (chosenApp == FitnessApps.GOOGLE_FIT) {
+        else if (chosenApp == FitnessApps.GOOGLE_FIT) {
             GoogleFitAPI.getInstance().setListener(this);
             GoogleFitAPI.getInstance().getAverageFromDates(startDate, endDate);
         }
-        if (chosenApp == FitnessApps.FITBIT) {
+        else if (chosenApp == FitnessApps.FITBIT) {
             FitbitAPI.getInstance().setListener(this);
             FitbitAPI.getInstance().getAverageFromDates(startDate, endDate);
         }
-        if (chosenApp == FitnessApps.SHEALTH) {
+        else if (chosenApp == FitnessApps.SHEALTH) {
             SHealthAPI.getInstance().setListener(this);
             SHealthAPI.getInstance().getAverageFromDates(startDate, endDate);
 
@@ -115,17 +118,31 @@ public class IntegrationConnectionHandler implements GoogleFitAPI.GoogleFitListe
             FitbitAPI.getInstance().setListener(this);
             FitbitAPI.getInstance().getStepsFromDates(startDate, endDate);
         }
+        else if (chosenApp == FitnessApps.SHEALTH) {
+            //S Health is exclusive of end date, but want inclusive so adding a day on
+            endDate = DateHelper.addDays(endDate, 1);
+            SHealthAPI.getInstance().setListener(this);
+            SHealthAPI.getInstance().getStepsFromDates(startDate, endDate);
+        }
     }
 
     @Override
-    public void getSteps(HashMap<Date, Integer> map) {
-        for (Map.Entry<Date, Integer> pair : map.entrySet()) {
+    public void getSteps(HashMap<Date, Integer> map, Date startDate, Date endDate) {
+
+        int daysBetwwen = DateHelper.getDaysBetween(endDate, startDate);
+        for (int i = 0; i < daysBetwwen; i++) {
+            Date thisDate = DateHelper.addDays(startDate, i);
+            int steps = 0;
+            if (map.containsKey(thisDate)) {
+                steps = map.get(thisDate);
+            }
             new UserActivity(
-                    pair.getKey(),
-                    pair.getValue()
+                    thisDate,
+                    steps
             );
-            if (tmListener != null) { tmListener.gotStepMap(); }
         }
+        if (tmListener != null) { tmListener.gotStepMap(); }
+
     }
 
     @Override

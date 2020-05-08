@@ -304,9 +304,11 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
                 int steps = Integer.parseInt(StringHelper.removeCommaFromString(text));
                 if (attackingNumbers.contains(steps)) {
                     newParent = (ConstraintLayout) attackingStepsList.getChildAt(attackIndex);
+                    attackingNumbers.remove(steps);
                     attackIndex++;
                 } else {
                     newParent = (ConstraintLayout) defendingStepsList.getChildAt(defendIndex);
+                    defendingNumbers.remove(steps);
                     defendIndex++;
                 }
                 animateViewsMoving(newParent, b2, false);
@@ -345,9 +347,14 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
             }
         }
 
-        int userDefenceAverage = userDefence / (daysBetween / 2);
-        int userAttackAverage = userAttack / (daysBetween / 2);
-
+        int userDefenceAverage = 0;
+        int userAttackAverage = 0;
+        if (userDefence > 0) {
+            userDefenceAverage = userDefence / (daysBetween / 2);
+        }
+        if (userAttack > 0) {
+            userAttackAverage = userAttack / (daysBetween / 2);
+        }
         if (defensiveNumber + attackingNumber == daysBetween) { playMatch.setVisibility(View.VISIBLE); }
         else { playMatch.setVisibility(View.GONE); }
 

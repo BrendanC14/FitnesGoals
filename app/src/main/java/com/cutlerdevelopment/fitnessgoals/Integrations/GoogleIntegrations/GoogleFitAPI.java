@@ -35,7 +35,7 @@ public class GoogleFitAPI {
 
     public interface GoogleFitListener {
         void getAverage(int average);
-        void getSteps(HashMap<Date, Integer> map);
+        void getSteps(HashMap<Date, Integer> map, Date startDate, Date endDate);
     }
 
     GoogleFitListener listener;
@@ -82,7 +82,7 @@ public class GoogleFitAPI {
         return account.getDisplayName();
     }
 
-    public void getStepsFromDates(Date startDate, Date endDate) {
+    public void getStepsFromDates(final Date startDate, final Date endDate) {
         long endTime = DateHelper.addDays(endDate, 1).getTime();
         long startTime =startDate.getTime();
 
@@ -118,7 +118,7 @@ public class GoogleFitAPI {
                         }
                     }
                 }
-                listener.getSteps(map);
+                listener.getSteps(map, startDate, endDate);
 
             }
         }).addOnFailureListener(new OnFailureListener() {

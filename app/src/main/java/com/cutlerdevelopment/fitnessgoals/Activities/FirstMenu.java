@@ -621,6 +621,8 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                 hideMenu(fitnessAppsLayout);
                 putSpeechBubbleBackIntoMiddle();
                 SHealthAPI.createSHealthAPIInstance(this);
+                SHealthAPI.getInstance().setInitListener(this);
+
                 break;
             default:
                 speechBubbleText.setText(R.string.first_menu_app_connected);
@@ -963,9 +965,6 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
      * Loads AppSettings & CareerSettings, then stats TMMainMenu.
      */
     void loadGame() {
-        AppDBHandler.getInstance().loadSettings();
-        GameDBHandler.getInstance().loadSettings();
-        IntegrationConnectionHandler.getInstance().initialiseFitnessAppConnection(this, this);
 
         Intent intent = new Intent(this, TMMainMenu.class);
         startActivity(intent);

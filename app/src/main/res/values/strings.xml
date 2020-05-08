@@ -160,6 +160,7 @@
     <string name="step_review_left">&lt;</string>
     <string name="step_review_yesterday">Yesterday</string>
     <string name="step_review_right">\></string>
+    <string name="step_review_date_picker">Go To Date</string>
 
     <string name="my_fixtures_mode">My Fixtures</string>
     <string name="league_fixtures_mode">%1s Fixtures</string>

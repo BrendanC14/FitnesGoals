@@ -135,6 +135,21 @@
                 android:visibility="gone">
             </TextView>
 
+            <Button
+                android:id="@+id/stepReviewCardCalendar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:maxLines="2"
+                android:textSize="8sp"
+                android:text="@string/step_review_date_picker"
+                style="@style/Widget.FitnessGoals.Button.TextButton">
+
+            </Button>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
