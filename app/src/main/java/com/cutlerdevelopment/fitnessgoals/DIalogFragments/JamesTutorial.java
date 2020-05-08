@@ -111,21 +111,7 @@ public class JamesTutorial extends DialogFragment {
 
         speechBubbleText.getBackground().setColorFilter(secondaryColour, PorterDuff.Mode.SRC_ATOP);
 
-/*
-        Drawable draw = speechBubbleText.getBackground();
-        if (draw instanceof ShapeDrawable) {
-            ((ShapeDrawable)draw).getPaint().setColor(primaryColour);
-        } else if (draw instanceof GradientDrawable) {
-            ((GradientDrawable)draw).setColor(primaryColour);
-        } else if (draw instanceof ColorDrawable) {
-            ((ColorDrawable)draw).setColor(primaryColour);
-        }
-        speechBubbleText.setBackground(draw);
-*/
-        if (getDialog() != null && getDialog().getWindow() != null) {
-            getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        }
+
         jamesImage.startAnimation(slideInRight);
         speechBubbleLayout.startAnimation(slideInTop);
         displayJamesStep();

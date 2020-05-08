@@ -10,7 +10,6 @@
         android:id="@+id/fitnessAppSmallCardAppImage"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:contentDescription="@string/content_description_aoo_logo"
         android:scaleType="centerCrop" />
@@ -21,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:maxLines="1"
+        android:textSize="14sp"
         android:layout_gravity="center"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.FitnessGoals.Title" />

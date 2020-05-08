@@ -67,16 +67,16 @@ public class Colours {
     }
 
     public static int getUsersPrimaryColour() {
+
         return Color.parseColor(
-                GameDBHandler.getInstance().getTeamFromID(
-                        GameData.getInstance().getTeamID())
+                GameData.getInstance().getUsersTeam()
                 .getPrimaryColour()
                 );
     }
     public static int getUsersSecondaryColour() {
+
         return Color.parseColor(
-                GameDBHandler.getInstance().getTeamFromID(
-                        GameData.getInstance().getTeamID())
+                GameData.getInstance().getUsersTeam()
                         .getSecondaryColour()
         );
 

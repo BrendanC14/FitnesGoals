@@ -34,6 +34,7 @@ import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.Constants.StepModes;
 import com.cutlerdevelopment.fitnessgoals.Constants.TutorialSteps;
 import com.cutlerdevelopment.fitnessgoals.Constants.Words;
+import com.cutlerdevelopment.fitnessgoals.DIalogFragments.JamesTutorial;
 import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitAPI;
 import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitStringsSavedData;
 import com.cutlerdevelopment.fitnessgoals.Integrations.GoogleIntegrations.GoogleFitAPI;
@@ -46,6 +47,7 @@ import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
 import com.cutlerdevelopment.fitnessgoals.Data.AppData;
 import com.cutlerdevelopment.fitnessgoals.Data.GameData;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
+import com.cutlerdevelopment.fitnessgoals.Utils.JamesStep;
 import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.ColourDisplaySmallCardAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.FitnessAppSmallCardAdapter;
@@ -163,7 +165,6 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                 @Override
                 public void onGlobalLayout() {
                     backgroundLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
 
                     animateJamesIntroduction();
 

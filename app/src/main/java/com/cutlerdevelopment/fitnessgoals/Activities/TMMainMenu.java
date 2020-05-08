@@ -112,8 +112,6 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
 
         GameData.getInstance().refreshPlayerActivity();
 
-        //RefreshActivityAsync refreshActivityAsync = new RefreshActivityAsync();
-        //refreshActivityAsync.execute();
     }
 
     void setupAndSlideCardsIn() {
