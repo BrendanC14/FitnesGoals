@@ -11,6 +11,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -121,6 +122,10 @@ public class JamesTutorial extends DialogFragment {
         }
         speechBubbleText.setBackground(draw);
 */
+        if (getDialog() != null && getDialog().getWindow() != null) {
+            getDialog().getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        }
         jamesImage.startAnimation(slideInRight);
         speechBubbleLayout.startAnimation(slideInTop);
         displayJamesStep();

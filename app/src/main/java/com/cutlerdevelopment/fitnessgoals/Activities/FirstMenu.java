@@ -162,11 +162,8 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
             backgroundLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                        backgroundLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    } else {
-                        backgroundLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    }
+                    backgroundLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
 
                     animateJamesIntroduction();
 

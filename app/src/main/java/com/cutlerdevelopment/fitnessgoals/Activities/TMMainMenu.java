@@ -86,6 +86,7 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tm_main_menu);
+
         AppDBHandler.getInstance().loadSettings();
         GameDBHandler.getInstance().loadSettings();
         IntegrationConnectionHandler.getInstance().initialiseFitnessAppConnection(this, this);

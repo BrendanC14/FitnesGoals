@@ -64,6 +64,7 @@ public class LeagueStepsItemAdapter extends BaseAdapter {
 
                 int newSteps = Integer.parseInt(StringHelper.removeCommaFromString(String.valueOf(leagueSteps.getText()))) - 500;
                 leagueSteps.setText(StringHelper.getNumberWithCommas(newSteps));
+                currentItem.setLeagueSteps(StringHelper.getNumberWithCommas(newSteps));
                 checkButtonValidity(newSteps, decreaseSteps);
             }
         });
@@ -72,6 +73,7 @@ public class LeagueStepsItemAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 int newSteps = Integer.parseInt(StringHelper.removeCommaFromString(String.valueOf(leagueSteps.getText()))) + 500;
+                currentItem.setLeagueSteps(StringHelper.getNumberWithCommas(newSteps));
                 leagueSteps.setText(StringHelper.getNumberWithCommas(newSteps));
             }
         });

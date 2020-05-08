@@ -304,11 +304,11 @@ public class MatchSetup extends DialogFragment implements MatchSetupStepAdapter.
                 int steps = Integer.parseInt(StringHelper.removeCommaFromString(text));
                 if (attackingNumbers.contains(steps)) {
                     newParent = (ConstraintLayout) attackingStepsList.getChildAt(attackIndex);
-                    attackingNumbers.remove(steps);
+                    attackingNumbers.remove(Integer.valueOf(steps));
                     attackIndex++;
                 } else {
                     newParent = (ConstraintLayout) defendingStepsList.getChildAt(defendIndex);
-                    defendingNumbers.remove(steps);
+                    defendingNumbers.remove(Integer.valueOf(steps));
                     defendIndex++;
                 }
                 animateViewsMoving(newParent, b2, false);

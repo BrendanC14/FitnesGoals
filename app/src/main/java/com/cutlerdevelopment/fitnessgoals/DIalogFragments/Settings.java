@@ -32,6 +32,7 @@ import com.cutlerdevelopment.fitnessgoals.Utils.JamesStep;
 import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.ColourDisplaySmallCardAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.LeagueStepsItemAdapter;
+import com.cutlerdevelopment.fitnessgoals.ViewAdapters.SpinnerItemAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.ColourDisplaySmallCard;
 import com.cutlerdevelopment.fitnessgoals.ViewItems.LeagueStepsItem;
 import com.google.android.material.textfield.TextInputLayout;
@@ -124,6 +125,7 @@ public class Settings extends DialogFragment {
         whatIsStepMode.setTextColor(secondaryColour);
         stepTargetHeader.setTextColor(secondaryColour);
         targetSpinner.setBackgroundColor(primaryColour);
+
         target000s.setTextColor(secondaryColour);
         daysBetweenHeader.setTextColor(secondaryColour);
         daysBetweenSpinner.setBackgroundColor(primaryColour);
@@ -282,24 +284,26 @@ public class Settings extends DialogFragment {
     }
 
     void populateStepTargetSpinner() {
-        List<String> spinnerList = new ArrayList<>();
+        ArrayList<String> spinnerList = new ArrayList<>();
         for (int i = 1; i <= Numbers.MAX_NUM_STEPS_TARGET; i++) {
             spinnerList.add(String.valueOf(i));
         }
-        ArrayAdapter<String> stepAdapter = new ArrayAdapter<>(
-                getContext(), R.layout.spinner_item, spinnerList);
+
+        SpinnerItemAdapter stepAdapter = new SpinnerItemAdapter(
+                getContext(), spinnerList);
+
         targetSpinner.setAdapter(stepAdapter);
         int chosenSteps = AppData.getInstance().getStepTarget() / 1000;
         targetSpinner.setSelection(chosenSteps - 1);
     }
 
     void populateDaysBetweenSpinner() {
-        List<String> spinnerList = new ArrayList<>();
+        ArrayList<String> spinnerList = new ArrayList<>();
         for (int i = 2; i <= Numbers.MAX_NUM_DAYS_BETWEEN; i+=2) {
             spinnerList.add(String.valueOf(i));
         }
-        ArrayAdapter<String> daysAdapter = new ArrayAdapter<>(
-                getContext(), R.layout.spinner_item, spinnerList);
+        SpinnerItemAdapter daysAdapter = new SpinnerItemAdapter(
+                getContext(), spinnerList);
         daysBetweenSpinner.setAdapter(daysAdapter);
         daysBetweenSpinner.setSelection(spinnerList.indexOf(String.valueOf(GameData.getInstance().getDaysBetween())));
     }
@@ -352,9 +356,8 @@ public class Settings extends DialogFragment {
         for (int i = Leagues.TOP_LEAGUE; i <= Leagues.BOTTOM_LEAGUE; i++) {
             int leagueAverage = Leagues.getAverageStepsInLeague(i);
 
-            View leagueItem = leagueStepsList.getChildAt(i - 1);
-            TextView stepsView = leagueItem.findViewById(R.id.leagueStepsTeamsSteps);
-            int newAverage = Integer.parseInt(StringHelper.removeCommaFromString(String.valueOf(stepsView.getText())));
+            LeagueStepsItem leagueItem = (LeagueStepsItem) adapter.getItem(i - 1);
+            int newAverage = Integer.parseInt(StringHelper.removeCommaFromString(leagueItem.getLeagueSteps()));
             if (newAverage != leagueAverage) {
                 updateLeagueAverage(i, leagueAverage, newAverage);
             }
