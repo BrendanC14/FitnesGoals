@@ -71,11 +71,8 @@ public class NextMatchCardController {
             opponentID = f.getHomeTeamID();
         }
         opponentText.setText(c.getString(R.string.tm_main_menu_opponent, f.getOpponent(teamID).getName(), StringHelper.getNumberWithDateSuffix(Leagues.getPositionInLeague(opponentID, f.getLeague()))));
-        if (f.getDate().before(new Date())) {
-            playMatchButton.setVisibility(VISIBLE);
-        } else {
-            playMatchButton.setVisibility(GONE);
-        }
+        playMatchButton.setVisibility(VISIBLE);
+
 
     }
 

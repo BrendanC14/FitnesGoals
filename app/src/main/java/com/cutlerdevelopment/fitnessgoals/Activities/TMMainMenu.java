@@ -110,7 +110,6 @@ public class TMMainMenu extends AppCompatActivity implements MatchEngine.MatchEn
 
         GameData.getInstance().setListener(this);
 
-        GameData.getInstance().refreshPlayerActivity();
 
     }
 

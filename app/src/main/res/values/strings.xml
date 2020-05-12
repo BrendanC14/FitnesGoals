@@ -88,8 +88,9 @@
     </string>
     <string name="first_menu_intro_text_6">How do you wanna play?</string>
     <string name="first_menu_targeted_mode_selected">Targeted it is. We\'ll set you up a target, but you can change this at any time. Or if you fancy a specific challenge you can change your target for specific fixtures.</string>
-    <string name="first_menu_scaled_mode_selected">Scaled it is. Each league\s average can be edited at any time. Or if necessary you can change your target for specific fixtures.</string>
-    <string name="first_menu_step_target_question">Alright then, what\'s your <u>daily</u> target?</string>
+    <string name="first_menu_scaled_mode_selected">Scaled it is. Each league\s average can be edited at any time in your Settings.</string>
+    <string name="first_menu_step_targeted_target_question">Alright then, what\'s your <u>daily</u> target? This is the number your match performance will be judged against.</string>
+    <string name="first_menu_step_scaled_target_question">Alright then, what\'s your <u>daily</u> target? Even in Scaled Mode, you should have a personal target you aim for regardless of the League you\'re in.</string>
     <string name="first_menu_step_target_000s">,000</string>
     <string name="first_menu_getting_average">Gimme a sec I\'ll find out</string>
     <string name="first_menu_cant_get_average">Hmm sorry, can\'t seem to get hold of step details, you might have to check with the app yourself.</string>
@@ -147,15 +148,17 @@
         Hey how\'s it going.
         \nThis is your main menu. The first card is your step progress against your current targets.
     </string>
-    <string name="tm_main_menu_james_description2">
-        The second is the league table which can be expanded. Teams with a light green background are in a promotion place. Teams with a red background are in a relegation place.
-    </string>
     <string name="tm_main_menu_james_description3">
-        The next card is your next, un-played fixture. If you\'ve reached match date, you can press Play Match and setup your tactics before getting a result.
+        The second card is your next, un-played fixture. Match Setup lets you see the steps you need and start planning your tactics. Give me a call when you\'re there for more info.
+    </string>
+    <string name="tm_main_menu_james_description2">
+        The next is the league table which can be expanded. Teams with a light green background are in a promotion place. Teams with a red background are in a relegation place.
     </string>
     <string name="tm_main_menu_james_description4">
         Finally, you have 2 cards for your fixtures and results, which can also be amended to show the fixtures/results in the leagues.
     </string>
+
+    <string name="next_match_card_match_setup">Match Setup</string>
 
     <string name="step_review_left">&lt;</string>
     <string name="step_review_yesterday">Yesterday</string>

@@ -82,7 +82,6 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
 
         dateChosen = DateHelper.addDays(new Date(), -1);
         yesterday = dateChosen;
-        checkDayButtonValidity();
         refreshStepCircle();
 
         leftDateButton.setOnClickListener(new View.OnClickListener() {
@@ -163,7 +162,8 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
             calendar.setVisibility(View.INVISIBLE);
             return;
         }
-        progressBar.setVisibility(VISIBLE);
+        checkDayButtonValidity();
+
         notEnoughDataText.setVisibility(GONE);
 
         stepsText.setText(String.valueOf(0));
@@ -204,7 +204,6 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
         refreshStepCircle();
         takeFootballOut();
         animatingGoldenFootball = false;
-        checkDayButtonValidity();
     }
 
     private void forwardADay() {
@@ -237,7 +236,6 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
         refreshStepCircle();
         takeFootballOut();
         animatingGoldenFootball = false;
-        checkDayButtonValidity();
 
     }
 
@@ -263,14 +261,6 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
         takeFootballOut();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public void openCalendar() {
-        final Calendar mcurrentDate = Calendar.getInstance();
-        final int mYear = mcurrentDate.get(Calendar.YEAR);
-        int mMonth = mcurrentDate.get(Calendar.MONTH);
-        int mDay = mcurrentDate.get(Calendar.DAY_OF_MONTH);
-
-    }
 
     private void updateProgressCircleAndSteps(int steps) {
          animateProgressCircle = ValueAnimator.ofInt(
@@ -324,6 +314,9 @@ public class StepReviewCardController implements IntegrationConnectionHandler.TM
 
     @Override
     public void gotStepMap() {
+        progressBar.setVisibility(VISIBLE);
+        stepsText.setVisibility(VISIBLE);
+        calendar.setVisibility(VISIBLE);
         refreshStepCircle();
     }
 

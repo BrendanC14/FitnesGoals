@@ -2,9 +2,6 @@ package com.cutlerdevelopment.fitnessgoals.DIalogFragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

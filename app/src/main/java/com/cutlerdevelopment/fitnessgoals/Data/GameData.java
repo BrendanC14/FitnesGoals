@@ -218,14 +218,17 @@ public class GameData {
         if (badgeToWin != null) {
             if (numAchieved >= badgeToWin.getTarget()) {
                 badgeToWin.unlockBadge();
-                listener.badgeUnlocked(badgeToWin);
+                if (listener != null) {
+                    listener.badgeUnlocked(badgeToWin);
+                }
             }
         }
     }
 
     public void startNewSeason() {
         season = 1;
-        startDate = DateHelper.addDays(new Date(), (daysBetween * 47) * -1);
+        startDate = DateHelper.addDays(new Date(), - 20);
+        //startDate = DateHelper.cleanDate(new Date());
         seasonStartDate = startDate;
         GameDBHandler.getInstance().saveObject(this);
         createFixtures();

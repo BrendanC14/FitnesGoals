@@ -121,10 +121,10 @@
 
     <style name="TextAppearance.FitnessGoals.SpeechText" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="android:textStyle">italic</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:gravity">center</item>
-        <item name="android:paddingBottom">114dp</item>
+        <item name="android:paddingBottom">120dp</item>
         <item name="android:paddingTop">16dp</item>
         <item name="android:paddingLeft">16dp</item>
         <item name="android:paddingRight">16dp</item>

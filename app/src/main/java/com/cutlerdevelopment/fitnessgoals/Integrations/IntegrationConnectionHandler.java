@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.cutlerdevelopment.fitnessgoals.Constants.FitnessApps;
 import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
+import com.cutlerdevelopment.fitnessgoals.Data.GameData;
 import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitAPI;
 import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitStringsSavedData;
 import com.cutlerdevelopment.fitnessgoals.Integrations.GoogleIntegrations.GoogleFirestoreConnector;
@@ -53,16 +54,22 @@ public class IntegrationConnectionHandler implements GoogleFitAPI.GoogleFitListe
     public void initialiseFitnessAppConnection(Activity activity, Context context) {
 
         int chosenApp = AppData.getInstance().getFitnessApp();
+        if (chosenApp == FitnessApps.MOCKED) {
+            GameData.getInstance().refreshPlayerActivity();
+        }
         if (chosenApp == FitnessApps.GOOGLE_FIT) {
             GoogleFitAPI.createGoogleFitAPIInstance(context);
+            GameData.getInstance().refreshPlayerActivity();
         }
         else if (chosenApp == FitnessApps.FITBIT) {
             FitbitAPI.createFitbitAPIInstance(activity);
             FitbitStringsSavedData.createFitbitStringsSavedDataInstance(context);
             FitbitStringsSavedData.getInstance().getTopData();
+            GameData.getInstance().refreshPlayerActivity();
         }
         else if (chosenApp == FitnessApps.SHEALTH) {
             SHealthAPI.createSHealthAPIInstance(activity);
+            SHealthAPI.getInstance().setListener(this);
         }
 
     }
@@ -109,8 +116,6 @@ public class IntegrationConnectionHandler implements GoogleFitAPI.GoogleFitListe
 
         }
         else if (chosenApp == FitnessApps.GOOGLE_FIT) {
-            //GoogleFit is exclusive of end date, but want inclusive so adding a day on
-            endDate = DateHelper.addDays(endDate, 1);
             GoogleFitAPI.getInstance().setListener(this);
             GoogleFitAPI.getInstance().getStepsFromDates(startDate, endDate);
         }
@@ -130,7 +135,7 @@ public class IntegrationConnectionHandler implements GoogleFitAPI.GoogleFitListe
     public void getSteps(HashMap<Date, Integer> map, Date startDate, Date endDate) {
 
         int daysBetwwen = DateHelper.getDaysBetween(endDate, startDate);
-        for (int i = 0; i < daysBetwwen; i++) {
+        for (int i = 0; i <= daysBetwwen; i++) {
             Date thisDate = DateHelper.addDays(startDate, i);
             int steps = 0;
             if (map.containsKey(thisDate)) {

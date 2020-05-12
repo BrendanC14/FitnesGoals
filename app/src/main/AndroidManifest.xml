@@ -11,9 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitnessGoals">
         <meta-data android:name="com.samsung.android.health.permission.read"
-        android:value="com.samsung.health.exercise;com.samsung.health.step_count"/>
-        <meta-data android:name="com.samsung.android.health.permission.write"
-            android:value="com.samsung.health.exercise"/>
+        android:value="com.samsung.shealth.step_daily_trend"/>
         <activity android:name=".Activities.TMMainMenu"></activity>
 
         <activity

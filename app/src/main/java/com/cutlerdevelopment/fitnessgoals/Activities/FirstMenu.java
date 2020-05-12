@@ -11,7 +11,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,6 @@ import com.cutlerdevelopment.fitnessgoals.Constants.Numbers;
 import com.cutlerdevelopment.fitnessgoals.Constants.StepModes;
 import com.cutlerdevelopment.fitnessgoals.Constants.TutorialSteps;
 import com.cutlerdevelopment.fitnessgoals.Constants.Words;
-import com.cutlerdevelopment.fitnessgoals.DIalogFragments.JamesTutorial;
 import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitAPI;
 import com.cutlerdevelopment.fitnessgoals.Integrations.FitbitIntegrations.FitbitStringsSavedData;
 import com.cutlerdevelopment.fitnessgoals.Integrations.GoogleIntegrations.GoogleFitAPI;
@@ -47,7 +45,6 @@ import com.cutlerdevelopment.fitnessgoals.SavedData.GameDBHandler;
 import com.cutlerdevelopment.fitnessgoals.Data.AppData;
 import com.cutlerdevelopment.fitnessgoals.Data.GameData;
 import com.cutlerdevelopment.fitnessgoals.Utils.DateHelper;
-import com.cutlerdevelopment.fitnessgoals.Utils.JamesStep;
 import com.cutlerdevelopment.fitnessgoals.Utils.StringHelper;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.ColourDisplaySmallCardAdapter;
 import com.cutlerdevelopment.fitnessgoals.ViewAdapters.FitnessAppSmallCardAdapter;
@@ -144,6 +141,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         readyButton = findViewById(R.id.firstMenuReadyButton);
 
         speechBubbleText.setText(getText(R.string.first_menu_intro_text_1));
+        speechBubbleText.requestLayout();
         backgroundLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -238,8 +236,10 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
                     populateStepTargetSpinner();
                     showMenu(stepTargetLayout);
                     readyToProgress = false;
-                    speechBubbleText.setText(getString(R.string.first_menu_step_target_question));
+                    if (stepMode == StepModes.TARGETED_MODE) { speechBubbleText.setText(getString(R.string.first_menu_step_targeted_target_question)); }
+                    else { speechBubbleText.setText(getString(R.string.first_menu_step_scaled_target_question)); }
                     pushSpeechBubbleToRight(stepTargetLayout);
+
 
                     break;
                 case TutorialSteps.FIRST_MENU_DAYS_BETWEEN_INTRO:
@@ -475,7 +475,7 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         final ArrayList<FitnessAppSmallCard> fitnessApps = new ArrayList<>();
         boolean offsetColour = false;
 
-        for (int i = 0; i < FitnessApps.NUM_OF_APPS; i++) {
+        for (int i = 0; i <= FitnessApps.NUM_OF_APPS; i++) {
             FitnessAppSmallCard item = new FitnessAppSmallCard();
             item.setAppName(FitnessApps.getFitnessAppName(i));
             item.setAppImage(FitnessApps.getFitnessAppImage(i));
@@ -938,9 +938,6 @@ public class FirstMenu extends AppCompatActivity implements IntegrationConnectio
         if (gameMode == GameModes.TEAM_MODE) {
             replaceRandomTeam();
         }
-
-        Intent intent = new Intent(this, TMMainMenu.class);
-        startActivity(intent);
 
     }
 
