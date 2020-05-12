@@ -17,8 +17,7 @@
         <activity
             android:name=".Activities.FirstMenu"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize"
-            tools:ignore="InnerclassSeparator">
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
